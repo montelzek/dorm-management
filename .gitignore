@@ -1,0 +1,73 @@
+# ==============================
+# Angular / Node
+# ==============================
+frontend/node_modules/
+frontend/dist/
+frontend/.angular/cache/
+npm-debug.log*
+yarn-error.log*
+
+# Temporary / compiled output
+/dist
+/tmp
+/out-tsc
+/bazel-out
+
+# ==============================
+# Java / Maven / Spring Boot
+# ==============================
+backend/target/
+.mvn/wrapper/maven-wrapper.jar
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+# ==============================
+# IDEs / Editors
+# ==============================
+# IntelliJ IDEA
+.idea/
+*.iws
+*.iml
+*.ipr
+
+# Eclipse / STS
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings/
+.springBeans
+.sts4-cache
+
+# NetBeans
+/nbproject/private/
+/nbbuild/
+/nbdist/
+/.nb-gradle/
+
+# VS Code
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/
+
+# ==============================
+# Miscellaneous
+# ==============================
+HELP.md
+/.sass-cache/
+/connect.lock
+/coverage/
+/libpeerconnection.log
+testem.log
+/typings
+
+# System files
+.DS_Store
+Thumbs.db
