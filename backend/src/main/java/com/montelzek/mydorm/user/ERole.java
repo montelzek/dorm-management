@@ -1,4 +1,4 @@
-package com.montelzek.mydorm.model;
+package com.montelzek.mydorm.user;
 
 public enum ERole {
     RESIDENT,
