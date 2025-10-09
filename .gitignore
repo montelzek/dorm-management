@@ -20,6 +20,7 @@ backend/target/
 .mvn/wrapper/maven-wrapper.jar
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
+!**/src/main/resources/application.properties
 !**/src/test/**/target/
 build/
 !**/src/main/**/build/
