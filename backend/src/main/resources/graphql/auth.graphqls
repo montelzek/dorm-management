@@ -1,0 +1,28 @@
+type Mutation {
+    registerUser(registerInput: RegisterInput!): MessageResponse
+    loginUser(loginInput: LoginInput!): JwtResponse
+}
+
+input RegisterInput {
+    firstName: String!
+    lastName: String!
+    email: String!
+    password: String!
+}
+
+input LoginInput {
+    email: String!
+    password: String!
+}
+
+type JwtResponse {
+    token: String!
+    id: ID!
+    email: String!
+    firstName: String!
+    roles: [String!]!
+}
+
+type MessageResponse {
+    message: String!
+}
