@@ -16,6 +16,8 @@
     "module": "preserve",
     "allowSyntheticDefaultImports": true,
     "lib": [
+      "ES2022",
+      "DOM",
       "esnext.asynciterable"
     ]
   },
