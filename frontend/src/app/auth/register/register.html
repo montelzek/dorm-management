@@ -1,0 +1,72 @@
+<div>
+  <h2>Register</h2>
+  <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+    <div>
+      <label for="firstName">First Name</label>
+      <input id="firstName" type="text" formControlName="firstName">
+      @if (registerForm.get('firstName')?.invalid && (registerForm.get('firstName')?.dirty || registerForm.get('firstName')?.touched)) {
+        <div class="error-messages">
+          @if (registerForm.get('firstName')?.errors?.['required']) {
+            <small>First name is required.</small>
+          }
+        </div>
+      }
+    </div>
+    <div>
+      <label for="lastName">Last Name</label>
+      <input id="lastName" type="text" formControlName="lastName">
+      @if (registerForm.get('lastName')?.invalid && (registerForm.get('lastName')?.dirty || registerForm.get('lastName')?.touched)) {
+        <div class="error-messages">
+          @if (registerForm.get('lastName')?.errors?.['required']) {
+            <small>Last name is required.</small>
+          }
+        </div>
+      }
+    </div>
+    <div>
+      <label for="email">Email</label>
+      <input id="email" type="email" formControlName="email">
+
+      @if (registerForm.get('email')?.invalid && (registerForm.get('email')?.dirty || registerForm.get('email')?.touched)) {
+        <div class="error-messages">
+          @if (registerForm.get('email')?.errors?.['required']) {
+            <small>Email is required.</small>
+          }
+          @if (registerForm.get('email')?.errors?.['email']) {
+            <small>Please enter a valid email address.</small>
+          }
+        </div>
+      }
+    </div>
+    <div>
+      <label for="password">Password</label>
+      <input id="password" type="password" formControlName="password">
+
+      @if (registerForm.get('password')?.invalid && (registerForm.get('password')?.dirty || registerForm.get('password')?.touched)) {
+        <div class="error-messages">
+          @if (registerForm.get('password')?.errors?.['required']) {
+            <small>Password is required.</small>
+          }
+          @if (registerForm.get('password')?.errors?.['minlength']) {
+            <small>Password must be at least 6 characters long.</small>
+          }
+        </div>
+      }
+    </div>
+
+    <button type="submit" [disabled]="registerForm.invalid">Register</button>
+  </form>
+  @if (errorMessage) {
+    <div class="server-error">
+      {{ errorMessage }}
+    </div>
+  }
+</div>
+
+<style>
+  .error-messages, .server-error {
+    color: red;
+    margin-top: 4px;
+    font-size: 0.8rem;
+  }
+</style>
