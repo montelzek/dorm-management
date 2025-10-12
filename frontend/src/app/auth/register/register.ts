@@ -1,12 +1,12 @@
 import {Component, inject} from '@angular/core';
 import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {Auth} from '../auth';
-import {Router} from '@angular/router';
+import {Router, RouterLink} from '@angular/router';
 import {RegisterInput} from '../../graphql.types';
 
 @Component({
   selector: 'app-register',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, RouterLink],
   templateUrl: './register.html',
   styleUrl: './register.css'
 })
