@@ -1,78 +1,99 @@
-<div>
-  <h2>Register</h2>
-  <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-    <div>
-      <label for="firstName">First Name</label>
-      <input id="firstName" type="text" formControlName="firstName">
-      @if (registerForm.get('firstName')?.invalid && (registerForm.get('firstName')?.dirty || registerForm.get('firstName')?.touched)) {
-        <div class="error-messages">
-          @if (registerForm.get('firstName')?.errors?.['required']) {
-            <small>First name is required.</small>
-          }
+<div class="min-h-screen flex items-center justify-center p-4">
+  <div class="w-full max-w-sm">
+    <p-card>
+      <div class="px-6 pb-4">
+        <div class="relative flex items-center">
+          <h2 class="absolute left-1/2 -translate-x-1/2 text-2xl font-bold mx-auto">Sign Up</h2>
+          <p-toggleswitch
+            class="ml-auto"
+            [(ngModel)]="checked"
+            (ngModelChange)="toggleDarkMode()">
+            <ng-template #handle let-checked="checked">
+              <i [ngClass]="['!text-xs', 'pi', checked ? 'pi-moon' : 'pi-sun']"></i>
+            </ng-template>
+          </p-toggleswitch>
         </div>
-      }
-    </div>
-    <div>
-      <label for="lastName">Last Name</label>
-      <input id="lastName" type="text" formControlName="lastName">
-      @if (registerForm.get('lastName')?.invalid && (registerForm.get('lastName')?.dirty || registerForm.get('lastName')?.touched)) {
-        <div class="error-messages">
-          @if (registerForm.get('lastName')?.errors?.['required']) {
-            <small>Last name is required.</small>
-          }
-        </div>
-      }
-    </div>
-    <div>
-      <label for="email">Email</label>
-      <input id="email" type="email" formControlName="email">
 
-      @if (registerForm.get('email')?.invalid && (registerForm.get('email')?.dirty || registerForm.get('email')?.touched)) {
-        <div class="error-messages">
-          @if (registerForm.get('email')?.errors?.['required']) {
-            <small>Email is required.</small>
-          }
-          @if (registerForm.get('email')?.errors?.['email']) {
-            <small>Please enter a valid email address.</small>
-          }
-        </div>
-      }
-    </div>
-    <div>
-      <label for="password">Password</label>
-      <input id="password" type="password" formControlName="password">
+        <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+          <div class="flex flex-col gap-1 mt-10">
+            <p-floatlabel variant="over">
+              <label for="firstName">First Name</label>
+              <input pInputText id="firstName" type="text" formControlName="firstName" fluid variant="filled">
+            </p-floatlabel>
+            @if (registerForm.get('firstName')?.invalid && (registerForm.get('firstName')?.dirty || registerForm.get('firstName')?.touched)) {
+              <p-message severity="error" size="small" variant="simple">
+                @if (registerForm.get('firstName')?.errors?.['required']) {
+                  First name is required.
+                }
+              </p-message>
+            }
+          </div>
+          <div class="flex flex-col gap-1 mt-8">
+            <p-floatlabel variant="over">
+              <label for="lastName">Last Name</label>
+              <input pInputText id="lastName" type="text" formControlName="lastName" fluid variant="filled">
+            </p-floatlabel>
+            @if (registerForm.get('lastName')?.invalid && (registerForm.get('lastName')?.dirty || registerForm.get('lastName')?.touched)) {
+              <p-message severity="error" size="small" variant="simple">
+                @if (registerForm.get('lastName')?.errors?.['required']) {
+                  Last name is required.
+                }
+              </p-message>
+            }
+          </div>
+          <div class="flex flex-col gap-1 mt-8">
+            <p-floatlabel variant="over">
+              <label for="email">Email</label>
+              <input pInputText id="email" type="email" formControlName="email" fluid variant="filled">
+            </p-floatlabel>
+            @if (registerForm.get('email')?.invalid && (registerForm.get('email')?.dirty || registerForm.get('email')?.touched)) {
+              <p-message severity="error" size="small" variant="simple">
+                @if (registerForm.get('email')?.errors?.['required']) {
+                  Email is required.
+                }
+                @if (registerForm.get('email')?.errors?.['email']) {
+                  Please enter a valid email address.
+                }
+              </p-message>
+            }
+          </div>
+          <div class="flex flex-col gap-1 my-8">
+            <p-floatlabel variant="over">
+              <p-password id="password" type="password" formControlName="password" fluid [toggleMask]="true" variant="filled" [feedback]="false" />
+              <label for="password">Password</label>
+            </p-floatlabel>
 
-      @if (registerForm.get('password')?.invalid && (registerForm.get('password')?.dirty || registerForm.get('password')?.touched)) {
-        <div class="error-messages">
-          @if (registerForm.get('password')?.errors?.['required']) {
-            <small>Password is required.</small>
-          }
-          @if (registerForm.get('password')?.errors?.['minlength']) {
-            <small>Password must be at least 6 characters long.</small>
-          }
-        </div>
-      }
-    </div>
-
-    <button type="submit" [disabled]="registerForm.invalid">Register</button>
-  </form>
-  @if (errorMessage) {
-    <div class="server-error">
-      {{ errorMessage }}
-    </div>
-  }
-
-  <div style="margin-top: 16px;">
-    <p>
-      Already have an account?
-      <a routerLink="/login">Login</a>
-    </p>
+            @if (registerForm.get('password')?.invalid && (registerForm.get('password')?.dirty || registerForm.get('password')?.touched)) {
+              <p-message severity="error" size="small" variant="simple">
+                @if (registerForm.get('password')?.errors?.['required']) {
+                  Password is required.
+                }
+                @if (registerForm.get('password')?.errors?.['minlength']) {
+                  At least 6 characters.
+                }
+              </p-message>
+            }
+          </div>
+          <button pButton type="submit" class="w-full">Register</button>
+        </form>
+        @if (errorMessage) {
+          <div class="server-error">
+            {{ errorMessage }}
+          </div>
+        }
+      </div>
+      <div class="flex flex-col gap-1 mt-2 items-center">
+        <span class="text-sm">Already have an account? </span>
+        <p-button routerLink="/login" label="Login" link size="small"/>
+      </div>
+    </p-card>
   </div>
-
 </div>
 
+
+
 <style>
-  .error-messages, .server-error {
+  .server-error {
     color: red;
     margin-top: 4px;
     font-size: 0.8rem;
