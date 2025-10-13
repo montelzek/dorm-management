@@ -1,49 +1,74 @@
-<div>
-  <h2>Login</h2>
-  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-    <div>
-      <label for="email">Email</label>
-      <input id="email" type="email" formControlName="email">
-      @if (loginForm.get('email')?.invalid && (loginForm.get('email')?.dirty || loginForm.get('email')?.touched)) {
-        <div class="error-messages">
-          @if (loginForm.get('email')?.errors?.['required']) {
-            <small>Email is required.</small>
-          }
-          @if (loginForm.get('email')?.errors?.['email']) {
-            <small>Please enter a valid email address.</small>
-          }
+<div class="min-h-screen flex items-center justify-center p-4">
+  <div class="w-full max-w-sm">
+    <p-card>
+      <div class="px-6 pb-4">
+        <div class="relative flex items-center">
+          <h2 class="absolute left-1/2 -translate-x-1/2 text-xl font-medium mx-auto">Welcome Back</h2>
+          <p-toggleswitch
+            class="ml-auto"
+            [(ngModel)]="checked"
+            (ngModelChange)="toggleDarkMode()"
+            [style]="{ transform: 'scale(1.2)' }">
+            <ng-template #handle let-checked="checked">
+              <i [ngClass]="['!text-xs', 'pi', checked ? 'pi-moon' : 'pi-sun']"></i>
+            </ng-template>
+          </p-toggleswitch>
         </div>
-      }
-    </div>
-    <div>
-      <label for="password">Password</label>
-      <input id="password" type="password" formControlName="password">
-      @if (loginForm.get('password')?.invalid && (loginForm.get('password')?.dirty || loginForm.get('password')?.touched)) {
-        <div class="error-messages">
-          @if (loginForm.get('password')?.errors?.['required']) {
-            <small>Password is required.</small>
-          }
-        </div>
-      }
-    </div>
-    <button type="submit" [disabled]="loginForm.invalid">Login</button>
-  </form>
-  @if (errorMessage) {
-    <div class="server-error">
-      {{ errorMessage }}
-    </div>
-  }
 
-  <div style="margin-top: 16px;">
-    <p>
-      Don't have an account yet?
-      <a routerLink="/register">Register</a>
-    </p>
+        <p class="mt-2 text-center">Sign in</p>
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+          <div class="flex flex-col gap-1 mt-4">
+            <p-floatlabel variant="on">
+              <label for="email">Email</label>
+              <input pInputText id="email" type="email" formControlName="email" fluid variant="filled">
+            </p-floatlabel>
+            @if (loginForm.get('email')?.invalid && (loginForm.get('email')?.dirty || loginForm.get('email')?.touched)) {
+              <p-message severity="error" size="small" variant="simple">
+                @if (loginForm.get('email')?.errors?.['required']) {
+                  Email is required.
+                }
+                @if (loginForm.get('email')?.errors?.['email']) {
+                  Please enter a valid email address.
+                }
+              </p-message>
+            }
+          </div>
+          <div class="flex flex-col gap-1 mt-4">
+            <p-floatlabel variant="on">
+              <p-password id="password" type="password" formControlName="password" fluid [toggleMask]="true" variant="filled" [feedback]="false" />
+              <label for="password">Password</label>
+            </p-floatlabel>
+
+            @if (loginForm.get('password')?.invalid && (loginForm.get('password')?.dirty || loginForm.get('password')?.touched)) {
+              <p-message severity="error" size="small" variant="simple">
+                @if (loginForm.get('password')?.errors?.['required']) {
+                  Password is required.
+                }
+              </p-message>
+            }
+          </div>
+          <div class="flex flex-col gap-1 mt-2 items-center">
+            <p-button label="Forget Password?" link size="small" />
+            <button pButton type="submit" class="w-full">Login</button>
+          </div>
+
+        </form>
+        @if (errorMessage) {
+          <div class="server-error">
+            {{ errorMessage }}
+          </div>
+        }
+      </div>
+      <div class="flex flex-col gap-1 mt-2 items-center">
+        <span class="text-sm">Don't have an account? </span>
+        <p-button routerLink="/register" label="Register" link size="small"/>
+      </div>
+    </p-card>
   </div>
-
 </div>
+
 <style>
-  .error-messages, .server-error {
+  .server-error {
     color: red;
     margin-top: 4px;
     font-size: 0.8rem;
