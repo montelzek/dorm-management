@@ -21,8 +21,8 @@ export const MyPreset = definePreset(Aura, {
         primary: {
           color: '{zinc.950}',
           inverseColor: '#ffffff',
-          hoverColor: '{zinc.900}',
-          activeColor: '{zinc.800}'
+          hoverColor: '{zinc.800}',
+          activeColor: '{zinc.700}'
         },
         highlight: {
           background: '{zinc.950}',
@@ -35,8 +35,8 @@ export const MyPreset = definePreset(Aura, {
         primary: {
           color: '{zinc.50}',
           inverseColor: '{zinc.950}',
-          hoverColor: '{zinc.100}',
-          activeColor: '{zinc.200}'
+          hoverColor: '{zinc.200}',
+          activeColor: '{zinc.300}'
         },
         highlight: {
           background: 'rgba(250, 250, 250, .16)',
