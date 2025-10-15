@@ -1,101 +1,115 @@
-<div class="min-h-screen flex items-center justify-center p-4">
-  <div class="w-full max-w-sm">
-    <p-card>
-      <div class="px-6 pb-4">
-        <div class="relative flex items-center">
-          <h2 class="absolute left-1/2 -translate-x-1/2 text-2xl font-bold mx-auto">Sign Up</h2>
-          <p-toggleswitch
-            class="ml-auto"
-            [(ngModel)]="checked"
-            (ngModelChange)="toggleDarkMode()">
-            <ng-template #handle let-checked="checked">
-              <i [ngClass]="['!text-xs', 'pi', checked ? 'pi-moon' : 'pi-sun']"></i>
-            </ng-template>
-          </p-toggleswitch>
+<div class="flex min-h-screen items-center justify-center bg-gray-50 px-6 py-12 lg:px-8">
+  <div class="w-full sm:mx-auto sm:max-w-sm rounded-lg bg-white p-8 shadow-lg ring-1 ring-gray-200">
+    <div class="text-center">
+      <img ngSrc="/logo-indigo.svg" alt="logo" class="mx-auto h-13 w-auto" height="53" width="53"/>
+      <h2 class="mt-6 text-center text-2xl/9 font-bold tracking-tight text-gray-900">Create account</h2>
+    </div>
+
+    <div class="mt-10">
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="space-y-6">
+
+        <div>
+          <label for="firstName" class="block text-sm/6 font-medium text-gray-900">First Name</label>
+          <div class="mt-2">
+            <input
+              id="firstName"
+              type="text"
+              formControlName="firstName"
+              class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+            />
+          </div>
+          @if (registerForm.get('firstName')?.invalid && (registerForm.get('firstName')?.dirty || registerForm.get('firstName')?.touched)) {
+            <p class="mt-2 text-sm text-red-600">
+              @if (registerForm.get('firstName')?.errors?.['required']) {
+                First name is required.
+              }
+            </p>
+          }
         </div>
 
-        <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-          <div class="flex flex-col gap-1 mt-10">
-            <p-floatlabel variant="over">
-              <label for="firstName">First Name</label>
-              <input pInputText id="firstName" type="text" formControlName="firstName" fluid variant="filled">
-            </p-floatlabel>
-            @if (registerForm.get('firstName')?.invalid && (registerForm.get('firstName')?.dirty || registerForm.get('firstName')?.touched)) {
-              <p-message severity="error" size="small" variant="simple">
-                @if (registerForm.get('firstName')?.errors?.['required']) {
-                  First name is required.
-                }
-              </p-message>
-            }
+        <div>
+          <label for="lastName" class="block text-sm/6 font-medium text-gray-900">Last Name</label>
+          <div class="mt-2">
+            <input
+              id="lastName"
+              type="text"
+              formControlName="lastName"
+              class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+            />
           </div>
-          <div class="flex flex-col gap-1 mt-8">
-            <p-floatlabel variant="over">
-              <label for="lastName">Last Name</label>
-              <input pInputText id="lastName" type="text" formControlName="lastName" fluid variant="filled">
-            </p-floatlabel>
-            @if (registerForm.get('lastName')?.invalid && (registerForm.get('lastName')?.dirty || registerForm.get('lastName')?.touched)) {
-              <p-message severity="error" size="small" variant="simple">
-                @if (registerForm.get('lastName')?.errors?.['required']) {
-                  Last name is required.
-                }
-              </p-message>
-            }
-          </div>
-          <div class="flex flex-col gap-1 mt-8">
-            <p-floatlabel variant="over">
-              <label for="email">Email</label>
-              <input pInputText id="email" type="email" formControlName="email" fluid variant="filled">
-            </p-floatlabel>
-            @if (registerForm.get('email')?.invalid && (registerForm.get('email')?.dirty || registerForm.get('email')?.touched)) {
-              <p-message severity="error" size="small" variant="simple">
-                @if (registerForm.get('email')?.errors?.['required']) {
-                  Email is required.
-                }
-                @if (registerForm.get('email')?.errors?.['email']) {
-                  Please enter a valid email address.
-                }
-              </p-message>
-            }
-          </div>
-          <div class="flex flex-col gap-1 my-8">
-            <p-floatlabel variant="over">
-              <p-password id="password" type="password" formControlName="password" fluid [toggleMask]="true" variant="filled" [feedback]="false" />
-              <label for="password">Password</label>
-            </p-floatlabel>
+          @if (registerForm.get('lastName')?.invalid && (registerForm.get('lastName')?.dirty || registerForm.get('lastName')?.touched)) {
+            <p class="mt-2 text-sm text-red-600">
+              @if (registerForm.get('lastName')?.errors?.['required']) {
+                Last name is required.
+              }
+            </p>
+          }
+        </div>
 
-            @if (registerForm.get('password')?.invalid && (registerForm.get('password')?.dirty || registerForm.get('password')?.touched)) {
-              <p-message severity="error" size="small" variant="simple">
-                @if (registerForm.get('password')?.errors?.['required']) {
-                  Password is required.
-                }
-                @if (registerForm.get('password')?.errors?.['minlength']) {
-                  At least 6 characters.
-                }
-              </p-message>
-            }
+        <div>
+          <label for="email" class="block text-sm/6 font-medium text-gray-900">Email</label>
+          <div class="mt-2">
+            <input
+              id="email"
+              type="email"
+              formControlName="email"
+              class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+            />
           </div>
-          <button pButton type="submit" class="w-full">Register</button>
-        </form>
-        @if (errorMessage) {
-          <div class="server-error">
-            {{ errorMessage }}
+          @if (registerForm.get('email')?.invalid && (registerForm.get('email')?.dirty || registerForm.get('email')?.touched)) {
+            <p class="mt-2 text-sm text-red-600">
+              @if (registerForm.get('email')?.errors?.['required']) {
+                Email is required.
+              }
+              @if (registerForm.get('email')?.errors?.['email']) {
+                Please enter a valid email address.
+              }
+            </p>
+          }
+        </div>
+
+        <div>
+          <label for="password" class="block text-sm/6 font-medium text-gray-900">Password</label>
+          <div class="mt-2">
+            <input
+              id="password"
+              type="password"
+              formControlName="password"
+              class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+            />
           </div>
-        }
-      </div>
-      <div class="flex flex-col gap-1 mt-2 items-center">
-        <span class="text-sm">Already have an account? </span>
-        <p-button routerLink="/login" label="Login" link size="small"/>
-      </div>
-    </p-card>
+          @if (registerForm.get('password')?.invalid && (registerForm.get('password')?.dirty || registerForm.get('password')?.touched)) {
+            <p class="mt-2 text-sm text-red-600">
+              @if (registerForm.get('password')?.errors?.['required']) {
+                Password is required.
+              }
+              @if (registerForm.get('password')?.errors?.['minlength']) {
+                At least 6 characters.
+              }
+            </p>
+          }
+        </div>
+
+        <div>
+          <button
+            type="submit"
+            class="flex w-full justify-center cursor-pointer rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+          >
+            Register
+          </button>
+        </div>
+      </form>
+
+      @if (errorMessage) {
+        <div class="mt-6 rounded-md bg-red-50 p-4 text-sm text-red-800 ring-1 ring-red-200">
+          {{ errorMessage }}
+        </div>
+      }
+
+      <p class="mt-10 text-center text-sm/6 text-gray-500">
+        Already have an account?
+        <a routerLink="/login" class="font-semibold text-indigo-600 hover:text-indigo-500">Login</a>
+      </p>
+    </div>
   </div>
 </div>
-
-
-
-<style>
-  .server-error {
-    color: red;
-    margin-top: 4px;
-    font-size: 0.8rem;
-  }
-</style>
