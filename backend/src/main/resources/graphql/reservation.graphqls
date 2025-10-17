@@ -1,0 +1,29 @@
+extend type Mutation {
+    createReservation(input: CreateReservationInput!): ReservationPayload!
+}
+
+input CreateReservationInput {
+    resourceId: ID!
+    startTime: String!
+    endTime: String!
+}
+
+type ReservationPayload {
+    id: ID!
+    startTime: String!
+    endTime: String!
+    status: String!
+    resource: ReservationResourcePayload!
+    user: UserPayload!
+}
+
+type ReservationResourcePayload {
+    id: ID!
+    name: String!
+}
+
+type UserPayload {
+    id: ID!
+    firstName: String!
+    lastName: String!
+}
