@@ -1,0 +1,17 @@
+<div class="flex h-screen bg-background">
+  <app-sidebar></app-sidebar>
+
+  <div class="ml-56 flex flex-1 flex-col overflow-y-auto">
+
+    <app-header
+      [userName]="currentUser()?.firstName + ' ' + currentUser()?.lastName"
+      [dormName]="currentUser()?.building?.name ?? 'Brak budynku'"
+      [roomNumber]="currentUser()?.room?.roomNumber ?? 'Brak pokoju'"
+      [avatarUrl]="'https://images.unsplash.com/...'"></app-header>
+
+    <main class="flex-1 p-8">
+      <h1>Witaj na Dashboardzie!</h1>
+      <app-theme-toggle />
+    </main>
+  </div>
+</div>
