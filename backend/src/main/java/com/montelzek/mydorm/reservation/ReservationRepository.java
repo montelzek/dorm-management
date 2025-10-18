@@ -11,6 +11,8 @@ import java.util.List;
 @Repository
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
 
+    List<Reservation> findByUserId(Long userId);
+
     @Query("SELECT r FROM Reservation r WHERE r.reservationResource.id = :resourceId AND r.startTime < :endTime AND r.endTime > :startTime AND r.status = 'CONFIRMED'")
     List<Reservation> findConflictingReservations(
             @Param("resourceId") Long resourceId,
