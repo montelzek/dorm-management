@@ -1,7 +1,5 @@
 package com.montelzek.mydorm.reservation.payload;
 
-import java.time.LocalDateTime;
-
 public class GraphQLPayloads {
     public record CreateReservationInput(Long resourceId, String startTime, String endTime) {}
     public record TimeSlot(String startTime, String endTime) {}
