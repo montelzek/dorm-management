@@ -3,18 +3,12 @@ import {FormBuilder, FormsModule, ReactiveFormsModule, Validators} from '@angula
 import {Auth} from '../auth';
 import {Router, RouterLink} from '@angular/router';
 import {RegisterInput} from '../../graphql.types';
-import {Button, ButtonDirective} from 'primeng/button';
-import {Card} from 'primeng/card';
-import {FloatLabel} from 'primeng/floatlabel';
-import {InputText} from 'primeng/inputtext';
-import {Message} from 'primeng/message';
-import {Password} from 'primeng/password';
-import {ToggleSwitch} from 'primeng/toggleswitch';
-import {NgClass} from '@angular/common';
+import {NgOptimizedImage} from '@angular/common';
+import {ThemeToggle} from '../../shared/components/theme-toggle/theme-toggle';
 
 @Component({
   selector: 'app-register',
-  imports: [ReactiveFormsModule, RouterLink, Button, ButtonDirective, Card, FloatLabel, InputText, Message, Password, ToggleSwitch, FormsModule, NgClass],
+  imports: [ReactiveFormsModule, RouterLink, FormsModule, NgOptimizedImage, ThemeToggle],
   templateUrl: './register.html',
   styleUrl: './register.css'
 })
@@ -49,16 +43,5 @@ export class Register implements OnInit {
 
   ngOnInit(): void {
     this.checked = document.documentElement.classList.contains('my-app-dark');
-  }
-
-  toggleDarkMode(): void {
-    const html = document.documentElement;
-    if (this.checked) {
-      html.classList.add('my-app-dark');
-      localStorage.setItem('darkMode', 'true');
-    } else {
-      html.classList.remove('my-app-dark');
-      localStorage.setItem('darkMode', 'false');
-    }
   }
 }
