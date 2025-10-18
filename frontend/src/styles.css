@@ -1,3 +1,85 @@
-/* You can add global styles to this file, and also import other style files */
 @import "tailwindcss";
 @import "primeicons/primeicons.css";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  /* background */
+  --color-background: oklch(98.5% 0.002 247.839); /* bg-gray-50 */
+
+  /* card */
+  --color-card: oklch(100% 0 0); /* bg-white */
+  --color-card-border: oklch(92.8% 0.006 264.531); /* ring-gray-200 */
+
+  /* text */
+  --color-text-primary: oklch(21% 0.034 264.665); /* text-gray-900 */
+  --color-text-secondary: oklch(55.1% 0.027 264.364); /* text-gray-500 */
+
+  /* input */
+  --color-input-bg: oklch(100% 0 0); /* bg-white */
+  --color-input-border: oklch(87.2% 0.01 258.338); /* outline-gray-300 */
+  --color-input-focus-border: oklch(51.1% 0.262 276.966); /* indigo-600 */
+  --color-input-text: oklch(21% 0.034 264.665); /* text-gray-900 */
+  --color-input-placeholder: oklch(70.7% 0.022 261.325); /* placeholder:text-gray-400 */
+
+  /* button */
+  --color-button-bg: oklch(51.1% 0.262 276.966);
+  --color-button-text: oklch(100% 0 0);
+  --color-button-hover: oklch(58.5% 0.233 277.117);
+  --color-button-focus-outline: oklch(54.6% 0.245 262.881);
+
+  /* link */
+  --color-link: oklch(51.1% 0.262 276.966); /* indigo-600 */
+  --color-link-hover: oklch(58.5% 0.233 277.117); /* indigo-500 */
+
+  /* error */
+  --color-error-bg: oklch(97.1% 0.013 17.38); /* bg-red-50 */
+  --color-error-text: oklch(57.7% 0.245 27.325); /* text-red-600 */
+  --color-error-border: oklch(88.5% 0.062 18.334); /* ring-red-200 */
+}
+
+@layer theme {
+  .dark {
+    /* background */
+    --color-background: oklch(22% 0.01 264.665); /* bg-gray-900 */
+
+    /* card */
+    --color-card: oklch(27% 0.013 264.665); /* bg-gray-800 */
+    --color-card-border: oklch(36% 0.012 264.665); /* ring-gray-700 */
+
+    /* text */
+    --color-text-primary: oklch(96% 0.003 264.665); /* text-gray-100 */
+    --color-text-secondary: oklch(75% 0.015 264.665); /* text-gray-400 */
+
+    /* input */
+    --color-input-bg: oklch(24% 0.01 264.665); /* bg-gray-850 */
+    --color-input-border: oklch(40% 0.01 264.665); /* outline-gray-700 */
+    --color-input-focus-border: oklch(68% 0.21 276.966); /* indigo-400 */
+    --color-input-text: oklch(96% 0.003 264.665); /* text-gray-100 */
+    --color-input-placeholder: oklch(65% 0.015 264.665); /* placeholder:text-gray-500 */
+
+    /* button */
+    --color-button-bg: oklch(51.1% 0.262 276.966); /* indigo-600 */
+    --color-button-text: oklch(100% 0 0);
+    --color-button-hover: oklch(58.5% 0.233 277.117); /* indigo-500 */
+    --color-button-focus-outline: oklch(70% 0.18 277.117); /* lighter indigo focus */
+
+    /* link */
+    --color-link: oklch(68% 0.22 277.117); /* indigo-400 */
+    --color-link-hover: oklch(75% 0.20 277.117); /* indigo-300 */
+
+    /* error */
+    --color-error-bg: oklch(25% 0.045 27.325); /* bg-red-900 */
+    --color-error-text: oklch(85% 0.15 27.325); /* text-red-400 */
+    --color-error-border: oklch(35% 0.07 27.325); /* ring-red-700 */
+  }
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  box-shadow: 0 0 0 30px var(--color-input-bg) inset !important;
+  -webkit-text-fill-color: var(--color-input-text) !important;
+  transition: background-color 5000s ease-in-out 0s;
+}

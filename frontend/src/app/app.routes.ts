@@ -9,7 +9,13 @@ export const routes: Routes = [
 
   {
     path: 'dashboard',
-    loadComponent: () => import('./dashboard/dashboard').then(m => m.Dashboard),
+    loadComponent: () => import('./features/resident/dashboard/dashboard').then(m => m.Dashboard),
+    canActivate: [authGuard]
+  },
+
+  {
+    path: 'reservation',
+    loadComponent: () => import('./features/resident/reservations/reservations').then(m => m.Reservations),
     canActivate: [authGuard]
   },
 

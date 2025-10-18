@@ -1,0 +1,55 @@
+extend type Query {
+    allBuildings: [BuildingPayload!]!
+    resourcesByBuilding(buildingId: ID!): [ReservationResourcePayload!]!
+    availableLaundrySlots(resourceId: ID!, date: String!): [TimeSlot!]!
+    myReservations: [ReservationPayload!]!
+    me: UserPayload
+}
+
+extend type Mutation {
+    createReservation(input: CreateReservationInput!): ReservationPayload!
+}
+
+input CreateReservationInput {
+    resourceId: ID!
+    startTime: String!
+    endTime: String!
+}
+
+type TimeSlot {
+    startTime: String!
+    endTime: String!
+}
+
+type BuildingPayload {
+    id: ID!
+    name: String!
+}
+
+type ReservationResourcePayload {
+    id: ID!
+    name: String!
+    resourceType: String!
+}
+
+type RoomPayload {
+    id: ID!
+    roomNumber: String!
+}
+
+type UserPayload {
+    id: ID!
+    firstName: String!
+    lastName: String!
+    building: BuildingPayload
+    room: RoomPayload
+}
+
+type ReservationPayload {
+    id: ID!
+    startTime: String!
+    endTime: String!
+    status: String!
+    resource: ReservationResourcePayload!
+    user: UserPayload!
+}

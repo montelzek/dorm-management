@@ -1,0 +1,24 @@
+<header class="flex items-center justify-between bg-card px-8 py-4 ring-1 ring-card-border">
+  <div>
+    <p class="text-md text-text-secondary">Welcome back,</p>
+    <h1 class="text-2xl font-bold text-text-primary">{{ userName() }}</h1>
+  </div>
+
+  <div class="flex items-center gap-x-4">
+    <div class="text-right">
+      <p class="font-semibold text-text-primary">{{ dormName() }}</p>
+      <p class="text-sm text-text-secondary">Room: {{ roomNumber() }}</p>
+    </div>
+
+    <div class="h-12 w-12">
+      <img
+
+      [ngSrc]="avatarUrl()"
+      alt="User Avatar"
+      height="48"
+      width="48"
+      class="h-full w-full rounded-full object-cover ring-2 ring-offset-2 ring-offset-card ring-accent"
+      />
+    </div>
+  </div>
+</header>

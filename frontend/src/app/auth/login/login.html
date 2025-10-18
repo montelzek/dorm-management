@@ -1,74 +1,67 @@
-<div class="min-h-screen flex items-center justify-center p-4">
-  <div class="w-full max-w-sm">
-    <p-card>
-      <div class="px-6 pb-4">
-        <div class="relative flex items-center">
-          <h2 class="absolute left-1/2 -translate-x-1/2 text-2xl font-bold mx-auto">Sign In</h2>
-          <p-toggleswitch
-            class="ml-auto"
-            [(ngModel)]="checked"
-            (ngModelChange)="toggleDarkMode()">
-            <ng-template #handle let-checked="checked">
-              <i [ngClass]="['!text-xs', 'pi', checked ? 'pi-moon' : 'pi-sun']"></i>
-            </ng-template>
-          </p-toggleswitch>
+<div class="flex min-h-screen items-center justify-center bg-background px-6 py-12 lg:px-8">
+  <div class="relative w-full sm:mx-auto sm:max-w-sm rounded-lg bg-card p-8 shadow-lg ring-1 ring-card-border">
+    <div class="absolute top-4 right-4">
+      <app-theme-toggle></app-theme-toggle>
+    </div>
+
+    <div class="text-center">
+      <img ngSrc="/logo-indigo.svg" alt="logo" class="mx-auto" height="53" width="53"/>
+      <h2 class="mt-6 text-center text-2xl/9 font-bold tracking-tight text-text-primary">Sign in to your account</h2>
+    </div>
+
+    <div class="mt-8">
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-6">
+
+        <div>
+          <label for="email" class="block text-sm/6 font-medium text-text-primary">Email</label>
+          <div class="mt-2">
+            <input id="email" type="email" formControlName="email" class="block w-full rounded-md bg-input-bg px-3 py-1.5 text-base text-input-text outline-1 -outline-offset-1 outline-input-border placeholder:text-input-placeholder focus:outline-2 focus:-outline-offset-2 focus:outline-input-focus-border sm:text-sm/6" />
+          </div>
+          @if (loginForm.get('email')?.invalid && (loginForm.get('email')?.dirty || loginForm.get('email')?.touched)) {
+            <p class="mt-2 text-sm text-error-text">
+              @if (loginForm.get('email')?.errors?.['required']) {
+                Email is required.
+              }
+              @if (loginForm.get('email')?.errors?.['email']) {
+                Please enter a valid email address.
+              }
+            </p>
+          }
         </div>
 
-        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-          <div class="flex flex-col gap-1 mt-10">
-            <p-floatlabel variant="over">
-              <label for="email">Email</label>
-              <input pInputText id="email" type="email" formControlName="email" fluid variant="filled">
-            </p-floatlabel>
-            @if (loginForm.get('email')?.invalid && (loginForm.get('email')?.dirty || loginForm.get('email')?.touched)) {
-              <p-message severity="error" size="small" variant="simple">
-                @if (loginForm.get('email')?.errors?.['required']) {
-                  Email is required.
-                }
-                @if (loginForm.get('email')?.errors?.['email']) {
-                  Please enter a valid email address.
-                }
-              </p-message>
-            }
+        <div>
+          <div class="flex items-center justify-between">
+            <label for="password" class="block text-sm/6 font-medium text-text-primary">Password</label>
+            <div class="text-sm">
+              <a href="#" class="font-semibold text-link hover:text-link-hover">Forgot password?</a>
+            </div>
           </div>
-          <div class="flex flex-col gap-1 mt-8">
-            <p-floatlabel variant="over">
-              <p-password id="password" type="password" formControlName="password" fluid [toggleMask]="true" variant="filled" [feedback]="false" />
-              <label for="password">Password</label>
-            </p-floatlabel>
+          <div class="mt-2">
+            <input id="password" type="password" formControlName="password" class="block w-full rounded-md bg-input-bg px-3 py-1.5 text-base text-input-text outline-1 -outline-offset-1 outline-input-border placeholder:text-input-placeholder focus:outline-2 focus:-outline-offset-2 focus:outline-input-focus-border sm:text-sm/6" />
+          </div>
+          @if (loginForm.get('password')?.invalid && (loginForm.get('password')?.dirty || loginForm.get('password')?.touched)) {
+            <p class="mt-2 text-sm text-error-text">
+              @if (loginForm.get('password')?.errors?.['required']) {
+                Password is required.
+              }
+            </p>
+          }
+        </div>
 
-            @if (loginForm.get('password')?.invalid && (loginForm.get('password')?.dirty || loginForm.get('password')?.touched)) {
-              <p-message severity="error" size="small" variant="simple">
-                @if (loginForm.get('password')?.errors?.['required']) {
-                  Password is required.
-                }
-              </p-message>
-            }
-          </div>
-          <div class="flex flex-col gap-1 mt-4 items-center">
-            <p-button label="Forget Password?" link size="small" />
-            <button pButton type="submit" class="w-full">Login</button>
-          </div>
+        <div>
+          <button type="submit" class="flex w-full justify-center cursor-pointer rounded-md bg-button-bg px-3 py-1.5 text-sm/6 font-semibold text-button-text shadow-xs hover:bg-button-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-button-focus-outline">Sign in</button>
+        </div>
+      </form>
+      @if (errorMessage) {
+        <div class="mt-6 rounded-md bg-error-bg p-4 text-sm text-error-text ring-1 ring-error-border">
+          {{ errorMessage }}
+        </div>
+      }
 
-        </form>
-        @if (errorMessage) {
-          <div class="server-error">
-            {{ errorMessage }}
-          </div>
-        }
-      </div>
-      <div class="flex flex-col gap-1 mt-2 items-center">
-        <span class="text-sm">Don't have an account? </span>
-        <p-button routerLink="/register" label="Register" link size="small"/>
-      </div>
-    </p-card>
+      <p class="mt-10 text-center text-sm/6 text-text-secondary">
+        Don't have an account?
+        <a routerLink="/register" class="font-semibold text-link hover:text-link-hover">Register</a>
+      </p>
+    </div>
   </div>
 </div>
-
-<style>
-  .server-error {
-    color: red;
-    margin-top: 4px;
-    font-size: 0.8rem;
-  }
-</style>

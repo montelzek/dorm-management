@@ -1,0 +1,154 @@
+<div class="flex h-screen bg-background">
+  <app-sidebar></app-sidebar>
+  <div class="ml-56 flex flex-1 flex-col overflow-y-auto">
+
+    <app-header
+      [userName]="currentUserr()?.firstName + ' ' + currentUserr()?.lastName"
+      [dormName]="currentUserr()?.building?.name ?? 'Brak budynku'"
+      [roomNumber]="currentUserr()?.room?.roomNumber ?? 'Brak pokoju'"
+      [avatarUrl]="'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=2070&auto=format&fit=crop'"
+    ></app-header>
+
+    <main class="flex-1 p-8">
+
+
+      <div class="mx-auto max-w-4xl">
+        <h1 class="mb-6 text-2xl font-bold text-gray-800">Moje Rezerwacje</h1>
+
+        @if (reservations$ | async; as reservations) {
+          @if (reservations.length === 0) {
+            <div class="rounded-lg bg-white p-6 text-center text-gray-500 shadow-md">
+              <p>Nie masz jeszcze żadnych rezerwacji.</p>
+            </div>
+          } @else {
+          <div class="overflow-x-auto rounded-lg bg-white shadow-md">
+            <table class="min-w-full divide-y divide-gray-200">
+              <thead class="bg-gray-50">
+              <tr>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Zasób</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Data</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Godziny</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Status</th>
+              </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-200 bg-white">
+                @for (reservation of reservations; track reservation.id) {
+                  <tr>
+                    <td class="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900">{{ reservation.resource.name }}</td>
+
+                    <td class="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
+                      {{ reservation.startTime | date:'EEEE, d MMMM y' }}
+                    </td>
+
+                    <td class="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
+                      {{ reservation.startTime | date:'HH:mm' }} - {{ reservation.endTime | date:'HH:mm' }}
+                    </td>
+
+                    <td class="whitespace-nowrap px-6 py-4 text-sm">
+                        <span class="inline-flex rounded-full bg-green-100 px-2 text-xs font-semibold leading-5 text-green-800">
+                          {{ reservation.status }}
+                        </span>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+
+        } @else {
+          <p>Ładowanie rezerwacji...</p>
+        }
+
+      </div>
+
+
+      <div class="mx-auto max-w-2xl rounded-lg bg-white p-6 shadow-md">
+        <h2 class="mb-6 text-2xl font-bold text-gray-800">Nowa rezerwacja</h2>
+
+        <form [formGroup]="reservationForm" (ngSubmit)="onSubmit()">
+
+          <div class="form-field">
+            <label for="building" class="mb-1 block text-sm font-medium text-gray-700">1. Wybierz budynek</label>
+            <select id="building" formControlName="buildingId" class="w-full rounded-md border-gray-300">
+              <option [ngValue]="null" disabled>Wybierz budynek...</option>
+              @for (building of buildings$ | async; track building.id) {
+                <option [value]="building.id">{{ building.name }}</option>
+              }
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="resource" class="mb-1 block text-sm font-medium text-gray-700">2. Wybierz zasób</label>
+            <select id="resource" formControlName="resourceId" class="w-full rounded-md border-gray-300">
+              <option [ngValue]="null" disabled>
+                @if (reservationForm.get('buildingId')?.value) {
+                  <span>Wybierz zasób...</span>
+                } @else {
+                  <span>Najpierw wybierz budynek</span>
+                }
+              </option>
+              @for (resource of resources$ | async; track resource.id) {
+                <option [value]="resource.id">{{ resource.name }}</option>
+              }
+            </select>
+          </div>
+
+          @if (selectedResource()) {
+            <hr class="my-6">
+            @if (selectedResource()?.resourceType === 'LAUNDRY') {
+              <div class="space-y-4">
+                <h4 class="text-lg font-semibold text-gray-800">3. Wybierz termin prania</h4>
+                <div>
+                  <label for="date" class="mb-1 block text-sm font-medium text-gray-700">Data</label>
+                  <input id="date" type="date" formControlName="date" class="w-full rounded-md border-gray-300">
+                </div>
+                <div>
+                  <label for="laundrySlot" class="mb-1 block text-sm font-medium text-gray-700">Dostępny termin</label>
+                  <select id="laundrySlot" formControlName="laundrySlot" class="w-full rounded-md border-gray-300">
+                    <option [ngValue]="null" disabled>
+                      @if (reservationForm.get('date')?.value) {
+                        <span>Wybierz godzinę...</span>
+                      } @else {
+                        <span>Najpierw wybierz datę</span>
+                      }
+                    </option>
+                    @for (slot of slots$ | async; track slot.startTime) {
+                      <option [value]="stringifySlot(slot)">
+                        {{ slot.startTime | date:'HH:mm' }} - {{ slot.endTime | date:'HH:mm' }}
+                      </option>
+                    }
+                  </select>
+                </div>
+              </div>
+            } @else {
+              <div class="space-y-4">
+                <h4 class="text-lg font-semibold text-gray-800">3. Wybierz przedział czasowy (min. od 8:00, max. 5h)</h4>
+                <div>
+                  <label for="startTime" class="mb-1 block text-sm font-medium text-gray-700">Czas rozpoczęcia</label>
+                  <input id="startTime" type="datetime-local" formControlName="startTime" class="w-full rounded-md border-gray-300">
+                </div>
+                <div>
+                  <label for="endTime" class="mb-1 block text-sm font-medium text-gray-700">Czas zakończenia</label>
+                  <input id="endTime" type="datetime-local" formControlName="endTime" class="w-full rounded-md border-gray-300">
+                </div>
+              </div>
+            }
+          }
+          <button type="submit" [disabled]="reservationForm.invalid || reservationForm.pending" class="mt-8 w-full rounded-md bg-indigo-600 px-4 py-2 font-semibold text-white shadow-sm transition-colors hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
+            Zarezerwuj
+          </button>
+        </form>
+
+        @if (successMessage) {
+          <div class="message success">{{ successMessage }}</div>
+        }
+        @if (errorMessage) {
+          <div class="message error">{{ errorMessage }}</div>
+        }
+      </div>
+
+    </main>
+  </div>
+</div>
+

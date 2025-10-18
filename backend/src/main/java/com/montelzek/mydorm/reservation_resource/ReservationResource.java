@@ -46,6 +46,10 @@ public class ReservationResource {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "resource_type", nullable = false)
+    private EResourceType resourceType = EResourceType.STANDARD;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "building_id", nullable = false)
     private Building building;

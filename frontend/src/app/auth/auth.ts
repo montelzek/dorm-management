@@ -60,6 +60,7 @@ export class Auth {
   logout(): void {
     localStorage.removeItem('auth_token');
     this._isLoggedIn.next(false);
+    this.apollo.client.resetStore();
   }
 
   private hasToken(): boolean {

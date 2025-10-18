@@ -4,30 +4,18 @@ import {Router, RouterLink} from '@angular/router';
 
 import {Auth} from '../auth';
 import {LoginInput} from '../../graphql.types';
-import {FloatLabel} from 'primeng/floatlabel';
-import {InputText} from 'primeng/inputtext';
-import {Message} from 'primeng/message';
-import {Password} from 'primeng/password';
-import {Button, ButtonDirective} from 'primeng/button';
-import {Card} from 'primeng/card';
-import {ToggleSwitch} from 'primeng/toggleswitch';
-import {NgClass} from '@angular/common';
+import {NgOptimizedImage} from '@angular/common';
+import {ThemeToggle} from '../../shared/components/theme-toggle/theme-toggle';
 
 @Component({
   selector: 'app-login',
   imports: [
     ReactiveFormsModule,
     RouterLink,
-    FloatLabel,
-    InputText,
-    Message,
-    Password,
-    ButtonDirective,
-    Button,
-    Card,
-    ToggleSwitch,
     FormsModule,
-    NgClass],
+    NgOptimizedImage,
+    ThemeToggle
+  ],
   templateUrl: './login.html',
   styleUrl: './login.css'
 })
@@ -64,16 +52,5 @@ export class Login implements OnInit {
 
   ngOnInit(): void {
     this.checked = document.documentElement.classList.contains('my-app-dark');
-  }
-
-  toggleDarkMode(): void {
-    const html = document.documentElement;
-    if (this.checked) {
-      html.classList.add('my-app-dark');
-      localStorage.setItem('darkMode', 'true');
-    } else {
-      html.classList.remove('my-app-dark');
-      localStorage.setItem('darkMode', 'false');
-    }
   }
 }
