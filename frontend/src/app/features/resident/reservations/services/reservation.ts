@@ -31,26 +31,18 @@ export class ReservationService {
   private errorService = inject(ErrorService);
   private toastService = inject(ToastService);
 
-  // Signals for reactive state management
   private readonly _isLoading = signal<boolean>(false);
   private readonly _error = signal<string | null>(null);
   private readonly _currentUser = signal<User | null>(null);
   private readonly _buildings = signal<Building[]>([]);
   private readonly _myReservations = signal<ReservationPayload[]>([]);
 
-  // Computed signals for derived state
   readonly isLoading = computed(() => this._isLoading());
   readonly error = computed(() => this._error());
   readonly currentUser = computed(() => this._currentUser());
   readonly buildings = computed(() => this._buildings());
   readonly myReservations = computed(() => this._myReservations());
 
-  // Computed derived state
-  readonly hasReservations = computed(() => this._myReservations().length > 0);
-  readonly userBuilding = computed(() => this._currentUser()?.building);
-  readonly userRoom = computed(() => this._currentUser()?.room);
-
-  // Helper method for consistent error handling and loading states
   private createQueryObservable<T>(queryFn: () => Observable<T>): Observable<T> {
     this._isLoading.set(true);
     this._error.set(null);
@@ -63,7 +55,7 @@ export class ReservationService {
         this._error.set(errorMessage);
         throw error;
       }),
-      shareReplay(1) // Cache the result
+      shareReplay(1)
     );
   }
 
@@ -176,16 +168,13 @@ export class ReservationService {
               throw new Error(result.errors[0]?.message || 'Failed to create reservation');
             }
         this._isLoading.set(false);
-        // Show success message
         this.toastService.showSuccess('Rezerwacja została utworzona pomyślnie!');
-        // Refresh reservations after creation
         this.loadMyReservations();
         return result.data;
       }),
       catchError(error => {
         this._isLoading.set(false);
-        
-        // Handle specific error types
+
         const errorCode = this.extractErrorCode(error);
         if (errorCode === 'RESOURCE_CONFLICT') {
           this.toastService.showWarning(
@@ -200,7 +189,7 @@ export class ReservationService {
         } else {
           this.errorService.handleError(error);
         }
-        
+
         const errorMessage = this.extractErrorMessage(error);
         this._error.set(errorMessage);
         throw error;
@@ -208,25 +197,21 @@ export class ReservationService {
     );
   }
 
-  // Utility methods for signal-based state management
   clearError(): void {
     this._error.set(null);
   }
 
   private extractErrorMessage(error: any): string {
-    // Check for GraphQL errors first (most common)
     if (error.graphQLErrors && error.graphQLErrors.length > 0) {
       const graphQLError = error.graphQLErrors[0];
       return graphQLError.message;
     }
-    
-    // Check for Apollo errors (alternative structure)
+
     if (error.errors && error.errors.length > 0) {
       const apolloError = error.errors[0];
       return apolloError.message;
     }
-    
-    // Check for network errors
+
     if (error.networkError) {
       if (error.networkError.error && error.networkError.error.errors) {
         return error.networkError.error.errors[0].message;
@@ -235,52 +220,38 @@ export class ReservationService {
         return error.networkError.message;
       }
     }
-    
-    // Check for standard error message
+
     if (error.message) {
       return error.message;
     }
-    
-    // Check for Spring Boot GraphQL error structure
+
     if (error.extensions && error.extensions.exception) {
       return error.extensions.exception.message || error.extensions.exception.className;
     }
-    
-    // Fallback
+
     return 'Wystąpił nieoczekiwany błąd. Spróbuj ponownie.';
   }
 
   private extractErrorCode(error: any): string | undefined {
-    // Check for GraphQL errors with extensions
     if (error.graphQLErrors && error.graphQLErrors.length > 0) {
       return error.graphQLErrors[0].extensions?.code;
     }
-    
-    // Check for Apollo errors with extensions
+
     if (error.errors && error.errors.length > 0) {
       return error.errors[0].extensions?.code;
     }
-    
-    // Check for network errors with extensions
+
     if (error.networkError?.error?.errors?.[0]?.extensions?.code) {
       return error.networkError.error.errors[0].extensions.code;
     }
-    
-    // Check for extensions directly
+
     if (error.extensions?.code) {
       return error.extensions.code;
     }
-    
+
     return undefined;
   }
 
-  refreshData(): void {
-    this.loadUserDetails();
-    this.loadBuildings();
-    this.loadMyReservations();
-  }
-
-  // Signal-based loading methods (no Observable return)
   loadUserDetails(): void {
     this.getMyDetails().subscribe();
   }
