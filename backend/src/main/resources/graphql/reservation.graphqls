@@ -2,6 +2,7 @@ extend type Query {
     allBuildings: [BuildingPayload!]!
     resourcesByBuilding(buildingId: ID!): [ReservationResourcePayload!]!
     availableLaundrySlots(resourceId: ID!, date: String!): [TimeSlot!]!
+    availableStandardSlots(resourceId: ID!, date: String!): [TimeSlot!]!
     myReservations: [ReservationPayload!]!
     me: UserPayload
 }
