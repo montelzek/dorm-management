@@ -1,0 +1,49 @@
+<div class="relative w-full sm:mx-auto sm:max-w-sm rounded-lg bg-card p-8 shadow-lg ring-1 ring-card-border">
+  <div class="absolute top-4 right-4">
+    <ng-content select="[slot=theme-toggle]"></ng-content>
+  </div>
+
+  <div class="text-center">
+    <ng-content select="[slot=logo]"></ng-content>
+    @if (title()) {
+      <h2 class="mt-6 text-center text-2xl/9 font-bold tracking-tight text-text-primary">
+        {{ title() }}
+      </h2>
+    }
+  </div>
+
+  <div class="mt-8">
+    <form [formGroup]="form()" (ngSubmit)="onSubmit()" class="space-y-6">
+      <ng-content select="[slot=form-fields]"></ng-content>
+
+      <div>
+        <button 
+          type="submit" 
+          [disabled]="form().invalid || isLoading()"
+          class="flex w-full justify-center cursor-pointer rounded-md bg-button-bg px-3 py-1.5 text-sm/6 font-semibold text-button-text shadow-xs hover:bg-button-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-button-focus-outline disabled:opacity-50"
+        >
+          @if (isLoading()) {
+            Ładowanie...
+          } @else {
+            {{ submitText() }}
+          }
+        </button>
+      </div>
+    </form>
+
+    @if (errorMessage()) {
+      <div class="mt-6 rounded-md bg-error-bg p-4 text-sm text-error-text ring-1 ring-error-border">
+        {{ errorMessage() }}
+      </div>
+    }
+
+    @if (linkText() && linkRoute()) {
+      <p class="mt-10 text-center text-sm/6 text-text-secondary">
+        {{ linkText() }}
+        <a [routerLink]="linkRoute()" class="font-semibold text-link hover:text-link-hover">
+          {{ linkLabel() }}
+        </a>
+      </p>
+    }
+  </div>
+</div>
