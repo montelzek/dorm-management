@@ -1,0 +1,185 @@
+<div class="space-y-6">
+
+  <form [formGroup]="form()" (ngSubmit)="onFormSubmit()" class="space-y-6">
+
+    <div class="form-field">
+      <label for="building" class="mb-1 block text-sm font-medium text-text-primary">
+        1. Wybierz budynek
+      </label>
+      <select
+        id="building"
+        formControlName="buildingId"
+        class="w-full rounded-md border-input-border bg-input-bg px-3 py-2 text-input-text placeholder:text-input-placeholder focus:border-input-focus-border focus:outline-none focus:ring-2 focus:ring-input-focus-border"
+      >
+        <option [ngValue]="null" disabled>Wybierz budynek...</option>
+        @for (building of buildings(); track building.id) {
+          <option [value]="building.id">{{ building.name }}</option>
+        }
+      </select>
+    </div>
+
+    <div class="form-field">
+      <label for="resource" class="mb-1 block text-sm font-medium text-text-primary">
+        2. Wybierz zasób
+      </label>
+      <select
+        id="resource"
+        formControlName="resourceId"
+        class="w-full rounded-md border-input-border bg-input-bg px-3 py-2 text-input-text placeholder:text-input-placeholder focus:border-input-focus-border focus:outline-none focus:ring-2 focus:ring-input-focus-border"
+      >
+        <option [ngValue]="null" disabled>
+          @if (form().get('buildingId')?.value) {
+            <span>Wybierz zasób...</span>
+          } @else {
+            <span>Najpierw wybierz budynek</span>
+          }
+        </option>
+        @for (resource of resources(); track resource.id) {
+          <option [value]="resource.id">{{ resource.name }}</option>
+        }
+      </select>
+    </div>
+
+    @if (selectedResource()) {
+      <hr class="my-6">
+
+      @if (isLaundryResource) {
+        <div class="space-y-4">
+          <h4 class="text-lg font-semibold text-text-primary">3. Wybierz termin prania</h4>
+
+          <div>
+            <label for="date" class="mb-1 block text-sm font-medium text-text-primary">Data</label>
+            <input
+              id="date"
+              type="date"
+              formControlName="date"
+              class="w-full rounded-lg border-2 border-input-border bg-input-bg px-4 py-3 text-input-text placeholder:text-input-placeholder focus:border-input-focus-border focus:outline-none focus:ring-2 focus:ring-input-focus-border focus:ring-opacity-50 transition-all duration-200 hover:border-input-focus-border/50"
+            >
+          </div>
+
+          <div>
+            <label for="laundrySlot" class="mb-1 block text-sm font-medium text-text-primary">
+              Dostępny termin
+            </label>
+            <select
+              id="laundrySlot"
+              formControlName="laundrySlot"
+              class="w-full rounded-md border-input-border bg-input-bg px-3 py-2 text-input-text placeholder:text-input-placeholder focus:border-input-focus-border focus:outline-none focus:ring-2 focus:ring-input-focus-border"
+            >
+              <option [ngValue]="null" disabled>
+                @if (form().get('date')?.value) {
+                  <span>Wybierz godzinę...</span>
+                } @else {
+                  <span>Najpierw wybierz datę</span>
+                }
+              </option>
+              @for (slot of slots(); track slot.startTime) {
+                <option [value]="onStringifySlot(slot)">
+                  {{ slot.startTime | date:'HH:mm' }} - {{ slot.endTime | date:'HH:mm' }}
+                </option>
+              }
+            </select>
+          </div>
+        </div>
+        } @else if (isStandardResource) {
+          <div class="space-y-4">
+            <h4 class="text-lg font-semibold text-text-primary">
+              3. Wybierz datę i przedział czasowy
+            </h4>
+
+            <div>
+              <label for="date" class="mb-1 block text-sm font-medium text-text-primary">Data</label>
+              <input
+                id="date"
+                type="date"
+                formControlName="date"
+                class="w-full rounded-lg border-2 border-input-border bg-input-bg px-4 py-3 text-input-text placeholder:text-input-placeholder focus:border-input-focus-border focus:outline-none focus:ring-2 focus:ring-input-focus-border focus:ring-opacity-50 transition-all duration-200 hover:border-input-focus-border/50"
+              >
+            </div>
+
+            <div class="grid grid-cols-2 gap-4 md:grid-cols-2 sm:grid-cols-1">
+              <div>
+                <label for="startTimeHour" class="mb-1 block text-sm font-medium text-text-primary">
+                  Godzina rozpoczęcia
+                </label>
+                <select
+                  id="startTimeHour"
+                  formControlName="startTimeHour"
+                  class="w-full rounded-md border-input-border bg-input-bg px-3 py-2 text-input-text placeholder:text-input-placeholder focus:border-input-focus-border focus:outline-none focus:ring-2 focus:ring-input-focus-border"
+                >
+                  <option [ngValue]="null" disabled>
+                    @if (form().get('date')?.value) {
+                      <span>Wybierz...</span>
+                    } @else {
+                      <span>Najpierw datę</span>
+                    }
+                  </option>
+                  @for (hour of getAvailableHours(); track hour) {
+                    <option [value]="hour">{{ hour }}</option>
+                  }
+                </select>
+                @if (form().get('startTimeHour')?.invalid && (form().get('startTimeHour')?.dirty || form().get('startTimeHour')?.touched)) {
+                  <p class="mt-1 text-sm text-error-text">
+                    @if (form().get('startTimeHour')?.errors?.['required']) {
+                      Godzina rozpoczęcia jest wymagana
+                    }
+                  </p>
+                }
+              </div>
+
+              <div>
+                <label for="endTimeHour" class="mb-1 block text-sm font-medium text-text-primary">
+                  Godzina zakończenia
+                </label>
+                <select
+                  id="endTimeHour"
+                  formControlName="endTimeHour"
+                  class="w-full rounded-md border-input-border bg-input-bg px-3 py-2 text-input-text placeholder:text-input-placeholder focus:border-input-focus-border focus:outline-none focus:ring-2 focus:ring-input-focus-border"
+                >
+                  <option [ngValue]="null" disabled>
+                    @if (form().get('date')?.value) {
+                      <span>Wybierz...</span>
+                    } @else {
+                      <span>Najpierw datę</span>
+                    }
+                  </option>
+                  @for (hour of getAvailableHours(); track hour) {
+                    <option [value]="hour">{{ hour }}</option>
+                  }
+                </select>
+                @if (form().get('endTimeHour')?.invalid && (form().get('endTimeHour')?.dirty || form().get('endTimeHour')?.touched)) {
+                  <p class="mt-1 text-sm text-error-text">
+                    @if (form().get('endTimeHour')?.errors?.['required']) {
+                      Godzina zakończenia jest wymagana
+                    }
+                  </p>
+                }
+              </div>
+            </div>
+          </div>
+        }
+    }
+
+    <div class="flex justify-end space-x-3 pt-4">
+      <button
+        type="button"
+        (click)="onCancel()"
+        class="rounded-md border border-input-border bg-card px-4 py-2 text-sm font-medium text-text-primary hover:bg-background focus:outline-none focus:ring-2 focus:ring-button-focus-outline"
+      >
+        Anuluj
+      </button>
+      <button
+        type="submit"
+        [disabled]="form().invalid || form().pending || isLoading()"
+        class="rounded-md bg-button-bg px-4 py-2 text-sm font-medium text-button-text shadow-sm transition-colors hover:bg-button-hover focus:outline-none focus:ring-2 focus:ring-button-focus-outline disabled:cursor-not-allowed disabled:opacity-50"
+      >
+        @if (isLoading()) {
+          Ładowanie...
+        } @else {
+          Zarezerwuj
+        }
+      </button>
+    </div>
+  </form>
+
+</div>
