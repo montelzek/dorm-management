@@ -3,6 +3,8 @@ package com.montelzek.mydorm.auth;
 import com.montelzek.mydorm.auth.payload.JwtResponse;
 import com.montelzek.mydorm.auth.payload.LoginInput;
 import com.montelzek.mydorm.auth.payload.RegisterInput;
+import com.montelzek.mydorm.exception.BusinessException;
+import com.montelzek.mydorm.exception.ErrorCodes;
 import com.montelzek.mydorm.security.UserDetailsImpl;
 import com.montelzek.mydorm.security.jwt.JwtUtils;
 import com.montelzek.mydorm.user.ERole;
@@ -10,6 +12,7 @@ import com.montelzek.mydorm.user.User;
 import com.montelzek.mydorm.user.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -20,7 +23,6 @@ import org.springframework.stereotype.Service;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -32,25 +34,27 @@ public class AuthService {
     private final JwtUtils jwtUtils;
 
     public JwtResponse login(LoginInput loginInput) {
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(loginInput.email(), loginInput.password())
+            );
 
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginInput.email(), loginInput.password())
-        );
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            String jwt = jwtUtils.generateJwtToken(authentication);
+            UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+            List<String> roles = userDetails.getAuthorities().stream()
+                    .map(GrantedAuthority::getAuthority)
+                    .toList();
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = jwtUtils.generateJwtToken(authentication);
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        List<String> roles = userDetails.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .toList();
-
-        return new JwtResponse(jwt, userDetails.getId(), userDetails.getEmail(), userDetails.getFirstName(), roles);
+            return new JwtResponse(jwt, userDetails.getId(), userDetails.getEmail(), userDetails.getFirstName(), roles);
+        } catch (BadCredentialsException e) {
+            throw new BusinessException(ErrorCodes.INVALID_CREDENTIALS, "Nieprawidłowy email lub hasło.", "credentials");
+        }
     }
 
     public void register(RegisterInput registerInput) {
-
         if (userRepository.existsByEmail(registerInput.email())) {
-            throw new IllegalArgumentException("Error: Email is already taken!");
+            throw new BusinessException(ErrorCodes.VALIDATION_ERROR, "Email jest już zajęty.", "email");
         }
 
         User user = new User();
