@@ -1,21 +1,21 @@
 import { Routes } from '@angular/router';
-import { Register } from './auth/register/register';
-import { Login } from './auth/login/login';
-import { authGuard } from './auth/auth-guard';
+import { RegisterComponent } from './features/auth/register/register';
+import { LoginComponent } from './features/auth/login/login';
+import { authGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
-  { path: 'register', component: Register },
-  { path: 'login', component: Login },
+  { path: 'register', component: RegisterComponent },
+  { path: 'login', component: LoginComponent },
 
   {
     path: 'dashboard',
-    loadComponent: () => import('./features/resident/dashboard/dashboard').then(m => m.Dashboard),
+    loadComponent: () => import('./features/resident/dashboard/dashboard').then(m => m.DashboardComponent),
     canActivate: [authGuard]
   },
 
   {
     path: 'reservation',
-    loadComponent: () => import('./features/resident/reservations/reservations').then(m => m.Reservations),
+    loadComponent: () => import('./features/resident/reservations/reservations').then(m => m.ReservationsComponent),
     canActivate: [authGuard]
   },
 
