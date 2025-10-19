@@ -1,27 +1,30 @@
-import {Component, inject, signal} from '@angular/core';
-import {Sidebar} from '../../../shared/components/sidebar/sidebar';
-import {ThemeToggle} from '../../../shared/components/theme-toggle/theme-toggle';
-import {Header} from '../../../shared/components/header/header';
-import {ReservationService} from '../reservations/reservation.service';
-import {User} from '../../../graphql.types';
+import { Component, inject, OnInit } from '@angular/core';
+
+import { MainLayoutComponent } from '../../../shared/components/layout/main-layout/main-layout';
+import { ThemeToggleComponent } from '../../../shared/components/ui/theme-toggle/theme-toggle';
+import { ReservationService } from '../reservations/services/reservation';
 
 @Component({
   selector: 'app-dashboard',
   imports: [
-    Sidebar,
-    ThemeToggle,
-    Header
+    MainLayoutComponent,
+    ThemeToggleComponent
   ],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css'
 })
-export class Dashboard {
-  private reservationService = inject(ReservationService);
-  currentUser = signal<User | null>(null);
+export class DashboardComponent implements OnInit {
+  private readonly reservationService = inject(ReservationService);
 
-  constructor() {
-    this.reservationService.getMyDetails().subscribe(user => {
-      this.currentUser.set(user);
-    });
+  readonly currentUser = this.reservationService.currentUser;
+  readonly isLoading = this.reservationService.isLoading;
+  readonly error = this.reservationService.error;
+
+  ngOnInit(): void {
+    this.loadUserData();
+  }
+
+  private loadUserData(): void {
+    this.reservationService.loadUserDetails();
   }
 }

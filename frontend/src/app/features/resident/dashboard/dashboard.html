@@ -1,17 +1,26 @@
-<div class="flex h-screen bg-background">
-  <app-sidebar></app-sidebar>
+<app-main-layout [user]="currentUser()">
+  <div class="space-y-6">
+    <h1 class="text-3xl font-bold text-gray-800">Witaj na Dashboardzie!</h1>
 
-  <div class="ml-56 flex flex-1 flex-col overflow-y-auto">
+    @if (isLoading()) {
+      <div class="rounded-lg bg-white p-6 text-center text-gray-500 shadow-md">
+        <p>Ładowanie danych...</p>
+      </div>
+    } @else if (error()) {
+      <div class="rounded-lg bg-red-100 p-6 text-center text-red-800 shadow-md">
+        <p>{{ error() }}</p>
+      </div>
+    } @else {
+      <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div class="rounded-lg bg-white p-6 shadow-md">
+          <h3 class="text-lg font-semibold text-gray-800">Szybkie akcje</h3>
+          <p class="mt-2 text-gray-600">Dostępne funkcje</p>
+        </div>
+      </div>
+    }
 
-    <app-header
-      [userName]="currentUser()?.firstName + ' ' + currentUser()?.lastName"
-      [dormName]="currentUser()?.building?.name ?? 'Brak budynku'"
-      [roomNumber]="currentUser()?.room?.roomNumber ?? 'Brak pokoju'"
-      [avatarUrl]="'https://images.unsplash.com/...'"></app-header>
-
-    <main class="flex-1 p-8">
-      <h1>Witaj na Dashboardzie!</h1>
+    <div class="flex justify-end">
       <app-theme-toggle />
-    </main>
+    </div>
   </div>
-</div>
+</app-main-layout>
