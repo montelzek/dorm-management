@@ -1,4 +1,4 @@
-import { Component, input, output, signal } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 
@@ -11,8 +11,8 @@ export interface ReservationFormData {
   laundrySlot?: string;
   startTime?: string;
   endTime?: string;
-  startTimeHour?: string; // New field for Standard Resource
-  endTimeHour?: string; // New field for Standard Resource
+  startTimeHour?: string;
+  endTimeHour?: string;
 }
 
 @Component({
@@ -57,7 +57,7 @@ export class ReservationFormComponent {
   }
 
       getAvailableHours(): string[] {
-        // Use available slots from backend instead of hardcoded hours
+        // Use available slots from backend
         const availableSlots = this.slots();
         if (availableSlots.length > 0) {
           return availableSlots.map(slot => {
@@ -65,10 +65,10 @@ export class ReservationFormComponent {
             return `${startTime.getHours().toString().padStart(2, '0')}:00`;
           });
         }
-        
-        // Fallback: Generate hours from 8:00 to 22:00 (8 AM to 10 PM)
+
+        // Fallback
         const hours: string[] = [];
-        for (let hour = 8; hour <= 22; hour++) {
+        for (let hour = 8; hour <= 23; hour++) {
           hours.push(`${hour.toString().padStart(2, '0')}:00`);
         }
         return hours;
