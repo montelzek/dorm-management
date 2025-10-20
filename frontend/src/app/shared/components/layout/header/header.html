@@ -22,13 +22,11 @@
     </div>
 
     <div class="h-8 w-8 lg:h-12 lg:w-12 md:h-10 md:w-10 sm:h-8 sm:w-8 flex-shrink-0">
-      <img
-        [ngSrc]="avatarUrl()"
-        alt="User Avatar"
-        height="48"
-        width="48"
-        class="h-full w-full rounded-full object-cover border-2 border-button-bg"
-      />
+      <div class="h-full w-full rounded-full bg-button-bg flex items-center justify-center border-2 border-button-bg">
+        <span class="text-white font-semibold text-xs lg:text-sm md:text-xs sm:text-xs">
+          {{ userInitials() }}
+        </span>
+      </div>
     </div>
   </div>
 </header>

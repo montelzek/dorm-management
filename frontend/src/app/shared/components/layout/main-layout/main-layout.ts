@@ -17,13 +17,18 @@ export interface UserInfo {
 })
 export class MainLayoutComponent {
   readonly user = input<UserInfo | null>(null);
-  readonly avatarUrl = input<string>('https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=2070&auto=format&fit=crop');
   
 
   get userName(): string {
     const user = this.user();
     if (!user?.firstName || !user?.lastName) return 'Guest';
     return `${user.firstName} ${user.lastName}`;
+  }
+
+  get userInitials(): string {
+    const user = this.user();
+    if (!user?.firstName || !user?.lastName) return 'GU';
+    return `${user.firstName.charAt(0)}${user.lastName.charAt(0)}`.toUpperCase();
   }
 
   get dormName(): string {
