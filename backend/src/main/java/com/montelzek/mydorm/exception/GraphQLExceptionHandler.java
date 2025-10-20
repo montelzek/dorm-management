@@ -21,7 +21,7 @@ public class GraphQLExceptionHandler extends DataFetcherExceptionResolverAdapter
         } else if (ex instanceof IllegalArgumentException || ex instanceof IllegalStateException) {
             message = ex.getMessage();
         } else {
-            message = "Wystąpił nieoczekiwany błąd";
+            message = "An unexpected error occurred";
         }
 
         return GraphqlErrorBuilder.newError()

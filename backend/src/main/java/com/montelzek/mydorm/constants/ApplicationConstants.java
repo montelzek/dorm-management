@@ -35,9 +35,9 @@ public final class ApplicationConstants {
     
     // ========== VALIDATION MESSAGES ==========
     public static final String INVALID_TIME_FORMAT_MESSAGE = "Rezerwacje muszą rozpoczynać się i kończyć o pełnych godzinach (np. 09:00)";
-    public static final String RESERVATION_TOO_LONG_MESSAGE = "Rezerwacja nie może trwać dłużej niż 5 godzin";
-    public static final String OUTSIDE_HOURS_START_MESSAGE = "Rezerwacja nie może rozpocząć się przed 08:00";
-    public static final String OUTSIDE_HOURS_END_MESSAGE = "Rezerwacja nie może zakończyć się po 23:00";
-    public static final String INVALID_DATE_MESSAGE = "Rezerwacja musi rozpocząć się i zakończyć tego samego dnia";
-    public static final String PAST_RESERVATION_MESSAGE = "Nie można rezerwować terminów w przeszłości";
+    public static final String RESERVATION_TOO_LONG_MESSAGE = "Reservation cannot last longer than 5 hours";
+    public static final String OUTSIDE_HOURS_START_MESSAGE = "Reservation cannot start before 08:00";
+    public static final String OUTSIDE_HOURS_END_MESSAGE = "Reservation cannot end after 23:00";
+    public static final String INVALID_DATE_MESSAGE = "Reservation must start and end on the same day";
+    public static final String PAST_RESERVATION_MESSAGE = "Cannot reserve time slots in the past";
 }

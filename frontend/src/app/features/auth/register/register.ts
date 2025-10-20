@@ -72,7 +72,7 @@ export class RegisterComponent implements OnInit {
 
   private handleRegistrationSuccess(): void {
     this.setLoading(false);
-    this.toastService.showSuccess('Konto zostało utworzone pomyślnie! Możesz się teraz zalogować.');
+    this.toastService.showSuccess('Account created successfully! You can now log in.');
     this.router.navigate(['/login']);
   }
 

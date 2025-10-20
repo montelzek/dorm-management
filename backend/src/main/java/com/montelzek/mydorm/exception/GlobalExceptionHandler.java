@@ -30,7 +30,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<Map<String, Object>> handleRuntimeException() {
-        Map<String, Object> errorResponse = ErrorResponseBuilder.buildSimpleErrorResponse("Wystąpił błąd serwera");
+        Map<String, Object> errorResponse = ErrorResponseBuilder.buildSimpleErrorResponse("Server error occurred");
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
     }
 }

@@ -34,14 +34,14 @@ public class ReservationService {
     public Reservation createReservation(ZonedDateTime startTime, ZonedDateTime endTime, Long resourceId, User user) {
 
         if (!endTime.isAfter(startTime)) {
-            throw new IllegalArgumentException("Godzina zakończenia musi być późniejsza niż godzina rozpoczęcia.");
+            throw new IllegalArgumentException("End time must be later than start time.");
         }
 
         ReservationResource resource = reservationResourceRepository.findById(resourceId)
-                .orElseThrow(() -> new IllegalArgumentException("Zasób o podanym ID nie został znaleziony: " + resourceId));
+                .orElseThrow(() -> new IllegalArgumentException("Resource with given ID not found: " + resourceId));
 
         User currentUser = userRepository.findById(user.getId())
-                .orElseThrow(() -> new IllegalStateException("Uwierzytelniony użytkownik nie został znaleziony"));
+                .orElseThrow(() -> new IllegalStateException("Authenticated user not found"));
 
         ZoneId dormitoryZone = ApplicationConstants.DORMITORY_TIMEZONE;
 
@@ -53,7 +53,7 @@ public class ReservationService {
         if (resource.getResourceType() == EResourceType.LAUNDRY) {
 
             if (currentUser.getRoom() == null || !currentUser.getRoom().getBuilding().getId().equals(resource.getBuilding().getId())) {
-                throw new IllegalStateException("Możesz rezerwować pralnię tylko w swoim budynku.");
+                throw new IllegalStateException("You can only reserve laundry in your own building.");
             }
 
             LocalTime localStartTime = startTime.withZoneSameInstant(dormitoryZone).toLocalTime();
@@ -65,7 +65,7 @@ public class ReservationService {
             );
 
             if (!isSlotValid) {
-                throw new IllegalArgumentException("Nieprawidłowy przedział czasowy dla rezerwacji pralni.");
+                throw new IllegalArgumentException("Invalid time slot for laundry reservation.");
             }
 
         } else {
@@ -103,7 +103,7 @@ public class ReservationService {
         );
 
         if (!conflictingReservations.isEmpty()) {
-            throw new BusinessException(ErrorCodes.RESOURCE_CONFLICT, "Zasób jest już zarezerwowany w wybranym przedziale czasowym.", "timeSlot");
+            throw new BusinessException(ErrorCodes.RESOURCE_CONFLICT, "Resource is already reserved in the selected time slot.", "timeSlot");
         }
 
         Reservation newReservation = new Reservation();
@@ -272,10 +272,10 @@ public class ReservationService {
     @Transactional
     public Boolean cancelReservation(Long reservationId, Long userId) {
         Reservation reservation = reservationRepository.findById(reservationId)
-                .orElseThrow(() -> new IllegalArgumentException("Rezerwacja o podanym ID nie została znaleziona: " + reservationId));
+                .orElseThrow(() -> new IllegalArgumentException("Reservation with given ID not found: " + reservationId));
 
         if (!reservation.getUser().getId().equals(userId)) {
-            throw new IllegalStateException("Możesz anulować tylko swoje rezerwacje");
+            throw new IllegalStateException("You can only cancel your own reservations");
         }
 
         ZoneId dormitoryZone = ApplicationConstants.DORMITORY_TIMEZONE;
@@ -283,11 +283,11 @@ public class ReservationService {
         ZonedDateTime reservationStart = reservation.getStartTime().atZone(dormitoryZone);
         
         if (reservationStart.isBefore(now)) {
-            throw new BusinessException(ErrorCodes.PAST_RESERVATION, "Nie można anulować rezerwacji z przeszłości", "reservationId");
+            throw new BusinessException(ErrorCodes.PAST_RESERVATION, "Cannot cancel reservations from the past", "reservationId");
         }
 
         if ("CANCELLED".equals(reservation.getStatus())) {
-            throw new IllegalStateException("Rezerwacja została już anulowana");
+            throw new IllegalStateException("Reservation has already been cancelled");
         }
 
         reservation.setStatus("CANCELLED");

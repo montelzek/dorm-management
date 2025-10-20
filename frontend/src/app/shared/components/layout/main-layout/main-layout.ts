@@ -32,10 +32,10 @@ export class MainLayoutComponent {
   }
 
   get dormName(): string {
-    return this.user()?.building?.name ?? 'Brak budynku';
+    return this.user()?.building?.name ?? 'No building';
   }
 
   get roomNumber(): string {
-    return this.user()?.room?.roomNumber ?? 'Brak pokoju';
+    return this.user()?.room?.roomNumber ?? 'No room';
   }
 }

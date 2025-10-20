@@ -48,13 +48,13 @@ public class AuthService {
 
             return new JwtResponse(jwt, userDetails.getId(), userDetails.getEmail(), userDetails.getFirstName(), roles);
         } catch (BadCredentialsException e) {
-            throw new BusinessException(ErrorCodes.INVALID_CREDENTIALS, "Nieprawidłowy email lub hasło.", "credentials");
+            throw new BusinessException(ErrorCodes.INVALID_CREDENTIALS, "Invalid email or password.", "credentials");
         }
     }
 
     public void register(RegisterInput registerInput) {
         if (userRepository.existsByEmail(registerInput.email())) {
-            throw new BusinessException(ErrorCodes.VALIDATION_ERROR, "Email jest już zajęty.", "email");
+            throw new BusinessException(ErrorCodes.VALIDATION_ERROR, "Email is already taken.", "email");
         }
 
         User user = new User();

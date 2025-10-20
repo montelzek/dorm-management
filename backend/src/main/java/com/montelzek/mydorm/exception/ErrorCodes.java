@@ -4,16 +4,16 @@ import lombok.Getter;
 
 @Getter
 public enum ErrorCodes {
-    RESOURCE_CONFLICT("RESOURCE_CONFLICT", "Zasób jest już zarezerwowany w wybranym przedziale czasowym"),
-    INVALID_TIME("INVALID_TIME", "Nieprawidłowy czas rezerwacji"),
-    INVALID_DATE("INVALID_DATE", "Nieprawidłowa data rezerwacji"),
-    RESERVATION_TOO_LONG("RESERVATION_TOO_LONG", "Rezerwacja nie może trwać dłużej niż 5 godzin"),
-    OUTSIDE_HOURS("OUTSIDE_HOURS", "Rezerwacja poza dozwolonymi godzinami"),
-    PAST_RESERVATION("PAST_RESERVATION", "Nie można rezerwować terminów w przeszłości"),
-    VALIDATION_ERROR("VALIDATION_ERROR", "Błąd walidacji danych"),
-    INVALID_CREDENTIALS("INVALID_CREDENTIALS", "Nieprawidłowe dane logowania"),
-    EMAIL_TAKEN("EMAIL_TAKEN", "Email jest już zajęty"),
-    INTERNAL_ERROR("INTERNAL_ERROR", "Wystąpił błąd serwera");
+    RESOURCE_CONFLICT("RESOURCE_CONFLICT", "Resource is already reserved in the selected time slot"),
+    INVALID_TIME("INVALID_TIME", "Invalid reservation time"),
+    INVALID_DATE("INVALID_DATE", "Invalid reservation date"),
+    RESERVATION_TOO_LONG("RESERVATION_TOO_LONG", "Reservation cannot last longer than 5 hours"),
+    OUTSIDE_HOURS("OUTSIDE_HOURS", "Reservation outside allowed hours"),
+    PAST_RESERVATION("PAST_RESERVATION", "Cannot reserve time slots in the past"),
+    VALIDATION_ERROR("VALIDATION_ERROR", "Data validation error"),
+    INVALID_CREDENTIALS("INVALID_CREDENTIALS", "Invalid login credentials"),
+    EMAIL_TAKEN("EMAIL_TAKEN", "Email is already taken"),
+    INTERNAL_ERROR("INTERNAL_ERROR", "Server error occurred");
     
     private final String code;
     private final String defaultMessage;
