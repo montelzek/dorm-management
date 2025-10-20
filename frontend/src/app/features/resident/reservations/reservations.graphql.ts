@@ -79,3 +79,9 @@ export const CREATE_RESERVATION = gql`
     }
   }
 `;
+
+export const CANCEL_RESERVATION = gql`
+  mutation CancelReservation($reservationId: ID!) {
+    cancelReservation(reservationId: $reservationId)
+  }
+`;

@@ -304,4 +304,15 @@ export class ReservationsComponent implements OnInit {
       control?.reset({ value: '', disabled: true });
     });
   }
+
+  onCancelReservation(reservationId: string): void {
+    this.reservationService.cancelReservation(reservationId).subscribe({
+      next: () => {
+        
+      },
+      error: (error) => {
+        console.error('Error canceling reservation:', error);
+      }
+    });
+  }
 }

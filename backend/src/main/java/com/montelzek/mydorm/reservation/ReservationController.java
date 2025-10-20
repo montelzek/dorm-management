@@ -54,4 +54,12 @@ public class ReservationController {
         return reservationService.getAvailableStandardSlotsAsPayloads(resourceId, date);
     }
 
+    @MutationMapping
+    @PreAuthorize("isAuthenticated()")
+    public Boolean cancelReservation(
+            @Argument Long reservationId,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return reservationService.cancelReservation(reservationId, userDetails.getId());
+    }
+
 }

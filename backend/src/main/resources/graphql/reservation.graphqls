@@ -9,6 +9,7 @@ extend type Query {
 
 extend type Mutation {
     createReservation(input: CreateReservationInput!): ReservationPayload!
+    cancelReservation(reservationId: ID!): Boolean!
 }
 
 input CreateReservationInput {

@@ -22,6 +22,7 @@
       <app-reservations-list
         [reservations]="myReservations()"
         [isLoading]="isLoading()"
+        (cancelReservation)="onCancelReservation($event)"
       ></app-reservations-list>
     </div>
   </div>

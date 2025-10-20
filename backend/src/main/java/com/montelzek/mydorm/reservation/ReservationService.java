@@ -244,7 +244,6 @@ public class ReservationService {
         GraphQLPayloads.ReservationResourcePayload resourcePayload = new GraphQLPayloads.ReservationResourcePayload(resource.getId(), resource.getName(), resource.getResourceType().name());
 
         ZoneId dormitoryZone = ApplicationConstants.DORMITORY_TIMEZONE;
-        // Uproszczenie: zwracamy czas w strefie Europe/Warsaw (bez konwersji do UTC)
         String startTimeString = reservation.getStartTime().atZone(dormitoryZone).format(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
         String endTimeString = reservation.getEndTime().atZone(dormitoryZone).format(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
 
@@ -265,5 +264,35 @@ public class ReservationService {
         return reservationRepository.findByUserId(userId).stream()
                 .map(this::toPayload)
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * Cancels a reservation by ID for a specific user
+     */
+    @Transactional
+    public Boolean cancelReservation(Long reservationId, Long userId) {
+        Reservation reservation = reservationRepository.findById(reservationId)
+                .orElseThrow(() -> new IllegalArgumentException("Rezerwacja o podanym ID nie została znaleziona: " + reservationId));
+
+        if (!reservation.getUser().getId().equals(userId)) {
+            throw new IllegalStateException("Możesz anulować tylko swoje rezerwacje");
+        }
+
+        ZoneId dormitoryZone = ApplicationConstants.DORMITORY_TIMEZONE;
+        ZonedDateTime now = ZonedDateTime.now(dormitoryZone);
+        ZonedDateTime reservationStart = reservation.getStartTime().atZone(dormitoryZone);
+        
+        if (reservationStart.isBefore(now)) {
+            throw new BusinessException(ErrorCodes.PAST_RESERVATION, "Nie można anulować rezerwacji z przeszłości", "reservationId");
+        }
+
+        if ("CANCELLED".equals(reservation.getStatus())) {
+            throw new IllegalStateException("Rezerwacja została już anulowana");
+        }
+
+        reservation.setStatus("CANCELLED");
+        reservationRepository.save(reservation);
+
+        return true;
     }
 }

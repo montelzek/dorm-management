@@ -14,6 +14,7 @@ import {
   User
 } from '../../../../shared/models/graphql.types';
 import {
+  CANCEL_RESERVATION,
   CREATE_RESERVATION,
   GET_AVAILABLE_LAUNDRY_SLOTS,
   GET_AVAILABLE_STANDARD_SLOTS,
@@ -268,6 +269,31 @@ export class ReservationService {
           return reservations;
         })
       )
+    );
+  }
+
+  cancelReservation(reservationId: string): Observable<boolean> {
+    this._isLoading.set(true);
+    this._error.set(null);
+
+    return this.apollo.mutate<{ cancelReservation: boolean }>({
+      mutation: CANCEL_RESERVATION,
+      variables: { reservationId },
+      errorPolicy: 'none'
+    }).pipe(
+      map(result => {
+        this._isLoading.set(false);
+        this.toastService.showSuccess('Rezerwacja została anulowana pomyślnie!');
+        this.loadMyReservations(); 
+        return result.data!.cancelReservation;
+      }),
+      catchError(error => {
+        this._isLoading.set(false);
+        this.errorService.handleError(error);
+        const errorMessage = this.extractErrorMessage(error);
+        this._error.set(errorMessage);
+        throw error;
+      })
     );
   }
 }
