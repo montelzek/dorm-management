@@ -6,6 +6,7 @@ export const GET_MY_DETAILS = gql`
       id
       firstName
       lastName
+      roles
       building {
         id
         name

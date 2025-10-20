@@ -7,6 +7,7 @@ export interface UserInfo {
   lastName?: string;
   building?: { name?: string } | null;
   room?: { roomNumber?: string } | null;
+  roles?: string[];
 }
 
 @Component({

@@ -43,6 +43,7 @@ type UserPayload {
     id: ID!
     firstName: String!
     lastName: String!
+    roles: [String!]!
     building: BuildingPayload
     room: RoomPayload
 }
