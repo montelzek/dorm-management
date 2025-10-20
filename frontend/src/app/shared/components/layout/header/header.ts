@@ -31,14 +31,19 @@ export class HeaderComponent {
 
   readonly userRole = computed(() => {
     const user = this.user();
-    if (!user?.roles || user.roles.length === 0) return 'Resident';
+    if (!user?.role) return 'Resident';
     
-    // Priority: Admin > Technician > Receptionist > Resident
-    if (user.roles.includes('ROLE_ADMIN')) return 'Administrator';
-    if (user.roles.includes('ROLE_TECHNICIAN')) return 'Technician';
-    if (user.roles.includes('ROLE_RECEPTIONIST')) return 'Receptionist';
-    
-    return 'Resident';
+    switch (user.role) {
+      case 'ROLE_ADMIN':
+        return 'Administrator';
+      case 'ROLE_TECHNICIAN':
+        return 'Technician';
+      case 'ROLE_RECEPTIONIST':
+        return 'Receptionist';
+      case 'ROLE_RESIDENT':
+      default:
+        return 'Resident';
+    }
   });
 
   readonly roleInfo = computed(() => {

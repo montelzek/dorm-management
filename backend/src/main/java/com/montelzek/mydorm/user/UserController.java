@@ -29,11 +29,9 @@ public class UserController {
         return null;
     }
 
-    @SchemaMapping(typeName = "UserPayload", field = "roles")
-    public java.util.List<String> getRolesForUser(User user) {
-        return user.getRoles().stream()
-                .map(role -> role.name())
-                .collect(java.util.stream.Collectors.toList());
+    @SchemaMapping(typeName = "UserPayload", field = "role")
+    public String getRoleForUser(User user) {
+        return user.getRoles().iterator().next().name();
     }
 
     @SchemaMapping(typeName = "UserPayload", field = "room")

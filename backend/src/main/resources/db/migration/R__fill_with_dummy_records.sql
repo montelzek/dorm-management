@@ -37,8 +37,19 @@ VALUES
 
     -- Building C
     ('Laundry Room C', 3, 'Modern laundry with dryers', true, NOW(), NOW()),
-    ('Meeting Room C', 3, 'For group projects and meetings', true, NOW(), NOW()),
+    ('Meeting Room C', 3, 'For group projects and meetings', true, NOW(), NOW());
 
-    -- Shared / building-independent
-    ('Sports Hall', 2, 'University sports hall – book for basketball or volleyball', true, NOW(), NOW()),
-    ('Music Practice Room', 3, 'Soundproof room with piano', true, NOW(), NOW());
+
+INSERT INTO users (email, password, first_name, last_name, phone, room_id)
+VALUES
+    ('admin@admin.com', '$2a$12$GuBHXDKgLih2ZGvzD7tQV.RC2BdiiTR6O3ZiP1Z0BILgkBbtQDJHO', 'Tomasz', 'Gawin', 689456235, null),
+    ('resident@resident.com', '$2a$12$GuBHXDKgLih2ZGvzD7tQV.RC2BdiiTR6O3ZiP1Z0BILgkBbtQDJHO', 'Maciej', 'Lis', 689456235, null),
+    ('technician@technician.com', '$2a$12$GuBHXDKgLih2ZGvzD7tQV.RC2BdiiTR6O3ZiP1Z0BILgkBbtQDJHO', 'Karol', 'Oliwiak', 689456235, null),
+    ('receptionist@receptionist.com', '$2a$12$GuBHXDKgLih2ZGvzD7tQV.RC2BdiiTR6O3ZiP1Z0BILgkBbtQDJHO', 'Azja', 'Zpasja', 689456235, null);
+
+INSERT INTO user_roles (user_id, role_name)
+VALUES
+    (1, 'ROLE_ADMIN'),
+    (2, 'ROLE_RESIDENT'),
+    (3, 'ROLE_TECHNICIAN'),
+    (4, 'ROLE_RECEPTIONIST');

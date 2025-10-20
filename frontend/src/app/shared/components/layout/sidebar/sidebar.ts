@@ -198,27 +198,21 @@ export class SidebarComponent {
   // Computed property that returns appropriate links based on user role
   readonly navigationLinks = computed(() => {
     const user = this.user();
-    if (!user?.roles || user.roles.length === 0) {
+    if (!user?.role) {
       return this.residentLinks; // Default to resident links
     }
 
-    // Check for admin role first (highest priority)
-    if (user.roles.includes('ROLE_ADMIN')) {
-      return this.adminLinks;
+    switch (user.role) {
+      case 'ROLE_ADMIN':
+        return this.adminLinks;
+      case 'ROLE_TECHNICIAN':
+        return this.technicianLinks;
+      case 'ROLE_RECEPTIONIST':
+        return this.receptionistLinks;
+      case 'ROLE_RESIDENT':
+      default:
+        return this.residentLinks;
     }
-    
-    // Check for technician role
-    if (user.roles.includes('ROLE_TECHNICIAN')) {
-      return this.technicianLinks;
-    }
-    
-    // Check for receptionist role
-    if (user.roles.includes('ROLE_RECEPTIONIST')) {
-      return this.receptionistLinks;
-    }
-    
-    // Default to resident links
-    return this.residentLinks;
   });
 
   public logoutAction = {

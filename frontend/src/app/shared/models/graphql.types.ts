@@ -37,7 +37,7 @@ export interface User {
   lastName: string;
   building: Building | null;
   room: Room | null;
-  roles: string[];
+  role: string;
 }
 
 export interface CreateReservationInput {
