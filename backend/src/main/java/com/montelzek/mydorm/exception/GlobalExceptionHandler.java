@@ -18,31 +18,19 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<Map<String, Object>> handleIllegalArgumentException(IllegalArgumentException ex) {
-        Map<String, Object> errorResponse = ErrorResponseBuilder.buildRestErrorResponse(
-            ex.getMessage(), 
-            ErrorCodes.VALIDATION_ERROR.getCode(), 
-            null
-        );
+        Map<String, Object> errorResponse = ErrorResponseBuilder.buildSimpleErrorResponse(ex.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
     @ExceptionHandler(IllegalStateException.class)
     public ResponseEntity<Map<String, Object>> handleIllegalStateException(IllegalStateException ex) {
-        Map<String, Object> errorResponse = ErrorResponseBuilder.buildRestErrorResponse(
-            ex.getMessage(), 
-            ErrorCodes.RESOURCE_CONFLICT.getCode(), 
-            null
-        );
+        Map<String, Object> errorResponse = ErrorResponseBuilder.buildSimpleErrorResponse(ex.getMessage());
         return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
     }
 
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<Map<String, Object>> handleRuntimeException() {
-        Map<String, Object> errorResponse = ErrorResponseBuilder.buildRestErrorResponse(
-            ErrorCodes.INTERNAL_ERROR.getDefaultMessage(), 
-            ErrorCodes.INTERNAL_ERROR.getCode(), 
-            null
-        );
+        Map<String, Object> errorResponse = ErrorResponseBuilder.buildSimpleErrorResponse("Wystąpił błąd serwera");
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
     }
 }

@@ -13,42 +13,19 @@ import java.util.Map;
 public class GraphQLExceptionHandler extends DataFetcherExceptionResolverAdapter {
 
     @Override
-    protected GraphQLError resolveToSingleError(Throwable ex,@NonNull DataFetchingEnvironment env) {
-        switch (ex) {
-            case BusinessException businessEx -> {
-                Map<String, Object> extensions = ErrorResponseBuilder.buildGraphQLExtensionsFromBusinessException(businessEx);
-
-                return GraphqlErrorBuilder.newError()
-                        .message(businessEx.getMessage())
-                        .extensions(extensions)
-                        .build();
-            }
-            case IllegalArgumentException illegalArgumentException -> {
-                Map<String, Object> extensions = ErrorResponseBuilder.buildGraphQLErrorExtensions(
-                        ErrorCodes.VALIDATION_ERROR.getCode(),
-                        null
-                );
-
-                return GraphqlErrorBuilder.newError()
-                        .message(ex.getMessage())
-                        .extensions(extensions)
-                        .build();
-            }
-            case IllegalStateException illegalStateException -> {
-                Map<String, Object> extensions = ErrorResponseBuilder.buildGraphQLErrorExtensions(
-                        ErrorCodes.RESOURCE_CONFLICT.getCode(),
-                        null
-                );
-
-                return GraphqlErrorBuilder.newError()
-                        .message(ex.getMessage())
-                        .extensions(extensions)
-                        .build();
-            }
-            default -> {
-            }
+    protected GraphQLError resolveToSingleError(Throwable ex, @NonNull DataFetchingEnvironment env) {
+        String message;
+        
+        if (ex instanceof BusinessException businessEx) {
+            message = businessEx.getMessage();
+        } else if (ex instanceof IllegalArgumentException || ex instanceof IllegalStateException) {
+            message = ex.getMessage();
+        } else {
+            message = "Wystąpił nieoczekiwany błąd";
         }
 
-        return null;
+        return GraphqlErrorBuilder.newError()
+                .message(message)
+                .build();
     }
 }

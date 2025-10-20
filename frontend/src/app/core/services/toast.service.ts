@@ -17,22 +17,20 @@ export class ToastService {
     });
   }
 
-  showError(message: string, code?: string, duration = 5000): void {
+  showError(message: string, duration = 5000): void {
     this.addToast({
       id: crypto.randomUUID(),
       message,
       type: 'error',
-      code,
       duration
     });
   }
 
-  showWarning(message: string, code?: string, duration = 4000): void {
+  showWarning(message: string, duration = 4000): void {
     this.addToast({
       id: crypto.randomUUID(),
       message,
       type: 'warning',
-      code,
       duration
     });
   }

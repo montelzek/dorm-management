@@ -40,11 +40,6 @@ import { ToastService } from '../../../../core/services/toast.service';
             <p class="text-sm font-medium" [ngClass]="getTextClasses(toast.type)">
               {{ toast.message }}
             </p>
-            @if (toast.code) {
-              <p class="mt-1 text-xs opacity-75" [ngClass]="getTextClasses(toast.type)">
-                Kod: {{ toast.code }}
-              </p>
-            }
           </div>
           <button 
             (click)="toastService.removeToast(toast.id)"

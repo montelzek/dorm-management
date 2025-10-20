@@ -18,9 +18,7 @@ export class ErrorService {
 
     this._currentError.set(appError);
 
-    if (!this.isProduction()) {
-      console.error('Error occurred:', error);
-    }
+    console.error('Error occurred:', error);
 
     setTimeout(() => this.clearError(appError.id), 5000);
   }
@@ -36,10 +34,8 @@ export class ErrorService {
     return {
       id: crypto.randomUUID(),
       message: this.extractMessage(error),
-      code: this.extractCode(error),
       timestamp: new Date(),
-      severity: this.determineSeverity(error),
-      field: this.extractField(error)
+      severity: this.determineSeverity(error)
     };
   }
 
@@ -79,83 +75,8 @@ export class ErrorService {
     return 'Wystąpił nieoczekiwany błąd. Spróbuj ponownie.';
   }
 
-  private extractCode(error: any): string | undefined {
-    if (error.graphQLErrors && error.graphQLErrors.length > 0) {
-      return error.graphQLErrors[0].extensions?.code;
-    }
-
-    if (error.errors && error.errors.length > 0) {
-      return error.errors[0].extensions?.code;
-    }
-
-    if (error.networkError) {
-      if (error.networkError.error && error.networkError.error.data && error.networkError.error.data.errors) {
-        return error.networkError.error.data.errors[0].extensions?.code;
-      }
-    }
-
-    if (error.error && error.error.data && error.error.data.errors) {
-      return error.error.data.errors[0].extensions?.code;
-    }
-
-    if (error.extensions?.code) {
-      return error.extensions.code;
-    }
-
-    return undefined;
-  }
-
-  private extractField(error: any): string | undefined {
-    if (error.graphQLErrors && error.graphQLErrors.length > 0) {
-      return error.graphQLErrors[0].extensions?.field;
-    }
-
-    if (error.errors && error.errors.length > 0) {
-      return error.errors[0].extensions?.field;
-    }
-
-    if (error.networkError) {
-      if (error.networkError.error && error.networkError.error.data && error.networkError.error.data.errors) {
-        return error.networkError.error.data.errors[0].extensions?.field;
-      }
-    }
-
-    if (error.error && error.error.data && error.error.data.errors) {
-      return error.error.data.errors[0].extensions?.field;
-    }
-
-    if (error.extensions?.field) {
-      return error.extensions.field;
-    }
-
-    return undefined;
-  }
-
   private determineSeverity(error: any): ErrorSeverity {
-    const code = this.extractCode(error);
-
-    if (code === 'RESOURCE_CONFLICT' || code === 'INVALID_TIME' || code === 'VALIDATION_ERROR' ||
-        code === 'INVALID_DATE' || code === 'RESERVATION_TOO_LONG' || code === 'OUTSIDE_HOURS' ||
-        code === 'PAST_RESERVATION' || code === 'REQUIRED_FIELD' || code === 'INVALID_FORMAT') {
-      return 'warning';
-    }
-
-    if (code === 'UNAUTHORIZED' || code === 'FORBIDDEN' || code === 'INVALID_CREDENTIALS') {
-      return 'error';
-    }
-
-    if (code === 'RESOURCE_NOT_FOUND' || code === 'USER_NOT_FOUND' || code === 'BUILDING_NOT_FOUND') {
-      return 'warning';
-    }
-
-    if (code === 'INTERNAL_ERROR' || code === 'DATABASE_ERROR' || code === 'NETWORK_ERROR') {
-      return 'error';
-    }
-
-    return 'error';
+    return 'warning';
   }
 
-  private isProduction(): boolean {
-    return false;
-  }
 }

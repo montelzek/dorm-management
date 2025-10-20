@@ -175,20 +175,8 @@ export class ReservationService {
       catchError(error => {
         this._isLoading.set(false);
 
-        const errorCode = this.extractErrorCode(error);
-        if (errorCode === 'RESOURCE_CONFLICT') {
-          this.toastService.showWarning(
-            'Wybrany zasób jest już zarezerwowany w tym czasie. Wybierz inny termin.',
-            errorCode
-          );
-        } else if (errorCode === 'INVALID_TIME' || errorCode === 'OUTSIDE_HOURS') {
-          this.toastService.showWarning(
-            'Nieprawidłowy czas rezerwacji. Sprawdź wybrane godziny.',
-            errorCode
-          );
-        } else {
-          this.errorService.handleError(error);
-        }
+        // Uproszczenie: wszystkie błędy obsługiwane przez ErrorService
+        this.errorService.handleError(error);
 
         const errorMessage = this.extractErrorMessage(error);
         this._error.set(errorMessage);

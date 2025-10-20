@@ -40,15 +40,8 @@ export class AuthService {
       map(response => response.data!.registerUser),
       catchError(error => {
         if (error.graphQLErrors && error.graphQLErrors.length > 0) {
-          const graphQLError = error.graphQLErrors[0];
-          const errorCode = graphQLError.extensions?.['code'] as string | undefined;
-          const errorMessage = graphQLError.message;
-
-          if (errorCode === 'VALIDATION_ERROR') {
-            this.toastService.showError(errorMessage);
-          } else {
-            this.toastService.showError(errorMessage || 'Wystąpił błąd podczas rejestracji');
-          }
+          const errorMessage = error.graphQLErrors[0].message;
+          this.toastService.showError(errorMessage);
         } else {
           this.toastService.showError('Wystąpił błąd podczas rejestracji');
         }
@@ -75,15 +68,8 @@ export class AuthService {
       }),
       catchError(error => {
         if (error.graphQLErrors && error.graphQLErrors.length > 0) {
-          const graphQLError = error.graphQLErrors[0];
-          const errorCode = graphQLError.extensions?.['code'] as string | undefined;
-          const errorMessage = graphQLError.message;
-
-          if (errorCode === 'INVALID_CREDENTIALS') {
-            this.toastService.showError(errorMessage);
-          } else {
-            this.toastService.showError(errorMessage || 'Wystąpił błąd podczas logowania');
-          }
+          const errorMessage = error.graphQLErrors[0].message;
+          this.toastService.showError(errorMessage);
         } else {
           this.toastService.showError('Wystąpił błąd podczas logowania');
         }

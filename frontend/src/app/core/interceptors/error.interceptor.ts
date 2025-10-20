@@ -20,13 +20,10 @@ export const ErrorInterceptor: HttpInterceptorFn = (req, next) => {
       }
 
       const errorMessage = extractErrorMessage(error);
-      const errorCode = extractErrorCode(error);
 
-      if (!isProduction()) {
-        console.error('HTTP Error:', error);
-      }
+      console.error('HTTP Error:', error);
 
-      toastService.showError(errorMessage, errorCode);
+      toastService.showError(errorMessage);
       errorService.handleError(error);
 
       return throwError(() => new Error(errorMessage));
@@ -61,22 +58,3 @@ function extractErrorMessage(error: HttpErrorResponse): string {
   }
 }
 
-function extractErrorCode(error: HttpErrorResponse): string | undefined {
-  if (error.error?.errors?.[0]?.extensions?.code) {
-    return error.error.errors[0].extensions.code;
-  }
-
-  if (error.error?.data?.errors?.[0]?.extensions?.code) {
-    return error.error.data.errors[0].extensions.code;
-  }
-
-  if (error.error?.extensions?.code) {
-    return error.error.extensions.code;
-  }
-
-  return undefined;
-}
-
-function isProduction(): boolean {
-  return false;
-}

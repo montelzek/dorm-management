@@ -17,12 +17,6 @@ import { ErrorService } from '../../../../core/services/error.service';
             <div class="flex-1 min-w-0">
               <h3 class="text-sm font-medium text-red-800 dark:text-red-200">Błąd</h3>
               <p class="mt-1 text-sm text-red-700 dark:text-red-300">{{ error.message }}</p>
-              @if (error.code) {
-                <p class="mt-1 text-xs text-red-600 dark:text-red-400">Kod: {{ error.code }}</p>
-              }
-              @if (error.field) {
-                <p class="mt-1 text-xs text-red-600 dark:text-red-400">Pole: {{ error.field }}</p>
-              }
             </div>
             <button 
               (click)="errorService.clearError(error.id)"
