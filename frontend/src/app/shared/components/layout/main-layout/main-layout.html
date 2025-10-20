@@ -3,10 +3,7 @@
 
   <div class="flex flex-1 flex-col overflow-y-auto lg:ml-0">
     <app-header
-      [userName]="userName"
-      [dormName]="dormName"
-      [roomNumber]="roomNumber"
-      [userInitials]="userInitials"
+      [user]="user()"
       (mobileMenuToggle)="sidebar.openMobileMenu()"
     ></app-header>
 

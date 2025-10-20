@@ -8,7 +8,7 @@
     </button>
 
     <div class="min-w-0 flex-1">
-      <p class="text-xs text-text-secondary lg:text-sm md:text-xs sm:text-xs truncate">Welcome back,</p>
+      <p class="text-xs text-text-secondary lg:text-sm md:text-xs sm:text-xs truncate">{{ roleInfo().title }}</p>
       <h1 class="text-lg font-bold text-text-primary lg:text-2xl md:text-xl sm:text-base truncate">{{ userName() }}</h1>
     </div>
   </div>
@@ -17,8 +17,13 @@
     <app-theme-toggle></app-theme-toggle>
 
     <div class="text-right hidden sm:block">
-      <p class="font-semibold text-text-primary text-xs lg:text-sm md:text-xs truncate">{{ dormName() }}</p>
-      <p class="text-xs text-text-secondary lg:text-sm md:text-xs truncate">Room: {{ roomNumber() }}</p>
+      @if (roleInfo().showBuildingInfo) {
+        <p class="font-semibold text-text-primary text-xs lg:text-sm md:text-xs truncate">{{ dormName() }}</p>
+        <p class="text-xs text-text-secondary lg:text-sm md:text-xs truncate">Room: {{ roomNumber() }}</p>
+      } @else {
+        <p class="font-semibold text-text-primary text-xs lg:text-sm md:text-xs truncate">{{ roleInfo().subtitle }}</p>
+        <p class="text-xs text-text-secondary lg:text-sm md:text-xs truncate">{{ userRole() }}</p>
+      }
     </div>
 
     <div class="h-8 w-8 lg:h-12 lg:w-12 md:h-10 md:w-10 sm:h-8 sm:w-8 flex-shrink-0">
