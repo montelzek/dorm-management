@@ -45,6 +45,11 @@ public class ReservationService {
 
         ZoneId dormitoryZone = ApplicationConstants.DORMITORY_TIMEZONE;
 
+        ZonedDateTime now = ZonedDateTime.now(dormitoryZone);
+        if (startTime.withZoneSameInstant(dormitoryZone).isBefore(now)) {
+            throw new BusinessException(ErrorCodes.PAST_RESERVATION, ApplicationConstants.PAST_RESERVATION_MESSAGE, "startTime");
+        }
+
         if (resource.getResourceType() == EResourceType.LAUNDRY) {
 
             if (currentUser.getRoom() == null || !currentUser.getRoom().getBuilding().getId().equals(resource.getBuilding().getId())) {
@@ -155,14 +160,14 @@ public class ReservationService {
     }
 
     /**
-     * Parses flexible date-time string to ZonedDateTime
+     * Parses date-time string to ZonedDateTime in Europe/Warsaw timezone
      */
     public ZonedDateTime parseFlexibleDateTime(String dateTimeString) {
         try {
             return ZonedDateTime.parse(dateTimeString);
         } catch (DateTimeParseException e) {
             try {
-                return LocalDateTime.parse(dateTimeString).atZone(ZoneId.systemDefault());
+                return LocalDateTime.parse(dateTimeString).atZone(ApplicationConstants.DORMITORY_TIMEZONE);
             } catch (DateTimeParseException e2) {
                 throw new IllegalArgumentException("Invalid date-time format: " + dateTimeString, e2);
             }
@@ -239,13 +244,14 @@ public class ReservationService {
         GraphQLPayloads.ReservationResourcePayload resourcePayload = new GraphQLPayloads.ReservationResourcePayload(resource.getId(), resource.getName(), resource.getResourceType().name());
 
         ZoneId dormitoryZone = ApplicationConstants.DORMITORY_TIMEZONE;
-        String startTimeAsUtcString = reservation.getStartTime().atZone(dormitoryZone).withZoneSameInstant(ApplicationConstants.UTC_TIMEZONE).format(DateTimeFormatter.ISO_INSTANT);
-        String endTimeAsUtcString = reservation.getEndTime().atZone(dormitoryZone).withZoneSameInstant(ApplicationConstants.UTC_TIMEZONE).format(DateTimeFormatter.ISO_INSTANT);
+        // Uproszczenie: zwracamy czas w strefie Europe/Warsaw (bez konwersji do UTC)
+        String startTimeString = reservation.getStartTime().atZone(dormitoryZone).format(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+        String endTimeString = reservation.getEndTime().atZone(dormitoryZone).format(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
 
         return new GraphQLPayloads.ReservationPayload(
                 reservation.getId(),
-                startTimeAsUtcString,
-                endTimeAsUtcString,
+                startTimeString,
+                endTimeString,
                 reservation.getStatus(),
                 resourcePayload,
                 userPayload

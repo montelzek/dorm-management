@@ -136,7 +136,7 @@ export class ErrorService {
 
     if (code === 'RESOURCE_CONFLICT' || code === 'INVALID_TIME' || code === 'VALIDATION_ERROR' ||
         code === 'INVALID_DATE' || code === 'RESERVATION_TOO_LONG' || code === 'OUTSIDE_HOURS' ||
-        code === 'REQUIRED_FIELD' || code === 'INVALID_FORMAT') {
+        code === 'PAST_RESERVATION' || code === 'REQUIRED_FIELD' || code === 'INVALID_FORMAT') {
       return 'warning';
     }
 

@@ -12,7 +12,7 @@ public final class ApplicationConstants {
     
     // ========== TIME ZONES ==========
     public static final ZoneId DORMITORY_TIMEZONE = ZoneId.of("Europe/Warsaw");
-    public static final ZoneId UTC_TIMEZONE = ZoneId.of("UTC");
+    // Usunięto UTC_TIMEZONE - używamy tylko Europe/Warsaw
     
     // ========== RESERVATION CONSTRAINTS ==========
     public static final LocalTime EARLIEST_RESERVATION_TIME = LocalTime.of(8, 0);
@@ -39,4 +39,5 @@ public final class ApplicationConstants {
     public static final String OUTSIDE_HOURS_START_MESSAGE = "Rezerwacja nie może rozpocząć się przed 08:00";
     public static final String OUTSIDE_HOURS_END_MESSAGE = "Rezerwacja nie może zakończyć się po 23:00";
     public static final String INVALID_DATE_MESSAGE = "Rezerwacja musi rozpocząć się i zakończyć tego samego dnia";
+    public static final String PAST_RESERVATION_MESSAGE = "Nie można rezerwować terminów w przeszłości";
 }

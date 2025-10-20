@@ -10,6 +10,7 @@ public enum ErrorCodes {
     INVALID_DATE("INVALID_DATE", "Nieprawidłowa data rezerwacji"),
     RESERVATION_TOO_LONG("RESERVATION_TOO_LONG", "Rezerwacja nie może trwać dłużej niż 5 godzin"),
     OUTSIDE_HOURS("OUTSIDE_HOURS", "Rezerwacja poza dozwolonymi godzinami"),
+    PAST_RESERVATION("PAST_RESERVATION", "Nie można rezerwować terminów w przeszłości"),
     
     // Validation Errors
     VALIDATION_ERROR("VALIDATION_ERROR", "Błąd walidacji danych"),

@@ -263,8 +263,8 @@ export class ReservationsComponent implements OnInit {
     const startTimeHour = formValue.startTimeHour;
     const endTimeHour = formValue.endTimeHour;
 
-    const startDateTime = `${date}T${startTimeHour}:00+02:00`;
-    const endDateTime = `${date}T${endTimeHour}:00+02:00`;
+    const startDateTime = `${date}T${startTimeHour}:00`;
+    const endDateTime = `${date}T${endTimeHour}:00`;
 
     return {
       startTime: new Date(startDateTime).toISOString(),
