@@ -41,20 +41,20 @@ function extractErrorMessage(error: HttpErrorResponse): string {
   }
 
   if (error.status === 0) {
-    return 'Brak połączenia z serwerem. Sprawdź połączenie internetowe.';
+    return 'No connection to server. Check your internet connection.';
   }
 
   switch (error.status) {
     case 401:
-      return 'Sesja wygasła. Zaloguj się ponownie.';
+      return 'Session expired. Please log in again.';
     case 403:
-      return 'Brak uprawnień do wykonania tej operacji.';
+      return 'You do not have permission to perform this operation.';
     case 404:
-      return 'Nie znaleziono żądanego zasobu.';
+      return 'Requested resource not found.';
     case 500:
-      return 'Wystąpił błąd serwera. Spróbuj ponownie.';
+      return 'Server error occurred. Please try again.';
     default:
-      return error.error?.message || error.message || 'Wystąpił nieoczekiwany błąd.';
+      return error.error?.message || error.message || 'An unexpected error occurred.';
   }
 }
 

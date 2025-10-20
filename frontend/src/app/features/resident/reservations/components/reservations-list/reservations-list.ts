@@ -90,11 +90,11 @@ export class ReservationsListComponent {
   getStatusDisplayText(status: string): string {
     switch (status) {
       case 'CONFIRMED':
-        return 'Potwierdzona';
+        return 'Confirmed';
       case 'CANCELLED':
-        return 'Anulowana';
+        return 'Cancelled';
       case 'COMPLETED':
-        return 'Zakończona';
+        return 'Completed';
       default:
         return status;
     }

@@ -72,7 +72,7 @@ export class ErrorService {
       return error.error.data.errors[0].message;
     }
 
-    return 'Wystąpił nieoczekiwany błąd. Spróbuj ponownie.';
+    return 'An unexpected error occurred. Please try again.';
   }
 
   private determineSeverity(error: any): ErrorSeverity {

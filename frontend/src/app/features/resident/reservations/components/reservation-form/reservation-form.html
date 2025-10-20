@@ -4,14 +4,14 @@
 
     <div class="form-field">
       <label for="building" class="mb-1 block text-sm font-medium text-text-primary">
-        1. Wybierz budynek
+        1. Select building
       </label>
       <select
         id="building"
         formControlName="buildingId"
         class="w-full rounded-md border-input-border bg-input-bg px-3 py-2 text-input-text placeholder:text-input-placeholder focus:border-input-focus-border focus:outline-none focus:ring-2 focus:ring-input-focus-border"
       >
-        <option [ngValue]="null" disabled>Wybierz budynek...</option>
+        <option [ngValue]="null" disabled>Select building...</option>
         @for (building of buildings(); track building.id) {
           <option [value]="building.id">{{ building.name }}</option>
         }
@@ -20,7 +20,7 @@
 
     <div class="form-field">
       <label for="resource" class="mb-1 block text-sm font-medium text-text-primary">
-        2. Wybierz zasób
+        2. Select resource
       </label>
       <select
         id="resource"
@@ -29,9 +29,9 @@
       >
         <option [ngValue]="null" disabled>
           @if (form().get('buildingId')?.value) {
-            <span>Wybierz zasób...</span>
+            <span>Select resource...</span>
           } @else {
-            <span>Najpierw wybierz budynek</span>
+            <span>First select building</span>
           }
         </option>
         @for (resource of resources(); track resource.id) {
@@ -45,10 +45,10 @@
 
       @if (isLaundryResource) {
         <div class="space-y-4">
-          <h4 class="text-lg font-semibold text-text-primary">3. Wybierz termin prania</h4>
+          <h4 class="text-lg font-semibold text-text-primary">3. Select laundry time slot</h4>
 
           <div>
-            <label for="date" class="mb-1 block text-sm font-medium text-text-primary">Data</label>
+            <label for="date" class="mb-1 block text-sm font-medium text-text-primary">Date</label>
             <input
               id="date"
               type="date"
@@ -59,7 +59,7 @@
 
           <div>
             <label for="laundrySlot" class="mb-1 block text-sm font-medium text-text-primary">
-              Dostępny termin
+              Available time slot
             </label>
             <select
               id="laundrySlot"
@@ -68,9 +68,9 @@
             >
               <option [ngValue]="null" disabled>
                 @if (form().get('date')?.value) {
-                  <span>Wybierz godzinę...</span>
+                  <span>Select time...</span>
                 } @else {
-                  <span>Najpierw wybierz datę</span>
+                  <span>First select date</span>
                 }
               </option>
               @for (slot of slots(); track slot.startTime) {
@@ -84,11 +84,11 @@
         } @else if (isStandardResource) {
           <div class="space-y-4">
             <h4 class="text-lg font-semibold text-text-primary">
-              3. Wybierz datę i przedział czasowy
+              3. Select date and time range
             </h4>
 
             <div>
-              <label for="date" class="mb-1 block text-sm font-medium text-text-primary">Data</label>
+              <label for="date" class="mb-1 block text-sm font-medium text-text-primary">Date</label>
               <input
                 id="date"
                 type="date"
@@ -100,7 +100,7 @@
             <div class="grid grid-cols-2 gap-4 md:grid-cols-2 sm:grid-cols-1">
               <div>
                 <label for="startTimeHour" class="mb-1 block text-sm font-medium text-text-primary">
-                  Godzina rozpoczęcia
+                  Start time
                 </label>
                 <select
                   id="startTimeHour"
@@ -109,9 +109,9 @@
                 >
                   <option [ngValue]="null" disabled>
                     @if (form().get('date')?.value) {
-                      <span>Wybierz...</span>
+                      <span>Select...</span>
                     } @else {
-                      <span>Najpierw datę</span>
+                      <span>First select date</span>
                     }
                   </option>
                   @for (hour of getAvailableHours(); track hour) {
@@ -121,7 +121,7 @@
                 @if (form().get('startTimeHour')?.invalid && (form().get('startTimeHour')?.dirty || form().get('startTimeHour')?.touched)) {
                   <p class="mt-1 text-sm text-error-text">
                     @if (form().get('startTimeHour')?.errors?.['required']) {
-                      Godzina rozpoczęcia jest wymagana
+                      Start time is required
                     }
                   </p>
                 }
@@ -129,7 +129,7 @@
 
               <div>
                 <label for="endTimeHour" class="mb-1 block text-sm font-medium text-text-primary">
-                  Godzina zakończenia
+                  End time
                 </label>
                 <select
                   id="endTimeHour"
@@ -138,9 +138,9 @@
                 >
                   <option [ngValue]="null" disabled>
                     @if (form().get('date')?.value) {
-                      <span>Wybierz...</span>
+                      <span>Select...</span>
                     } @else {
-                      <span>Najpierw datę</span>
+                      <span>First select date</span>
                     }
                   </option>
                   @for (hour of getAvailableHours(); track hour) {
@@ -150,7 +150,7 @@
                 @if (form().get('endTimeHour')?.invalid && (form().get('endTimeHour')?.dirty || form().get('endTimeHour')?.touched)) {
                   <p class="mt-1 text-sm text-error-text">
                     @if (form().get('endTimeHour')?.errors?.['required']) {
-                      Godzina zakończenia jest wymagana
+                      End time is required
                     }
                   </p>
                 }
@@ -166,7 +166,7 @@
         (click)="onCancel()"
         class="rounded-md border border-input-border bg-card px-4 py-2 text-sm font-medium text-text-primary hover:bg-background focus:outline-none focus:ring-2 focus:ring-button-focus-outline"
       >
-        Anuluj
+        Cancel
       </button>
       <button
         type="submit"
@@ -174,9 +174,9 @@
         class="rounded-md bg-button-bg px-4 py-2 text-sm font-medium text-button-text shadow-sm transition-colors hover:bg-button-hover focus:outline-none focus:ring-2 focus:ring-button-focus-outline disabled:cursor-not-allowed disabled:opacity-50"
       >
         @if (isLoading()) {
-          Ładowanie...
+          Loading...
         } @else {
-          Zarezerwuj
+          Reserve
         }
       </button>
     </div>

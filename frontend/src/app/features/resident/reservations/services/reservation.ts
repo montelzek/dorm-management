@@ -169,7 +169,7 @@ export class ReservationService {
               throw new Error(result.errors[0]?.message || 'Failed to create reservation');
             }
         this._isLoading.set(false);
-        this.toastService.showSuccess('Rezerwacja została utworzona pomyślnie!');
+        this.toastService.showSuccess('Reservation created successfully!');
         this.loadMyReservations();
         return result.data;
       }),
@@ -283,7 +283,7 @@ export class ReservationService {
     }).pipe(
       map(result => {
         this._isLoading.set(false);
-        this.toastService.showSuccess('Rezerwacja została anulowana pomyślnie!');
+        this.toastService.showSuccess('Reservation cancelled successfully!');
         this.loadMyReservations(); 
         return result.data!.cancelReservation;
       }),
