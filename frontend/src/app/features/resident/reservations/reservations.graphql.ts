@@ -1,24 +1,5 @@
 import { gql } from 'apollo-angular';
 
-export const GET_MY_DETAILS = gql`
-  query GetMyDetails {
-    me {
-      id
-      firstName
-      lastName
-      role
-      building {
-        id
-        name
-      }
-      room {
-        id
-        roomNumber
-      }
-    }
-  }
-`;
-
 export const GET_BUILDINGS = gql`
   query GetBuildings {
     allBuildings {

@@ -1,7 +1,9 @@
 package com.montelzek.mydorm.user;
 
 import com.montelzek.mydorm.building.Building;
+import com.montelzek.mydorm.room.Room;
 import com.montelzek.mydorm.security.UserDetailsImpl;
+import com.montelzek.mydorm.user.payloads.ResidentPayload;
 import lombok.AllArgsConstructor;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.graphql.data.method.annotation.SchemaMapping;
@@ -9,11 +11,14 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 
+import java.util.List;
+
 @Controller
 @AllArgsConstructor
 public class UserController {
 
     private final UserRepository userRepository;
+    private final UserService userService;
 
     @QueryMapping
     @PreAuthorize("isAuthenticated()")
@@ -35,7 +40,15 @@ public class UserController {
     }
 
     @SchemaMapping(typeName = "UserPayload", field = "room")
-    public com.montelzek.mydorm.room.Room getRoomForUser(User user) {
+    public Room getRoomForUser(User user) {
         return user.getRoom();
+    }
+
+    // Resident management
+
+    @QueryMapping
+    @PreAuthorize("isAuthenticated()")
+    public List<ResidentPayload> allResidents() {
+        return userService.getResidentsAsPayloads();
     }
 }

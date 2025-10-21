@@ -4,14 +4,14 @@ import { Observable } from 'rxjs';
 import { map, catchError, tap, shareReplay } from 'rxjs/operators';
 import { ErrorService } from '../../../../core/services/error.service';
 import { ToastService } from '../../../../core/services/toast.service';
+import { UserService } from '../../../../core/services/user.service';
 
 import {
   Building,
   CreateReservationInput,
   ReservationPayload,
   ReservationResource,
-  TimeSlot,
-  User
+  TimeSlot
 } from '../../../../shared/models/graphql.types';
 import {
   CANCEL_RESERVATION,
@@ -19,7 +19,6 @@ import {
   GET_AVAILABLE_LAUNDRY_SLOTS,
   GET_AVAILABLE_STANDARD_SLOTS,
   GET_BUILDINGS,
-  GET_MY_DETAILS,
   GET_MY_RESERVATIONS,
   GET_RESOURCES_BY_BUILDING
 } from '../reservations.graphql';
@@ -31,16 +30,16 @@ export class ReservationService {
   private readonly apollo = inject(Apollo);
   private errorService = inject(ErrorService);
   private toastService = inject(ToastService);
+  private userService = inject(UserService);
 
   private readonly _isLoading = signal<boolean>(false);
   private readonly _error = signal<string | null>(null);
-  private readonly _currentUser = signal<User | null>(null);
   private readonly _buildings = signal<Building[]>([]);
   private readonly _myReservations = signal<ReservationPayload[]>([]);
 
   readonly isLoading = computed(() => this._isLoading());
   readonly error = computed(() => this._error());
-  readonly currentUser = computed(() => this._currentUser());
+  readonly currentUser = computed(() => this.userService.currentUser());
   readonly buildings = computed(() => this._buildings());
   readonly myReservations = computed(() => this._myReservations());
 
@@ -60,23 +59,6 @@ export class ReservationService {
     );
   }
 
-  getMyDetails(): Observable<User> {
-    return this.createQueryObservable(() =>
-      this.apollo.watchQuery<{ me: User }>({
-        query: GET_MY_DETAILS,
-        errorPolicy: 'all'
-      }).valueChanges.pipe(
-        map(result => {
-          if (result.errors) {
-            throw new Error(result.errors[0]?.message || 'Failed to load user details');
-          }
-          const user = result.data.me;
-          this._currentUser.set(user);
-          return user;
-        })
-      )
-    );
-  }
 
   getBuildings(): Observable<Building[]> {
     return this.createQueryObservable(() =>
@@ -242,7 +224,7 @@ export class ReservationService {
   }
 
   loadUserDetails(): void {
-    this.getMyDetails().subscribe();
+    this.userService.loadCurrentUser();
   }
 
   loadBuildings(): void {
