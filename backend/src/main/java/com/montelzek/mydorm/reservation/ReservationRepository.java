@@ -19,4 +19,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
             @Param("startTime") LocalDateTime startTime,
             @Param("endTime") LocalDateTime endTime
     );
+
+    @Query("SELECT COUNT(r) > 0 FROM Reservation r WHERE r.user.id = :userId AND r.status = 'CONFIRMED' AND r.endTime > :now")
+    boolean hasActiveReservations(@Param("userId") Long userId, @Param("now") LocalDateTime now);
 }

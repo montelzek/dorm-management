@@ -1,6 +1,12 @@
 package com.montelzek.mydorm.user;
 
+import com.montelzek.mydorm.constants.ApplicationConstants;
+import com.montelzek.mydorm.exception.BusinessException;
+import com.montelzek.mydorm.exception.ErrorCodes;
+import com.montelzek.mydorm.reservation.ReservationRepository;
 import com.montelzek.mydorm.reservation.payload.GraphQLPayloads;
+import com.montelzek.mydorm.room.Room;
+import com.montelzek.mydorm.room.RoomRepository;
 import com.montelzek.mydorm.user.payloads.ResidentPage;
 import com.montelzek.mydorm.user.payloads.ResidentPayload;
 import lombok.AllArgsConstructor;
@@ -9,6 +15,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,6 +25,8 @@ import java.util.stream.Collectors;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final RoomRepository roomRepository;
+    private final ReservationRepository reservationRepository;
 
     public List<ResidentPayload> getResidentsAsPayloads() {
         return userRepository.findAllResidents().stream()
@@ -98,6 +108,61 @@ public class UserService {
                 roomNumber,
                 roomId
         );
+    }
+
+    public ResidentPayload assignRoom(Long userId, Long roomId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new BusinessException(
+                        ErrorCodes.RESOURCE_NOT_FOUND,
+                        "User not found with id: " + userId,
+                        "userId"
+                ));
+
+        Room room = roomRepository.findById(roomId)
+                .orElseThrow(() -> new BusinessException(
+                        ErrorCodes.RESOURCE_NOT_FOUND,
+                        "Room not found with id: " + roomId,
+                        "roomId"
+                ));
+
+        // Check if room has available capacity
+        if (room.getUsers().size() >= room.getCapacity()) {
+            throw new BusinessException(
+                    ErrorCodes.VALIDATION_ERROR,
+                    "Room is at full capacity",
+                    "roomId"
+            );
+        }
+
+        user.setRoom(room);
+        User savedUser = userRepository.save(user);
+
+        return toPayload(savedUser);
+    }
+
+    public boolean deleteResident(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new BusinessException(
+                        ErrorCodes.RESOURCE_NOT_FOUND,
+                        "User not found with id: " + userId,
+                        "userId"
+                ));
+
+        // Check if user has active reservations
+        ZoneId dormitoryZone = ApplicationConstants.DORMITORY_TIMEZONE;
+        LocalDateTime now = LocalDateTime.now(dormitoryZone);
+        
+        boolean hasActiveReservations = reservationRepository.hasActiveReservations(userId, now);
+        if (hasActiveReservations) {
+            throw new BusinessException(
+                    ErrorCodes.VALIDATION_ERROR,
+                    "Cannot delete resident with active reservations",
+                    "userId"
+            );
+        }
+
+        userRepository.delete(user);
+        return true;
     }
 
 }

@@ -2,11 +2,14 @@ package com.montelzek.mydorm.user;
 
 import com.montelzek.mydorm.building.Building;
 import com.montelzek.mydorm.room.Room;
+import com.montelzek.mydorm.room.RoomService;
+import com.montelzek.mydorm.room.payloads.RoomPayload;
 import com.montelzek.mydorm.security.UserDetailsImpl;
 import com.montelzek.mydorm.user.payloads.ResidentPage;
 import com.montelzek.mydorm.user.payloads.ResidentPayload;
 import lombok.AllArgsConstructor;
 import org.springframework.graphql.data.method.annotation.Argument;
+import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.graphql.data.method.annotation.SchemaMapping;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,6 +24,7 @@ public class UserController {
 
     private final UserRepository userRepository;
     private final UserService userService;
+    private final RoomService roomService;
 
     @QueryMapping
     @PreAuthorize("isAuthenticated()")
@@ -58,5 +62,23 @@ public class UserController {
     @PreAuthorize("isAuthenticated()")
     public ResidentPage residentsByBuilding(@Argument Long buildingId, @Argument Integer page, @Argument Integer size) {
         return userService.getResidentsByBuildingPage(buildingId, page, size);
+    }
+
+    @QueryMapping
+    @PreAuthorize("isAuthenticated()")
+    public List<RoomPayload> availableRooms(@Argument Long buildingId) {
+        return roomService.getAvailableRooms(buildingId);
+    }
+
+    @MutationMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResidentPayload assignRoom(@Argument Long userId, @Argument Long roomId) {
+        return userService.assignRoom(userId, roomId);
+    }
+
+    @MutationMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public Boolean deleteResident(@Argument Long userId) {
+        return userService.deleteResident(userId);
     }
 }
