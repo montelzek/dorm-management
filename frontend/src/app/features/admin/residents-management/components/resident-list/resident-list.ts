@@ -1,4 +1,4 @@
-import {Component, computed, input, signal} from '@angular/core';
+import {Component, computed, input, output, signal} from '@angular/core';
 import {ResidentPayload} from '../../models/resident.models';
 
 type SortField = 'firstName' | 'lastName';
@@ -11,6 +11,8 @@ type SortDirection = 'asc' | 'desc';
 })
 export class ResidentListComponent {
   readonly residents = input<ResidentPayload[]>([]);
+  readonly assignRoom = output<ResidentPayload>();
+  readonly deleteResident = output<ResidentPayload>();
   
   readonly sortField = signal<SortField>('firstName');
   readonly sortDirection = signal<SortDirection>('asc');
@@ -39,5 +41,17 @@ export class ResidentListComponent {
       this.sortField.set(field);
       this.sortDirection.set('asc');
     }
+  }
+
+  onAssignRoom(resident: ResidentPayload): void {
+    this.assignRoom.emit(resident);
+  }
+
+  onDeleteResident(resident: ResidentPayload): void {
+    this.deleteResident.emit(resident);
+  }
+
+  hasRoom(resident: ResidentPayload): boolean {
+    return resident.roomNumber !== 'N/A' && resident.roomId != null;
   }
 }
