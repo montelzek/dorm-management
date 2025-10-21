@@ -2,7 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 
 import { MainLayoutComponent } from '../../../shared/components/layout/main-layout/main-layout';
 import { ThemeToggleComponent } from '../../../shared/components/ui/theme-toggle/theme-toggle';
-import { ReservationService } from '../reservations/services/reservation';
+import { UserService } from '../../../core/services/user.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -14,17 +14,17 @@ import { ReservationService } from '../reservations/services/reservation';
   styleUrl: './dashboard.css'
 })
 export class DashboardComponent implements OnInit {
-  private readonly reservationService = inject(ReservationService);
+  private readonly userService = inject(UserService);
 
-  readonly currentUser = this.reservationService.currentUser;
-  readonly isLoading = this.reservationService.isLoading;
-  readonly error = this.reservationService.error;
+  readonly currentUser = this.userService.currentUser;
+  readonly isLoading = this.userService.isLoading;
+  readonly error = this.userService.error;
 
   ngOnInit(): void {
     this.loadUserData();
   }
 
   private loadUserData(): void {
-    this.reservationService.loadUserDetails();
+    this.userService.loadCurrentUser();
   }
 }
