@@ -63,47 +63,99 @@
       </div>
     </div>
 
-    <!-- Residents List -->
-    <div class="rounded-lg bg-card shadow-sm border border-card-border">
-      <app-resident-list
-        [residents]="filteredResidents()"
-      ></app-resident-list>
-    </div>
-
-    <!-- Pagination Controls -->
-    @if (totalPages() > 1) {
-      <div class="flex justify-center items-center gap-2 mt-6">
-        <button
-          (click)="onPageChange(currentPage() - 1)"
-          [disabled]="currentPage() === 0"
-          class="px-4 py-2 rounded-lg bg-card border border-card-border text-text-primary hover:bg-background disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-        >
-          Previous
-        </button>
-
-        <div class="flex gap-1">
-          @for (pageNum of [].constructor(totalPages()); track $index) {
-            <button
-              (click)="onPageChange($index)"
-              [class.bg-primary]="currentPage() === $index"
-              [class.text-white]="currentPage() === $index"
-              [class.bg-card]="currentPage() !== $index"
-              class="px-3 py-2 rounded-lg border border-card-border hover:bg-primary hover:text-white transition-colors min-w-[40px]"
-            >
-              {{ $index + 1 }}
-            </button>
-          }
-        </div>
-
-        <button
-          (click)="onPageChange(currentPage() + 1)"
-          [disabled]="currentPage() === totalPages() - 1"
-          class="px-4 py-2 rounded-lg bg-card border border-card-border text-text-primary hover:bg-background disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-        >
-          Next
-        </button>
+    <!-- Loading State -->
+    @if (isLoading()) {
+      <div class="flex justify-center items-center py-12">
+        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+        <span class="ml-3 text-text-secondary">Loading residents...</span>
       </div>
     }
+
+    <!-- Empty State -->
+    @if (!isLoading() && filteredResidents().length === 0) {
+      <div class="text-center py-12">
+        <svg class="mx-auto h-12 w-12 text-text-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+        </svg>
+        <h3 class="mt-2 text-sm font-medium text-text-primary">No residents found</h3>
+        <p class="mt-1 text-sm text-text-secondary">
+          @if (searchQuery()) {
+            Try adjusting your search query.
+          } @else if (selectedBuildingId()) {
+            No residents in this building.
+          } @else {
+            Get started by adding residents to the system.
+          }
+        </p>
+      </div>
+    }
+
+    <!-- Resident List -->
+    @if (!isLoading() && filteredResidents().length > 0) {
+      <div class="rounded-lg bg-card shadow-sm border border-card-border">
+        <app-resident-list 
+          [residents]="filteredResidents()"
+          (assignRoom)="onAssignRoom($event)"
+          (deleteResident)="onDeleteResident($event)"
+        ></app-resident-list>
+      </div>
+
+      <!-- Pagination Controls -->
+      @if (totalPages() > 1) {
+        <div class="flex justify-center items-center gap-2 mt-6">
+          <button
+            (click)="onPageChange(currentPage() - 1)"
+            [disabled]="currentPage() === 0"
+            class="px-4 py-2 rounded-lg bg-card border border-card-border text-text-primary hover:bg-background disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          >
+            Previous
+          </button>
+
+          <div class="flex gap-1">
+            @for (pageNum of [].constructor(totalPages()); track $index) {
+              <button
+                (click)="onPageChange($index)"
+                [class.bg-indigo-600]="currentPage() === $index"
+                [class.text-white]="currentPage() === $index"
+                [class.bg-card]="currentPage() !== $index"
+                [class.text-text-primary]="currentPage() !== $index"
+                class="px-3 py-2 rounded-lg border border-card-border hover:bg-indigo-600 hover:text-white transition-colors min-w-[40px]"
+              >
+                {{ $index + 1 }}
+              </button>
+            }
+          </div>
+
+          <button
+            (click)="onPageChange(currentPage() + 1)"
+            [disabled]="currentPage() === totalPages() - 1"
+            class="px-4 py-2 rounded-lg bg-card border border-card-border text-text-primary hover:bg-background disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          >
+            Next
+          </button>
+        </div>
+      }
+    }
   </div>
+
+  <!-- Room Assignment Modal -->
+  <app-room-assignment-modal
+    [isOpen]="isModalOpen()"
+    [resident]="selectedResident()"
+    (close)="onModalClose()"
+    (assigned)="onRoomAssigned()"
+  />
+
+  <!-- Delete Confirmation Dialog -->
+  <app-confirmation-dialog
+    [isOpen]="isDeleteDialogOpen()"
+    [title]="'Delete Resident'"
+    [message]="'Are you sure you want to delete ' + (residentToDelete()?.firstName || '') + ' ' + (residentToDelete()?.lastName || '') + '? This action cannot be undone.'"
+    [confirmText]="'Delete'"
+    [cancelText]="'Cancel'"
+    (confirm)="onConfirmDelete()"
+    (cancel)="onCancelDelete()"
+  />
+
 </app-main-layout>
 

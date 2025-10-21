@@ -4,13 +4,19 @@ import {ResidentListComponent} from './components/resident-list/resident-list';
 import {MainLayoutComponent} from '../../../shared/components/layout/main-layout/main-layout';
 import {UserService} from '../../../core/services/user.service';
 import {FormsModule} from '@angular/forms';
+import {RoomAssignmentModalComponent} from './components/room-assignment-modal/room-assignment-modal';
+import {ConfirmationDialogComponent} from './components/confirmation-dialog/confirmation-dialog';
+import {ResidentPayload} from './models/resident.models';
+import {ToastService} from '../../../core/services/toast.service';
 
 @Component({
   selector: 'app-residents-management',
   imports: [
     ResidentListComponent,
     MainLayoutComponent,
-    FormsModule
+    FormsModule,
+    RoomAssignmentModalComponent,
+    ConfirmationDialogComponent
   ],
   templateUrl: './residents-management.html'
 })
@@ -18,6 +24,7 @@ export class ResidentsManagementComponent implements OnInit {
 
   private readonly residentService = inject(ResidentService);
   private readonly userService = inject(UserService);
+  private readonly toastService = inject(ToastService);
 
   readonly allResidents = this.residentService.allResidents;
   readonly buildings = this.residentService.buildings;
@@ -31,6 +38,12 @@ export class ResidentsManagementComponent implements OnInit {
   readonly searchQuery = signal<string>('');
   readonly page = signal<number>(0);
   readonly size = signal<number>(10);
+
+  readonly isModalOpen = signal<boolean>(false);
+  readonly selectedResident = signal<ResidentPayload | null>(null);
+  readonly isDeleteDialogOpen = signal<boolean>(false);
+  readonly residentToDelete = signal<ResidentPayload | null>(null);
+  readonly isLoading = signal<boolean>(false);
 
   readonly filteredResidents = computed(() => {
     const residents = this.allResidents();
@@ -54,15 +67,20 @@ export class ResidentsManagementComponent implements OnInit {
   }
 
   private loadResidents() {
+    this.isLoading.set(true);
     const buildingId = this.selectedBuildingId();
     const page = this.page();
     const size = this.size();
     
-    if (buildingId === '') {
-      this.residentService.getAllResidents(page, size);
-    } else {
-      this.residentService.getResidentsByBuilding(buildingId, page, size);
-    }
+    // Small delay to show that loading is happening
+    setTimeout(() => {
+      if (buildingId === '') {
+        this.residentService.getAllResidents(page, size);
+      } else {
+        this.residentService.getResidentsByBuilding(buildingId, page, size);
+      }
+      this.isLoading.set(false);
+    }, 300);
   }
 
   onBuildingFilterChange(buildingId: string) {
@@ -84,6 +102,48 @@ export class ResidentsManagementComponent implements OnInit {
     this.size.set(newSize);
     this.page.set(0); // Reset to first page
     this.loadResidents();
+  }
+
+  onAssignRoom(resident: ResidentPayload) {
+    this.selectedResident.set(resident);
+    this.isModalOpen.set(true);
+  }
+
+  onModalClose() {
+    this.isModalOpen.set(false);
+    this.selectedResident.set(null);
+  }
+
+  onRoomAssigned() {
+    this.loadResidents(); // Reload the residents list
+  }
+
+  onDeleteResident(resident: ResidentPayload) {
+    this.residentToDelete.set(resident);
+    this.isDeleteDialogOpen.set(true);
+  }
+
+  onCancelDelete() {
+    this.isDeleteDialogOpen.set(false);
+    this.residentToDelete.set(null);
+  }
+
+  onConfirmDelete() {
+    const resident = this.residentToDelete();
+    if (!resident) return;
+
+    this.residentService.deleteResident(resident.id).subscribe({
+      next: () => {
+        this.toastService.showSuccess(`Resident ${resident.firstName} ${resident.lastName} deleted successfully`);
+        this.isDeleteDialogOpen.set(false);
+        this.residentToDelete.set(null);
+        this.loadResidents();
+      },
+      error: (err) => {
+        console.error('Error deleting resident:', err);
+        this.toastService.showError('Failed to delete resident');
+      }
+    });
   }
 
 }
