@@ -5,6 +5,7 @@ import com.montelzek.mydorm.room.Room;
 import com.montelzek.mydorm.security.UserDetailsImpl;
 import com.montelzek.mydorm.user.payloads.ResidentPayload;
 import lombok.AllArgsConstructor;
+import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.graphql.data.method.annotation.SchemaMapping;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -50,5 +51,11 @@ public class UserController {
     @PreAuthorize("isAuthenticated()")
     public List<ResidentPayload> allResidents() {
         return userService.getResidentsAsPayloads();
+    }
+
+    @QueryMapping
+    @PreAuthorize("isAuthenticated()")
+    public List<ResidentPayload> residentsByBuilding(@Argument Long buildingId) {
+        return userService.getResidentsByBuilding(buildingId);
     }
 }

@@ -2,6 +2,7 @@ package com.montelzek.mydorm.user;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -16,4 +17,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("SELECT u FROM User u JOIN u.roles r WHERE r = 'ROLE_RESIDENT'")
     List<User> findAllResidents();
+
+    @Query("SELECT u FROM User u JOIN u.roles r WHERE r = 'ROLE_RESIDENT' AND u.room.building.id = :buildingId")
+    List<User> findResidentsByBuildingId(@Param("buildingId") Long buildingId);
 }
