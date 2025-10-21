@@ -40,17 +40,23 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
-    public ResidentPage getResidentsPage(Integer page, Integer size) {
+    public ResidentPage getResidentsPage(Integer page, Integer size, String search) {
         int pageNumber = page != null ? page : 0;
         int pageSize = size != null ? size : 10;
-        
+
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
-        Page<User> userPage = userRepository.findAllResidents(pageable);
-        
+        Page<User> userPage;
+
+        if (search != null && !search.trim().isEmpty()) {
+            userPage = userRepository.findAllResidentsWithSearch(search.trim(), pageable);
+        } else {
+            userPage = userRepository.findAllResidents(pageable);
+        }
+
         List<ResidentPayload> content = userPage.getContent().stream()
                 .map(this::toPayload)
                 .collect(Collectors.toList());
-        
+
         return new ResidentPage(
                 content,
                 (int) userPage.getTotalElements(),
@@ -60,17 +66,23 @@ public class UserService {
         );
     }
 
-    public ResidentPage getResidentsByBuildingPage(Long buildingId, Integer page, Integer size) {
+    public ResidentPage getResidentsByBuildingPage(Long buildingId, Integer page, Integer size, String search) {
         int pageNumber = page != null ? page : 0;
         int pageSize = size != null ? size : 10;
-        
+
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
-        Page<User> userPage = userRepository.findResidentsByBuildingId(buildingId, pageable);
-        
+        Page<User> userPage;
+
+        if (search != null && !search.trim().isEmpty()) {
+            userPage = userRepository.findResidentsByBuildingIdWithSearch(buildingId, search.trim(), pageable);
+        } else {
+            userPage = userRepository.findResidentsByBuildingId(buildingId, pageable);
+        }
+
         List<ResidentPayload> content = userPage.getContent().stream()
                 .map(this::toPayload)
                 .collect(Collectors.toList());
-        
+
         return new ResidentPage(
                 content,
                 (int) userPage.getTotalElements(),

@@ -1,6 +1,6 @@
 extend type Query {
-    allResidents(page: Int, size: Int): ResidentPage!
-    residentsByBuilding(buildingId: ID!, page: Int, size: Int): ResidentPage!
+    allResidents(page: Int, size: Int, search: String): ResidentPage!
+    residentsByBuilding(buildingId: ID!, page: Int, size: Int, search: String): ResidentPage!
     availableRooms(buildingId: ID): [RoomPayload!]!
 }
 

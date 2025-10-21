@@ -54,14 +54,14 @@ public class UserController {
 
     @QueryMapping
     @PreAuthorize("isAuthenticated()")
-    public ResidentPage allResidents(@Argument Integer page, @Argument Integer size) {
-        return userService.getResidentsPage(page, size);
+    public ResidentPage allResidents(@Argument Integer page, @Argument Integer size, @Argument String search) {
+        return userService.getResidentsPage(page, size, search);
     }
 
     @QueryMapping
     @PreAuthorize("isAuthenticated()")
-    public ResidentPage residentsByBuilding(@Argument Long buildingId, @Argument Integer page, @Argument Integer size) {
-        return userService.getResidentsByBuildingPage(buildingId, page, size);
+    public ResidentPage residentsByBuilding(@Argument Long buildingId, @Argument Integer page, @Argument Integer size, @Argument String search) {
+        return userService.getResidentsByBuildingPage(buildingId, page, size, search);
     }
 
     @QueryMapping

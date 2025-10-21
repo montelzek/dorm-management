@@ -45,21 +45,6 @@ export class ResidentsManagementComponent implements OnInit {
   readonly residentToDelete = signal<ResidentPayload | null>(null);
   readonly isLoading = signal<boolean>(false);
 
-  readonly filteredResidents = computed(() => {
-    const residents = this.allResidents();
-    const query = this.searchQuery().toLowerCase().trim();
-
-    if (!query) {
-      return residents;
-    }
-
-    return residents.filter(resident =>
-      resident.firstName.toLowerCase().includes(query) ||
-      resident.lastName.toLowerCase().includes(query) ||
-      resident.roomNumber.toLowerCase().includes(query)
-    );
-  });
-
   ngOnInit() {
     this.userService.loadCurrentUser();
     this.loadResidents();
@@ -71,13 +56,14 @@ export class ResidentsManagementComponent implements OnInit {
     const buildingId = this.selectedBuildingId();
     const page = this.page();
     const size = this.size();
+    const search = this.searchQuery().trim() || undefined;
     
     // Small delay to show that loading is happening
     setTimeout(() => {
       if (buildingId === '') {
-        this.residentService.getAllResidents(page, size);
+        this.residentService.getAllResidents(page, size, search);
       } else {
-        this.residentService.getResidentsByBuilding(buildingId, page, size);
+        this.residentService.getResidentsByBuilding(buildingId, page, size, search);
       }
       this.isLoading.set(false);
     }, 300);
@@ -91,6 +77,8 @@ export class ResidentsManagementComponent implements OnInit {
 
   onSearchChange(query: string) {
     this.searchQuery.set(query);
+    this.page.set(0); // Reset to first page when searching
+    this.loadResidents(); // Trigger backend search
   }
 
   onPageChange(newPage: number) {

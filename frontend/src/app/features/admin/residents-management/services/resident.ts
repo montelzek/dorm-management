@@ -22,11 +22,11 @@ export class ResidentService {
   readonly currentPage = signal<number>(0);
   readonly pageSize = signal<number>(10);
 
-  getAllResidents(page: number = 0, size: number = 10) {
+  getAllResidents(page: number = 0, size: number = 10, search?: string) {
     this.apollo
       .watchQuery<{ allResidents: ResidentPage }>({
         query: GET_ALL_RESIDENTS,
-        variables: { page, size },
+        variables: { page, size, search: search || null },
         fetchPolicy: 'network-only'
       })
       .valueChanges
@@ -47,11 +47,11 @@ export class ResidentService {
       });
   }
 
-  getResidentsByBuilding(buildingId: string, page: number = 0, size: number = 10) {
+  getResidentsByBuilding(buildingId: string, page: number = 0, size: number = 10, search?: string) {
     this.apollo
       .watchQuery<{ residentsByBuilding: ResidentPage }>({
         query: GET_RESIDENTS_BY_BUILDING,
-        variables: { buildingId, page, size },
+        variables: { buildingId, page, size, search: search || null },
         fetchPolicy: 'network-only'
       })
       .valueChanges
