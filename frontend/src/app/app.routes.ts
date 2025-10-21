@@ -19,5 +19,11 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
 
+  {
+    path: 'admin/residents',
+    loadComponent: () => import('./features/admin/residents-management/residents-management').then(m => m.ResidentsManagementComponent),
+    canActivate: [authGuard]
+  },
+
   { path: '', redirectTo: '/login', pathMatch: 'full' }
 ];

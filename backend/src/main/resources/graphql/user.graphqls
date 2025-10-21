@@ -1,0 +1,12 @@
+extend type Query {
+    allResidents: [ResidentPayload!]!
+}
+
+type ResidentPayload {
+    id: ID!
+    firstName: String!
+    lastName: String!
+    phone: String!
+    buildingName: String!
+    roomNumber: String!
+}

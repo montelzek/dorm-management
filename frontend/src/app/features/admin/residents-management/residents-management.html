@@ -1,0 +1,8 @@
+<app-main-layout [user]="currentUser()">
+  <div class="rounded-lg bg-card shadow-sm border border-card-border">
+    <app-resident-list
+      [residents]="allResidents()"
+    ></app-resident-list>
+  </div>
+</app-main-layout>
+
