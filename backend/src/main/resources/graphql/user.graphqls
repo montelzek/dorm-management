@@ -1,6 +1,12 @@
 extend type Query {
     allResidents(page: Int, size: Int): ResidentPage!
     residentsByBuilding(buildingId: ID!, page: Int, size: Int): ResidentPage!
+    availableRooms(buildingId: ID): [RoomPayload!]!
+}
+
+extend type Mutation {
+    assignRoom(userId: ID!, roomId: ID!): ResidentPayload!
+    deleteResident(userId: ID!): Boolean!
 }
 
 type ResidentPage {
@@ -21,4 +27,14 @@ type ResidentPayload {
     buildingId: ID
     roomNumber: String!
     roomId: ID
+}
+
+type RoomPayload {
+    id: ID!
+    roomNumber: String!
+    capacity: Int!
+    currentOccupancy: Int!
+    rentAmount: Float!
+    buildingId: ID!
+    buildingName: String!
 }

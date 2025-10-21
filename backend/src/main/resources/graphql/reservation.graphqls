@@ -34,11 +34,6 @@ type ReservationResourcePayload {
     resourceType: String!
 }
 
-type RoomPayload {
-    id: ID!
-    roomNumber: String!
-}
-
 type UserPayload {
     id: ID!
     firstName: String!

@@ -5,6 +5,7 @@ import lombok.Getter;
 @Getter
 public enum ErrorCodes {
     RESOURCE_CONFLICT("RESOURCE_CONFLICT", "Resource is already reserved in the selected time slot"),
+    RESOURCE_NOT_FOUND("RESOURCE_NOT_FOUND", "Requested resource not found"),
     INVALID_TIME("INVALID_TIME", "Invalid reservation time"),
     INVALID_DATE("INVALID_DATE", "Invalid reservation date"),
     RESERVATION_TOO_LONG("RESERVATION_TOO_LONG", "Reservation cannot last longer than 5 hours"),
