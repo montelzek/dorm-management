@@ -1,12 +1,16 @@
 extend type Query {
     allResidents: [ResidentPayload!]!
+    residentsByBuilding(buildingId: ID!): [ResidentPayload!]!
 }
 
 type ResidentPayload {
     id: ID!
     firstName: String!
     lastName: String!
+    email: String!
     phone: String!
     buildingName: String!
+    buildingId: ID
     roomNumber: String!
+    roomId: ID
 }

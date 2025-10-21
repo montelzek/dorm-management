@@ -45,11 +45,31 @@ VALUES
     ('admin@admin.com', '$2a$12$GuBHXDKgLih2ZGvzD7tQV.RC2BdiiTR6O3ZiP1Z0BILgkBbtQDJHO', 'Tomasz', 'Gawin', 689456235, null),
     ('resident@resident.com', '$2a$12$GuBHXDKgLih2ZGvzD7tQV.RC2BdiiTR6O3ZiP1Z0BILgkBbtQDJHO', 'Maciej', 'Lis', 689456235, null),
     ('technician@technician.com', '$2a$12$GuBHXDKgLih2ZGvzD7tQV.RC2BdiiTR6O3ZiP1Z0BILgkBbtQDJHO', 'Karol', 'Oliwiak', 689456235, null),
-    ('receptionist@receptionist.com', '$2a$12$GuBHXDKgLih2ZGvzD7tQV.RC2BdiiTR6O3ZiP1Z0BILgkBbtQDJHO', 'Azja', 'Zpasja', 689456235, null);
+    ('receptionist@receptionist.com', '$2a$12$GuBHXDKgLih2ZGvzD7tQV.RC2BdiiTR6O3ZiP1Z0BILgkBbtQDJHO', 'Azja', 'Zpasja', 689456235, null),
+    ('anna.kowalska@example.com', '$2a$12$GuBHXDKgLih2ZGvzD7tQV.RC2BdiiTR6O3ZiP1Z0BILgkBbtQDJHO', 'Anna', 'Kowalska', 600123456, null),
+    ('piotr.nowak@example.com', '$2a$12$GuBHXDKgLih2ZGvzD7tQV.RC2BdiiTR6O3ZiP1Z0BILgkBbtQDJHO', 'Piotr', 'Nowak', 601234567, null),
+    ('julia.mazur@example.com', '$2a$12$GuBHXDKgLih2ZGvzD7tQV.RC2BdiiTR6O3ZiP1Z0BILgkBbtQDJHO', 'Julia', 'Mazur', 602345678, null),
+    ('michal.wozniak@example.com', '$2a$12$GuBHXDKgLih2ZGvzD7tQV.RC2BdiiTR6O3ZiP1Z0BILgkBbtQDJHO', 'Michał', 'Woźniak', 603456789, null),
+    ('katarzyna.lewandowska@example.com', '$2a$12$GuBHXDKgLih2ZGvzD7tQV.RC2BdiiTR6O3ZiP1Z0BILgkBbtQDJHO', 'Katarzyna', 'Lewandowska', 604567890, null),
+    ('pawel.wisniewski@example.com', '$2a$12$GuBHXDKgLih2ZGvzD7tQV.RC2BdiiTR6O3ZiP1Z0BILgkBbtQDJHO', 'Paweł', 'Wiśniewski', 605678901, null),
+    ('magdalena.zielinska@example.com', '$2a$12$GuBHXDKgLih2ZGvzD7tQV.RC2BdiiTR6O3ZiP1Z0BILgkBbtQDJHO', 'Magdalena', 'Zielińska', 606789012, null),
+    ('bartosz.kaczmarek@example.com', '$2a$12$GuBHXDKgLih2ZGvzD7tQV.RC2BdiiTR6O3ZiP1Z0BILgkBbtQDJHO', 'Bartosz', 'Kaczmarek', 607890123, null),
+    ('alicja.piotrowska@example.com', '$2a$12$GuBHXDKgLih2ZGvzD7tQV.RC2BdiiTR6O3ZiP1Z0BILgkBbtQDJHO', 'Alicja', 'Piotrowska', 608901234, null),
+    ('jakub.kowalczyk@example.com', '$2a$12$GuBHXDKgLih2ZGvzD7tQV.RC2BdiiTR6O3ZiP1Z0BILgkBbtQDJHO', 'Jakub', 'Kowalczyk', 609012345, null);
 
 INSERT INTO user_roles (user_id, role_name)
 VALUES
     (1, 'ROLE_ADMIN'),
     (2, 'ROLE_RESIDENT'),
     (3, 'ROLE_TECHNICIAN'),
-    (4, 'ROLE_RECEPTIONIST');
+    (4, 'ROLE_RECEPTIONIST'),
+    (5, 'ROLE_RESIDENT'),
+    (6, 'ROLE_RESIDENT'),
+    (7, 'ROLE_RESIDENT'),
+    (8, 'ROLE_RESIDENT'),
+    (9, 'ROLE_RESIDENT'),
+    (10, 'ROLE_RESIDENT'),
+    (11, 'ROLE_RESIDENT'),
+    (12, 'ROLE_RESIDENT'),
+    (13, 'ROLE_RESIDENT'),
+    (14, 'ROLE_RESIDENT');

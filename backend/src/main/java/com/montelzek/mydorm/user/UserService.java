@@ -20,22 +20,39 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
+    public List<ResidentPayload> getResidentsByBuilding(Long buildingId) {
+        return userRepository.findResidentsByBuildingId(buildingId).stream()
+                .map(this::toPayload)
+                .collect(Collectors.toList());
+    }
+
     public ResidentPayload toPayload(User user) {
         String buildingName = user.getRoom() != null && user.getRoom().getBuilding() != null
                 ? user.getRoom().getBuilding().getName()
                 : "N/A";
         
+        Long buildingId = user.getRoom() != null && user.getRoom().getBuilding() != null
+                ? user.getRoom().getBuilding().getId()
+                : null;
+        
         String roomNumber = user.getRoom() != null
                 ? user.getRoom().getRoomNumber()
                 : "N/A";
+        
+        Long roomId = user.getRoom() != null
+                ? user.getRoom().getId()
+                : null;
 
         return new ResidentPayload(
                 user.getId(),
                 user.getFirstName(),
                 user.getLastName(),
+                user.getEmail(),
                 user.getPhone(),
                 buildingName,
-                roomNumber
+                buildingId,
+                roomNumber,
+                roomId
         );
     }
 

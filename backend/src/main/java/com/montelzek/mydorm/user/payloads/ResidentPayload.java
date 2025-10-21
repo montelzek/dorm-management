@@ -4,7 +4,10 @@ public record ResidentPayload(
         Long id,
         String firstName,
         String lastName,
+        String email,
         String phone,
         String buildingName,
-        String roomNumber
+        Long buildingId,
+        String roomNumber,
+        Long roomId
 ) {}

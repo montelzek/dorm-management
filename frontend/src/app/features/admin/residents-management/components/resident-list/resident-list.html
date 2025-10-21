@@ -1,16 +1,28 @@
 <!-- Desktop Table View -->
-<div class="hidden md:block overflow-hidden">
+<div class="rounded-lg hidden md:block overflow-hidden">
   <table class="min-w-full divide-y divide-card-border">
     <thead class="bg-background">
     <tr>
-      <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-text-secondary">
-        ID
+      <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-text-secondary cursor-pointer hover:text-text-primary"
+          (click)="onSort('firstName')">
+        <div class="flex items-center gap-1">
+          First Name
+          @if (sortField() === 'firstName') {
+            <span>{{ sortDirection() === 'asc' ? '↑' : '↓' }}</span>
+          }
+        </div>
+      </th>
+      <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-text-secondary cursor-pointer hover:text-text-primary"
+          (click)="onSort('lastName')">
+        <div class="flex items-center gap-1">
+          Last Name
+          @if (sortField() === 'lastName') {
+            <span>{{ sortDirection() === 'asc' ? '↑' : '↓' }}</span>
+          }
+        </div>
       </th>
       <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-text-secondary">
-        First Name
-      </th>
-      <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-text-secondary">
-        Last Name
+        Email
       </th>
       <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-text-secondary">
         Phone
@@ -24,16 +36,16 @@
     </tr>
     </thead>
     <tbody class="divide-y divide-card-border bg-card">
-      @for (resident of residents(); track resident.id) {
+      @for (resident of sortedResidents(); track resident.id) {
         <tr class="hover:bg-background transition-colors">
-          <td class="whitespace-nowrap px-6 py-4 text-sm font-medium text-text-primary">
-            {{ resident.id }}
-          </td>
           <td class="whitespace-nowrap px-6 py-4 text-sm text-text-secondary">
             {{ resident.firstName }}
           </td>
           <td class="whitespace-nowrap px-6 py-4 text-sm text-text-secondary">
             {{ resident.lastName }}
+          </td>
+          <td class="whitespace-nowrap px-6 py-4 text-sm text-text-secondary">
+            {{ resident.email }}
           </td>
           <td class="whitespace-nowrap px-6 py-4 text-sm text-text-secondary">
             {{ resident.phone }}
