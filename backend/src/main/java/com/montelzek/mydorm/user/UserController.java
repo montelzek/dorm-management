@@ -3,6 +3,7 @@ package com.montelzek.mydorm.user;
 import com.montelzek.mydorm.building.Building;
 import com.montelzek.mydorm.room.Room;
 import com.montelzek.mydorm.security.UserDetailsImpl;
+import com.montelzek.mydorm.user.payloads.ResidentPage;
 import com.montelzek.mydorm.user.payloads.ResidentPayload;
 import lombok.AllArgsConstructor;
 import org.springframework.graphql.data.method.annotation.Argument;
@@ -49,13 +50,13 @@ public class UserController {
 
     @QueryMapping
     @PreAuthorize("isAuthenticated()")
-    public List<ResidentPayload> allResidents() {
-        return userService.getResidentsAsPayloads();
+    public ResidentPage allResidents(@Argument Integer page, @Argument Integer size) {
+        return userService.getResidentsPage(page, size);
     }
 
     @QueryMapping
     @PreAuthorize("isAuthenticated()")
-    public List<ResidentPayload> residentsByBuilding(@Argument Long buildingId) {
-        return userService.getResidentsByBuilding(buildingId);
+    public ResidentPage residentsByBuilding(@Argument Long buildingId, @Argument Integer page, @Argument Integer size) {
+        return userService.getResidentsByBuildingPage(buildingId, page, size);
     }
 }

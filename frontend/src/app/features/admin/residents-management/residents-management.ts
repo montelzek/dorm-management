@@ -22,9 +22,15 @@ export class ResidentsManagementComponent implements OnInit {
   readonly allResidents = this.residentService.allResidents;
   readonly buildings = this.residentService.buildings;
   readonly currentUser = this.userService.currentUser;
+  readonly totalElements = this.residentService.totalElements;
+  readonly totalPages = this.residentService.totalPages;
+  readonly currentPage = this.residentService.currentPage;
+  readonly pageSize = this.residentService.pageSize;
 
   readonly selectedBuildingId = signal<string>('');
   readonly searchQuery = signal<string>('');
+  readonly page = signal<number>(0);
+  readonly size = signal<number>(10);
 
   readonly filteredResidents = computed(() => {
     const residents = this.allResidents();
@@ -43,21 +49,41 @@ export class ResidentsManagementComponent implements OnInit {
 
   ngOnInit() {
     this.userService.loadCurrentUser();
-    this.residentService.getAllResidents();
+    this.loadResidents();
     this.residentService.getBuildings();
+  }
+
+  private loadResidents() {
+    const buildingId = this.selectedBuildingId();
+    const page = this.page();
+    const size = this.size();
+    
+    if (buildingId === '') {
+      this.residentService.getAllResidents(page, size);
+    } else {
+      this.residentService.getResidentsByBuilding(buildingId, page, size);
+    }
   }
 
   onBuildingFilterChange(buildingId: string) {
     this.selectedBuildingId.set(buildingId);
-    if (buildingId === '') {
-      this.residentService.getAllResidents();
-    } else {
-      this.residentService.getResidentsByBuilding(buildingId);
-    }
+    this.page.set(0); // Reset to first page
+    this.loadResidents();
   }
 
   onSearchChange(query: string) {
     this.searchQuery.set(query);
+  }
+
+  onPageChange(newPage: number) {
+    this.page.set(newPage);
+    this.loadResidents();
+  }
+
+  onPageSizeChange(newSize: number) {
+    this.size.set(newSize);
+    this.page.set(0); // Reset to first page
+    this.loadResidents();
   }
 
 }

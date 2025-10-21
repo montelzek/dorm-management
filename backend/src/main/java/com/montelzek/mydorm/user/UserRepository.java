@@ -1,5 +1,7 @@
 package com.montelzek.mydorm.user;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -18,6 +20,12 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT u FROM User u JOIN u.roles r WHERE r = 'ROLE_RESIDENT'")
     List<User> findAllResidents();
 
+    @Query("SELECT u FROM User u JOIN u.roles r WHERE r = 'ROLE_RESIDENT'")
+    Page<User> findAllResidents(Pageable pageable);
+
     @Query("SELECT u FROM User u JOIN u.roles r WHERE r = 'ROLE_RESIDENT' AND u.room.building.id = :buildingId")
     List<User> findResidentsByBuildingId(@Param("buildingId") Long buildingId);
+
+    @Query("SELECT u FROM User u JOIN u.roles r WHERE r = 'ROLE_RESIDENT' AND u.room.building.id = :buildingId")
+    Page<User> findResidentsByBuildingId(@Param("buildingId") Long buildingId, Pageable pageable);
 }

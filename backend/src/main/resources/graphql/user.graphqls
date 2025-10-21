@@ -1,6 +1,14 @@
 extend type Query {
-    allResidents: [ResidentPayload!]!
-    residentsByBuilding(buildingId: ID!): [ResidentPayload!]!
+    allResidents(page: Int, size: Int): ResidentPage!
+    residentsByBuilding(buildingId: ID!, page: Int, size: Int): ResidentPage!
+}
+
+type ResidentPage {
+    content: [ResidentPayload!]!
+    totalElements: Int!
+    totalPages: Int!
+    currentPage: Int!
+    pageSize: Int!
 }
 
 type ResidentPayload {

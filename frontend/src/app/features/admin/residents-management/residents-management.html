@@ -41,9 +41,26 @@
       </div>
     </div>
 
-    <!-- Results Count -->
-    <div class="text-sm text-text-secondary">
-      Showing {{ filteredResidents().length }} resident(s)
+    <!-- Results Count and Page Size -->
+    <div class="flex justify-between items-center">
+      <div class="text-sm text-text-secondary">
+        Showing {{ filteredResidents().length }} of {{ totalElements() }} resident(s)
+      </div>
+      
+      <div class="flex items-center gap-2">
+        <label for="pageSize" class="text-sm text-text-secondary">Items per page:</label>
+        <select
+          id="pageSize"
+          [value]="size()"
+          (change)="onPageSizeChange(+$any($event.target).value)"
+          class="px-3 py-1 rounded-lg border border-card-border bg-card text-text-primary focus:outline-none focus:ring-2 focus:ring-primary"
+        >
+          <option [value]="5">5</option>
+          <option [value]="10">10</option>
+          <option [value]="20">20</option>
+          <option [value]="50">50</option>
+        </select>
+      </div>
     </div>
 
     <!-- Residents List -->
@@ -52,6 +69,41 @@
         [residents]="filteredResidents()"
       ></app-resident-list>
     </div>
+
+    <!-- Pagination Controls -->
+    @if (totalPages() > 1) {
+      <div class="flex justify-center items-center gap-2 mt-6">
+        <button
+          (click)="onPageChange(currentPage() - 1)"
+          [disabled]="currentPage() === 0"
+          class="px-4 py-2 rounded-lg bg-card border border-card-border text-text-primary hover:bg-background disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+        >
+          Previous
+        </button>
+
+        <div class="flex gap-1">
+          @for (pageNum of [].constructor(totalPages()); track $index) {
+            <button
+              (click)="onPageChange($index)"
+              [class.bg-primary]="currentPage() === $index"
+              [class.text-white]="currentPage() === $index"
+              [class.bg-card]="currentPage() !== $index"
+              class="px-3 py-2 rounded-lg border border-card-border hover:bg-primary hover:text-white transition-colors min-w-[40px]"
+            >
+              {{ $index + 1 }}
+            </button>
+          }
+        </div>
+
+        <button
+          (click)="onPageChange(currentPage() + 1)"
+          [disabled]="currentPage() === totalPages() - 1"
+          class="px-4 py-2 rounded-lg bg-card border border-card-border text-text-primary hover:bg-background disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+        >
+          Next
+        </button>
+      </div>
+    }
   </div>
 </app-main-layout>
 
