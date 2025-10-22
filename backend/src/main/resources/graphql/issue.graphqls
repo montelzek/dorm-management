@@ -20,6 +20,33 @@ type IssuePayload {
     building: IssueBuildingPayload
 }
 
+type IssueUserPayload {
+    id: ID!
+    firstName: String!
+    lastName: String!
+}
+
+type AdminIssuePayload {
+    id: ID!
+    title: String!
+    description: String!
+    status: String!
+    priority: String!
+    createdAt: String!
+    updatedAt: String!
+    user: IssueUserPayload!
+    room: IssueRoomPayload
+    building: IssueBuildingPayload
+}
+
+type AdminIssuesPagePayload {
+    content: [AdminIssuePayload!]!
+    totalElements: Int!
+    totalPages: Int!
+    currentPage: Int!
+    pageSize: Int!
+}
+
 input CreateIssueInput {
     title: String!
     description: String!
@@ -28,10 +55,12 @@ input CreateIssueInput {
 
 extend type Query {
     myIssues(status: String): [IssuePayload!]!
+    allIssues(page: Int, size: Int, status: String, priority: String, buildingId: ID): AdminIssuesPagePayload!
 }
 
 extend type Mutation {
     createIssue(input: CreateIssueInput!): IssuePayload!
     cancelIssue(issueId: ID!): Boolean!
+    updateIssueStatus(issueId: ID!, status: String!): AdminIssuePayload!
 }
 

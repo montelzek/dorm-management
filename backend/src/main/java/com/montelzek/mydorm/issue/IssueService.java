@@ -1,12 +1,14 @@
 package com.montelzek.mydorm.issue;
 
-import com.montelzek.mydorm.issue.payload.IssueBuildingPayload;
-import com.montelzek.mydorm.issue.payload.IssuePayload;
-import com.montelzek.mydorm.issue.payload.IssueRoomPayload;
+import com.montelzek.mydorm.issue.payload.*;
 import com.montelzek.mydorm.user.User;
 import com.montelzek.mydorm.user.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.format.DateTimeFormatter;
@@ -108,6 +110,109 @@ public class IssueService {
                 issue.getPriority().name(),
                 issue.getCreatedAt().format(DATE_TIME_FORMATTER),
                 issue.getUpdatedAt().format(DATE_TIME_FORMATTER),
+                roomPayload,
+                buildingPayload
+        );
+    }
+
+    // Admin methods
+    @Transactional
+    public AdminIssuesPagePayload getAllIssues(Integer page, Integer size, String statusFilter, 
+                                                 String priorityFilter, Long buildingId) {
+        try {
+            int pageNumber = (page != null && page >= 0) ? page : 0;
+            int pageSize = (size != null && size > 0) ? size : 10;
+            
+            Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, "createdAt"));
+            
+            EIssueStatus status = null;
+            if (statusFilter != null && !statusFilter.isEmpty()) {
+                try {
+                    status = EIssueStatus.valueOf(statusFilter.toUpperCase());
+                } catch (IllegalArgumentException e) {
+                    // Invalid status, ignore filter
+                }
+            }
+            
+            EIssuePriority priority = null;
+            if (priorityFilter != null && !priorityFilter.isEmpty()) {
+                try {
+                    priority = EIssuePriority.valueOf(priorityFilter.toUpperCase());
+                } catch (IllegalArgumentException e) {
+                    // Invalid priority, ignore filter
+                }
+            }
+            
+            Page<Issue> issuesPage = issueRepository.findByFilters(status, priority, buildingId, pageable);
+            
+            List<AdminIssuePayload> content = issuesPage.getContent().stream()
+                    .map(this::toAdminPayload)
+                    .collect(Collectors.toList());
+            
+            return new AdminIssuesPagePayload(
+                    content,
+                    (int) issuesPage.getTotalElements(),
+                    issuesPage.getTotalPages(),
+                    issuesPage.getNumber(),
+                    issuesPage.getSize()
+            );
+        } catch (Exception e) {
+            System.err.println("Error in getAllIssues: " + e.getMessage());
+            e.printStackTrace();
+            throw new RuntimeException("Failed to get issues", e);
+        }
+    }
+
+    @Transactional
+    public AdminIssuePayload updateIssueStatus(Long issueId, String newStatus) {
+        Issue issue = issueRepository.findById(issueId)
+                .orElseThrow(() -> new IllegalArgumentException("Issue with given ID not found: " + issueId));
+        
+        EIssueStatus status;
+        try {
+            status = EIssueStatus.valueOf(newStatus.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Invalid status: " + newStatus);
+        }
+        
+        issue.setStatus(status);
+        Issue updatedIssue = issueRepository.save(issue);
+        
+        return toAdminPayload(updatedIssue);
+    }
+
+    public AdminIssuePayload toAdminPayload(Issue issue) {
+        IssueUserPayload userPayload = new IssueUserPayload(
+                issue.getUser().getId(),
+                issue.getUser().getFirstName(),
+                issue.getUser().getLastName()
+        );
+        
+        IssueRoomPayload roomPayload = null;
+        if (issue.getRoom() != null) {
+            roomPayload = new IssueRoomPayload(
+                    issue.getRoom().getId(),
+                    issue.getRoom().getRoomNumber()
+            );
+        }
+        
+        IssueBuildingPayload buildingPayload = null;
+        if (issue.getBuilding() != null) {
+            buildingPayload = new IssueBuildingPayload(
+                    issue.getBuilding().getId(),
+                    issue.getBuilding().getName()
+            );
+        }
+        
+        return new AdminIssuePayload(
+                issue.getId(),
+                issue.getTitle(),
+                issue.getDescription(),
+                issue.getStatus().name(),
+                issue.getPriority().name(),
+                issue.getCreatedAt().format(DATE_TIME_FORMATTER),
+                issue.getUpdatedAt().format(DATE_TIME_FORMATTER),
+                userPayload,
                 roomPayload,
                 buildingPayload
         );

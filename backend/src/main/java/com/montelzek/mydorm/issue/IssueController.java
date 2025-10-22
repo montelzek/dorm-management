@@ -1,7 +1,6 @@
 package com.montelzek.mydorm.issue;
 
-import com.montelzek.mydorm.issue.payload.CreateIssueInput;
-import com.montelzek.mydorm.issue.payload.IssuePayload;
+import com.montelzek.mydorm.issue.payload.*;
 import com.montelzek.mydorm.security.UserDetailsImpl;
 import com.montelzek.mydorm.user.User;
 import com.montelzek.mydorm.user.UserRepository;
@@ -63,6 +62,26 @@ public class IssueController {
             @Argument Long issueId,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return issueService.cancelIssue(issueId, userDetails.getId());
+    }
+
+    // Admin endpoints
+    @QueryMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public AdminIssuesPagePayload allIssues(
+            @Argument Integer page,
+            @Argument Integer size,
+            @Argument String status,
+            @Argument String priority,
+            @Argument Long buildingId) {
+        return issueService.getAllIssues(page, size, status, priority, buildingId);
+    }
+
+    @MutationMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public AdminIssuePayload updateIssueStatus(
+            @Argument Long issueId,
+            @Argument String status) {
+        return issueService.updateIssueStatus(issueId, status);
     }
 }
 
