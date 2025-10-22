@@ -24,26 +24,26 @@ VALUES
     (3, 'C103', 3, 740.00, NOW(), NOW());
 
 -- Insert sample reservation resources (laundry, common rooms, etc.)
-INSERT INTO reservation_resources (name, building_id, description, is_active, created_at, updated_at)
+INSERT INTO reservation_resources (name, building_id, description, is_active, resource_type, created_at, updated_at)
 VALUES
     -- Building A
-    ('Laundry Room A', 1, 'Ground floor laundry with 4 machines', true, NOW(), NOW()),
-    ('Study Room A', 1, 'Quiet study space with desks and Wi-Fi', true, NOW(), NOW()),
-    ('Common Lounge A', 1, 'TV, sofas, and kitchenette', true, NOW(), NOW()),
+    ('Laundry Room A', 1, 'Ground floor laundry with 4 machines', true, 'LAUNDRY', NOW(), NOW()),
+    ('Study Room A', 1, 'Quiet study space with desks and Wi-Fi', true, 'STANDARD', NOW(), NOW()),
+    ('Common Lounge A', 1, 'TV, sofas, and kitchenette', true, 'STANDARD', NOW(), NOW()),
 
     -- Building B
-    ('Laundry Room B', 2, 'Basement laundry area', true, NOW(), NOW()),
-    ('Game Room B', 2, 'Pool table, foosball, and board games', true, NOW(), NOW()),
+    ('Laundry Room B', 2, 'Basement laundry area', true, 'LAUNDRY', NOW(), NOW()),
+    ('Game Room B', 2, 'Pool table, foosball, and board games', true, 'STANDARD', NOW(), NOW()),
 
     -- Building C
-    ('Laundry Room C', 3, 'Modern laundry with dryers', true, NOW(), NOW()),
-    ('Meeting Room C', 3, 'For group projects and meetings', true, NOW(), NOW());
+    ('Laundry Room C', 3, 'Modern laundry with dryers', true, 'LAUNDRY', NOW(), NOW()),
+    ('Meeting Room C', 3, 'For group projects and meetings', true, 'STANDARD', NOW(), NOW());
 
 
 INSERT INTO users (email, password, first_name, last_name, phone, room_id)
 VALUES
     ('admin@admin.com', '$2a$12$GuBHXDKgLih2ZGvzD7tQV.RC2BdiiTR6O3ZiP1Z0BILgkBbtQDJHO', 'Tomasz', 'Gawin', 689456235, null),
-    ('resident@resident.com', '$2a$12$GuBHXDKgLih2ZGvzD7tQV.RC2BdiiTR6O3ZiP1Z0BILgkBbtQDJHO', 'Maciej', 'Lis', 689456235, null),
+    ('resident@resident.com', '$2a$12$GuBHXDKgLih2ZGvzD7tQV.RC2BdiiTR6O3ZiP1Z0BILgkBbtQDJHO', 'Maciej', 'Lis', 689456235, 1),
     ('technician@technician.com', '$2a$12$GuBHXDKgLih2ZGvzD7tQV.RC2BdiiTR6O3ZiP1Z0BILgkBbtQDJHO', 'Karol', 'Oliwiak', 689456235, null),
     ('receptionist@receptionist.com', '$2a$12$GuBHXDKgLih2ZGvzD7tQV.RC2BdiiTR6O3ZiP1Z0BILgkBbtQDJHO', 'Azja', 'Zpasja', 689456235, null),
     ('anna.kowalska@example.com', '$2a$12$GuBHXDKgLih2ZGvzD7tQV.RC2BdiiTR6O3ZiP1Z0BILgkBbtQDJHO', 'Anna', 'Kowalska', 600123456, null),
