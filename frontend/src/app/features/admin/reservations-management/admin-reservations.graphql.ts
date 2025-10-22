@@ -44,8 +44,8 @@ export const GET_RESOURCES = gql`
 `;
 
 export const CANCEL_RESERVATION_ADMIN = gql`
-  mutation CancelReservationAdmin($reservationId: ID!) {
-    cancelReservation(reservationId: $reservationId)
+  mutation CancelReservationByAdmin($reservationId: ID!) {
+    cancelReservationByAdmin(reservationId: $reservationId)
   }
 `;
 

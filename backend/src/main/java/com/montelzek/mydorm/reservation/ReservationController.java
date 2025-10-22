@@ -77,4 +77,10 @@ public class ReservationController {
         return reservationService.getAdminReservationsPage(page, size, sortDirection, resourceId, buildingId, date, search);
     }
 
+    @MutationMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public Boolean cancelReservationByAdmin(@Argument Long reservationId) {
+        return reservationService.cancelReservationByAdmin(reservationId);
+    }
+
 }

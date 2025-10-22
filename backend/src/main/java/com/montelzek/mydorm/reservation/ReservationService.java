@@ -400,4 +400,27 @@ public class ReservationService {
                 reservation.getStatus()
         );
     }
+
+    @Transactional
+    public boolean cancelReservationByAdmin(Long reservationId) {
+        Reservation reservation = reservationRepository.findById(reservationId)
+                .orElseThrow(() -> new IllegalArgumentException("Reservation with given ID not found: " + reservationId));
+
+        ZoneId dormitoryZone = ApplicationConstants.DORMITORY_TIMEZONE;
+        ZonedDateTime now = ZonedDateTime.now(dormitoryZone);
+        ZonedDateTime reservationStart = reservation.getStartTime().atZone(dormitoryZone);
+        
+        if (reservationStart.isBefore(now)) {
+            throw new BusinessException(ErrorCodes.PAST_RESERVATION, "Cannot cancel reservations from the past", "reservationId");
+        }
+
+        if ("CANCELLED".equals(reservation.getStatus())) {
+            throw new IllegalStateException("Reservation has already been cancelled");
+        }
+
+        reservation.setStatus("CANCELLED");
+        reservationRepository.save(reservation);
+
+        return true;
+    }
 }
