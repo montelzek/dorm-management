@@ -4,6 +4,9 @@ VALUES
     (2, 'Building B', '25 Student Avenue, Kraków, 30-001', NOW(), NOW()),
     (3, 'Building C', '5 Dormitory Lane, Wrocław, 50-001', NOW(), NOW());
 
+-- Reset the buildings sequence to continue from the last inserted ID
+SELECT setval('buildings_id_seq', (SELECT MAX(id) FROM buildings));
+
 -- Insert sample rooms (2-4 per building)
 INSERT INTO rooms (building_id, room_number, capacity, rent_amount, created_at, updated_at)
 VALUES
