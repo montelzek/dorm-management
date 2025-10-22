@@ -149,7 +149,8 @@ export class ReservationsComponent implements OnInit {
   }
 
   private filterResourcesForUser(resources: ReservationResource[], user: User | null, buildingId: string): ReservationResource[] {
-    if (user && buildingId !== user.building?.id) {
+    // Only filter out laundry if user has a building assigned and it's different from selected building
+    if (user && user.building && buildingId !== user.building.id) {
       return resources.filter(r => r.resourceType !== 'LAUNDRY');
     }
     return resources;
@@ -165,6 +166,11 @@ export class ReservationsComponent implements OnInit {
   }
 
   private handleResourceSelection(resourceId: string | null, resources: ReservationResource[]): void {
+    // Disable and reset all time-related fields first
+    this.reservationForm.get('date')!.disable();
+    this.reservationForm.get('laundrySlot')!.disable();
+    this.reservationForm.get('startTimeHour')!.disable();
+    this.reservationForm.get('endTimeHour')!.disable();
     this.resetFields(['date', 'laundrySlot', 'startTime', 'endTime', 'startTimeHour', 'endTimeHour']);
 
     const resource = resources.find(r => r.id === resourceId) || null;
