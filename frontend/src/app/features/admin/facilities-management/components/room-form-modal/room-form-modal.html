@@ -1,0 +1,108 @@
+<form [formGroup]="form()" (ngSubmit)="onSubmit()" class="space-y-4">
+  <!-- Room Number -->
+  <div>
+    <label for="roomNumber" class="block text-sm font-medium text-text-primary mb-1">
+      Room Number <span class="text-red-500">*</span>
+    </label>
+    <input
+      id="roomNumber"
+      type="text"
+      formControlName="roomNumber"
+      class="w-full rounded-lg border-2 border-input-border bg-input-bg px-4 py-3 text-input-text placeholder:text-input-placeholder focus:border-input-focus-border focus:outline-none focus:ring-2 focus:ring-input-focus-border focus:ring-opacity-50 transition-all duration-200 hover:border-input-focus-border/50"
+      placeholder="e.g. 101"
+      maxlength="20"
+    />
+    @if (form().get('roomNumber')?.invalid && form().get('roomNumber')?.touched) {
+      <p class="mt-1 text-sm text-red-500">
+        @if (form().get('roomNumber')?.errors?.['required']) {
+          Room number is required
+        }
+      </p>
+    }
+  </div>
+
+  <!-- Building -->
+  <div>
+    <label for="buildingId" class="block text-sm font-medium text-text-primary mb-1">
+      Building <span class="text-red-500">*</span>
+    </label>
+    <select
+      id="buildingId"
+      formControlName="buildingId"
+      class="w-full rounded-lg border-2 border-input-border bg-input-bg px-4 py-3 text-input-text focus:border-input-focus-border focus:outline-none focus:ring-2 focus:ring-input-focus-border focus:ring-opacity-50 transition-all duration-200"
+    >
+      <option value="">Select building</option>
+      @for (building of buildings(); track building.id) {
+        <option [value]="building.id">{{ building.name }}</option>
+      }
+    </select>
+    @if (form().get('buildingId')?.invalid && form().get('buildingId')?.touched) {
+      <p class="mt-1 text-sm text-red-500">Building is required</p>
+    }
+  </div>
+
+  <!-- Capacity -->
+  <div>
+    <label for="capacity" class="block text-sm font-medium text-text-primary mb-1">
+      Capacity <span class="text-red-500">*</span>
+    </label>
+    <input
+      id="capacity"
+      type="number"
+      formControlName="capacity"
+      min="1"
+      class="w-full rounded-lg border-2 border-input-border bg-input-bg px-4 py-3 text-input-text placeholder:text-input-placeholder focus:border-input-focus-border focus:outline-none focus:ring-2 focus:ring-input-focus-border focus:ring-opacity-50 transition-all duration-200 hover:border-input-focus-border/50"
+      placeholder="e.g. 2"
+    />
+    @if (form().get('capacity')?.invalid && form().get('capacity')?.touched) {
+      <p class="mt-1 text-sm text-red-500">
+        @if (form().get('capacity')?.errors?.['required']) {
+          Capacity is required
+        }
+        @if (form().get('capacity')?.errors?.['min']) {
+          Capacity must be at least 1
+        }
+      </p>
+    }
+  </div>
+
+  <!-- Rent Amount -->
+  <div>
+    <label for="rentAmount" class="block text-sm font-medium text-text-primary mb-1">
+      Rent Amount (PLN) <span class="text-red-500">*</span>
+    </label>
+    <input
+      id="rentAmount"
+      type="number"
+      formControlName="rentAmount"
+      min="0"
+      step="0.01"
+      class="w-full rounded-lg border-2 border-input-border bg-input-bg px-4 py-3 text-input-text placeholder:text-input-placeholder focus:border-input-focus-border focus:outline-none focus:ring-2 focus:ring-input-focus-border focus:ring-opacity-50 transition-all duration-200 hover:border-input-focus-border/50"
+      placeholder="e.g. 500.00"
+    />
+    @if (form().get('rentAmount')?.invalid && form().get('rentAmount')?.touched) {
+      <p class="mt-1 text-sm text-red-500">
+        @if (form().get('rentAmount')?.errors?.['required']) {
+          Rent amount is required
+        }
+        @if (form().get('rentAmount')?.errors?.['min']) {
+          Rent amount must be positive
+        }
+      </p>
+    }
+  </div>
+
+  <div class="flex justify-end gap-3 pt-4">
+    <app-button variant="secondary" size="md" type="button" (click)="onCancel()">
+      Cancel
+    </app-button>
+    <app-button variant="primary" size="md" type="submit" [disabled]="isLoading()">
+      @if (isLoading()) {
+        <span>{{ isEdit() ? 'Updating...' : 'Creating...' }}</span>
+      } @else {
+        <span>{{ isEdit() ? 'Update Room' : 'Create Room' }}</span>
+      }
+    </app-button>
+  </div>
+</form>
+

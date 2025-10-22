@@ -1,0 +1,84 @@
+<form [formGroup]="form()" (ngSubmit)="onSubmit()" class="space-y-4">
+  <!-- Name -->
+  <div>
+    <label for="name" class="block text-sm font-medium text-text-primary mb-1">
+      Name <span class="text-red-500">*</span>
+    </label>
+    <input
+      id="name"
+      type="text"
+      formControlName="name"
+      class="w-full rounded-lg border-2 border-input-border bg-input-bg px-4 py-3 text-input-text placeholder:text-input-placeholder focus:border-input-focus-border focus:outline-none focus:ring-2 focus:ring-input-focus-border focus:ring-opacity-50 transition-all duration-200 hover:border-input-focus-border/50"
+      placeholder="e.g. Gym A"
+      maxlength="100"
+    />
+    @if (form().get('name')?.invalid && form().get('name')?.touched) {
+      <p class="mt-1 text-sm text-red-500">
+        @if (form().get('name')?.errors?.['required']) {
+          Name is required
+        }
+      </p>
+    }
+  </div>
+
+  <!-- Description -->
+  <div>
+    <label for="description" class="block text-sm font-medium text-text-primary mb-1">
+      Description
+    </label>
+    <textarea
+      id="description"
+      formControlName="description"
+      rows="3"
+      class="w-full rounded-lg border-2 border-input-border bg-input-bg px-4 py-3 text-input-text placeholder:text-input-placeholder focus:border-input-focus-border focus:outline-none focus:ring-2 focus:ring-input-focus-border focus:ring-opacity-50 transition-all duration-200 hover:border-input-focus-border/50"
+      placeholder="Optional description..."
+    ></textarea>
+  </div>
+
+  <!-- Building -->
+  <div>
+    <label for="buildingId" class="block text-sm font-medium text-text-primary mb-1">
+      Building <span class="text-red-500">*</span>
+    </label>
+    <select
+      id="buildingId"
+      formControlName="buildingId"
+      class="w-full rounded-lg border-2 border-input-border bg-input-bg px-4 py-3 text-input-text focus:border-input-focus-border focus:outline-none focus:ring-2 focus:ring-input-focus-border focus:ring-opacity-50 transition-all duration-200"
+    >
+      <option value="">Select building</option>
+      @for (building of buildings(); track building.id) {
+        <option [value]="building.id">{{ building.name }}</option>
+      }
+    </select>
+    @if (form().get('buildingId')?.invalid && form().get('buildingId')?.touched) {
+      <p class="mt-1 text-sm text-red-500">Building is required</p>
+    }
+  </div>
+
+  <!-- Active Status -->
+  <div class="flex items-center gap-3">
+    <input
+      id="isActive"
+      type="checkbox"
+      formControlName="isActive"
+      class="w-4 h-4 text-indigo-600 bg-input-bg border-input-border rounded focus:ring-indigo-500 focus:ring-2"
+    />
+    <label for="isActive" class="text-sm font-medium text-text-primary">
+      Active (available for reservations)
+    </label>
+  </div>
+
+  <div class="flex justify-end gap-3 pt-4">
+    <app-button variant="secondary" size="md" type="button" (click)="onCancel()">
+      Cancel
+    </app-button>
+    <app-button variant="primary" size="md" type="submit" [disabled]="isLoading()">
+      @if (isLoading()) {
+        <span>{{ isEdit() ? 'Updating...' : 'Creating...' }}</span>
+      } @else {
+        <span>{{ isEdit() ? 'Update Space' : 'Create Space' }}</span>
+      }
+    </app-button>
+  </div>
+</form>
+

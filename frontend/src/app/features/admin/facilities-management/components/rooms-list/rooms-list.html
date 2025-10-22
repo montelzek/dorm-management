@@ -1,0 +1,125 @@
+<div class="space-y-4">
+  <!-- Header with Add Button and Filters -->
+  <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+    <h2 class="text-xl font-semibold text-text-primary">Rooms</h2>
+    <div class="flex flex-wrap gap-3 items-center">
+      <!-- Building Filter -->
+      <select
+        [value]="selectedBuilding()"
+        (change)="buildingFilterChange.emit($any($event.target).value)"
+        class="rounded-lg border-2 border-input-border bg-input-bg px-3 py-2 text-input-text text-sm focus:border-input-focus-border focus:outline-none focus:ring-2 focus:ring-input-focus-border transition-all"
+      >
+        <option value="">All Buildings</option>
+        @for (building of buildings(); track building.id) {
+          <option [value]="building.id">{{ building.name }}</option>
+        }
+      </select>
+
+      <!-- Status Filter -->
+      <select
+        [value]="selectedStatus()"
+        (change)="statusFilterChange.emit($any($event.target).value)"
+        class="rounded-lg border-2 border-input-border bg-input-bg px-3 py-2 text-input-text text-sm focus:border-input-focus-border focus:outline-none focus:ring-2 focus:ring-input-focus-border transition-all"
+      >
+        <option value="">All Status</option>
+        <option value="FREE">Free</option>
+        <option value="PARTIALLY_OCCUPIED">Partially Occupied</option>
+        <option value="FULL">Full</option>
+      </select>
+
+      <app-button variant="primary" size="md" (click)="add.emit()">
+        <svg class="mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+        </svg>
+        Add Room
+      </app-button>
+    </div>
+  </div>
+
+  @if (isLoading()) {
+    <div class="flex justify-center items-center py-12">
+      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      <span class="ml-3 text-text-secondary">Loading rooms...</span>
+    </div>
+  } @else if (rooms().length === 0) {
+    <div class="text-center py-12 bg-card rounded-lg border border-card-border">
+      <h3 class="text-sm font-medium text-text-primary">No rooms found</h3>
+      <p class="mt-1 text-sm text-text-secondary">Try adjusting your filters or add a new room.</p>
+    </div>
+  } @else {
+    <!-- Desktop Table -->
+    <div class="hidden md:block overflow-x-auto bg-card rounded-lg border border-card-border">
+      <table class="min-w-full divide-y divide-card-border">
+        <thead class="bg-surface">
+          <tr>
+            <th class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase">Room #</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase">Building</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase">Occupancy</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase">Rent</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-card-border">
+          @for (room of rooms(); track room.id) {
+            <tr class="hover:bg-surface transition-colors">
+              <td class="px-6 py-4 text-sm font-medium text-text-primary">{{ room.roomNumber }}</td>
+              <td class="px-6 py-4 text-sm text-text-primary">{{ room.buildingName }}</td>
+              <td class="px-6 py-4">
+                <div class="flex items-center gap-2">
+                  <span class="text-sm font-medium text-text-primary">{{ room.occupancy }}/{{ room.capacity }}</span>
+                  <span class="px-2 py-0.5 rounded-full text-xs font-medium" [ngClass]="getOccupancyBadgeClass(room.occupancy, room.capacity)">
+                    {{ getOccupancyLabel(room.occupancy, room.capacity) }}
+                  </span>
+                </div>
+              </td>
+              <td class="px-6 py-4 text-sm text-text-primary">{{ room.rentAmount }} PLN</td>
+              <td class="px-6 py-4">
+                <div class="flex gap-2">
+                  <button
+                    (click)="edit.emit(room)"
+                    class="text-indigo-600 dark:text-indigo-400 hover:text-indigo-900 dark:hover:text-indigo-300 text-sm font-medium"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    (click)="delete.emit(room)"
+                    class="text-red-600 dark:text-red-400 hover:text-red-900 dark:hover:text-red-300 text-sm font-medium"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Mobile Cards -->
+    <div class="md:hidden space-y-3">
+      @for (room of rooms(); track room.id) {
+        <div class="bg-card border border-card-border rounded-lg p-4">
+          <div class="flex justify-between items-start mb-3">
+            <div>
+              <h3 class="font-semibold text-text-primary">Room {{ room.roomNumber }}</h3>
+              <p class="text-sm text-text-secondary">{{ room.buildingName }}</p>
+            </div>
+            <span class="px-2 py-0.5 rounded-full text-xs font-medium" [ngClass]="getOccupancyBadgeClass(room.occupancy, room.capacity)">
+              {{ room.occupancy }}/{{ room.capacity }}
+            </span>
+          </div>
+          <p class="text-sm text-text-primary mb-3">Rent: {{ room.rentAmount }} PLN</p>
+          <div class="grid grid-cols-2 gap-2">
+            <app-button variant="secondary" size="sm" [fullWidth]="true" (click)="edit.emit(room)">
+              Edit
+            </app-button>
+            <app-button variant="danger" size="sm" [fullWidth]="true" (click)="delete.emit(room)">
+              Delete
+            </app-button>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>
+

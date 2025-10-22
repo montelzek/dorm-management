@@ -1,0 +1,61 @@
+<form [formGroup]="form()" (ngSubmit)="onSubmit()" class="space-y-4">
+  <!-- Name -->
+  <div>
+    <label for="name" class="block text-sm font-medium text-text-primary mb-1">
+      Building Name <span class="text-red-500">*</span>
+    </label>
+    <input
+      id="name"
+      type="text"
+      formControlName="name"
+      class="w-full rounded-lg border-2 border-input-border bg-input-bg px-4 py-3 text-input-text placeholder:text-input-placeholder focus:border-input-focus-border focus:outline-none focus:ring-2 focus:ring-input-focus-border focus:ring-opacity-50 transition-all duration-200 hover:border-input-focus-border/50"
+      placeholder="e.g. Building A"
+      maxlength="100"
+    />
+    @if (form().get('name')?.invalid && form().get('name')?.touched) {
+      <p class="mt-1 text-sm text-red-500">
+        @if (form().get('name')?.errors?.['required']) {
+          Building name is required
+        }
+        @if (form().get('name')?.errors?.['maxlength']) {
+          Name cannot exceed 100 characters
+        }
+      </p>
+    }
+  </div>
+
+  <!-- Address -->
+  <div>
+    <label for="address" class="block text-sm font-medium text-text-primary mb-1">
+      Address <span class="text-red-500">*</span>
+    </label>
+    <input
+      id="address"
+      type="text"
+      formControlName="address"
+      class="w-full rounded-lg border-2 border-input-border bg-input-bg px-4 py-3 text-input-text placeholder:text-input-placeholder focus:border-input-focus-border focus:outline-none focus:ring-2 focus:ring-input-focus-border focus:ring-opacity-50 transition-all duration-200 hover:border-input-focus-border/50"
+      placeholder="e.g. 123 Main Street"
+    />
+    @if (form().get('address')?.invalid && form().get('address')?.touched) {
+      <p class="mt-1 text-sm text-red-500">
+        @if (form().get('address')?.errors?.['required']) {
+          Address is required
+        }
+      </p>
+    }
+  </div>
+
+  <div class="flex justify-end gap-3 pt-4">
+    <app-button variant="secondary" size="md" type="button" (click)="onCancel()">
+      Cancel
+    </app-button>
+    <app-button variant="primary" size="md" type="submit" [disabled]="isLoading()">
+      @if (isLoading()) {
+        <span>{{ isEdit() ? 'Updating...' : 'Creating...' }}</span>
+      } @else {
+        <span>{{ isEdit() ? 'Update Building' : 'Create Building' }}</span>
+      }
+    </app-button>
+  </div>
+</form>
+
