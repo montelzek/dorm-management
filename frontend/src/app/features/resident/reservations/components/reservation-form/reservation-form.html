@@ -43,7 +43,7 @@
     @if (selectedResource()) {
       <hr class="my-6">
 
-      @if (isLaundryResource) {
+      @if (isLaundryResource()) {
         <div class="space-y-4">
           <h4 class="text-lg font-semibold text-text-primary">3. Select laundry time slot</h4>
 
@@ -81,7 +81,7 @@
             </select>
           </div>
         </div>
-        } @else if (isStandardResource) {
+        } @else if (isStandardResource()) {
           <div class="space-y-4">
             <h4 class="text-lg font-semibold text-text-primary">
               3. Select date and time range

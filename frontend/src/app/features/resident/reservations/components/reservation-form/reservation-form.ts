@@ -1,4 +1,4 @@
-import { Component, input, output } from '@angular/core';
+import { Component, input, output, computed } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 
@@ -74,11 +74,11 @@ export class ReservationFormComponent {
         return hours;
       }
 
-  get isLaundryResource(): boolean {
+  readonly isLaundryResource = computed(() => {
     return this.selectedResource()?.resourceType === 'LAUNDRY';
-  }
+  });
 
-  get isStandardResource(): boolean {
+  readonly isStandardResource = computed(() => {
     return this.selectedResource()?.resourceType === 'STANDARD';
-  }
+  });
 }

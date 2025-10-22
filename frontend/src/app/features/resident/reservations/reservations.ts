@@ -149,8 +149,10 @@ export class ReservationsComponent implements OnInit {
   }
 
   private filterResourcesForUser(resources: ReservationResource[], user: User | null, buildingId: string): ReservationResource[] {
-    // Only filter out laundry if user has a building assigned and it's different from selected building
-    if (user && user.building && buildingId !== user.building.id) {
+    // Filter out laundry resources if:
+    // 1. User has no building assigned (can't use any laundry)
+    // 2. User is viewing a different building than their own (can only use laundry in their building)
+    if (!user || !user.building || buildingId !== user.building.id) {
       return resources.filter(r => r.resourceType !== 'LAUNDRY');
     }
     return resources;
