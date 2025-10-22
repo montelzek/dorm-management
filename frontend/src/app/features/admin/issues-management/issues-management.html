@@ -1,0 +1,168 @@
+<app-main-layout [user]="currentUser()">
+  <div class="mx-auto max-w-7xl space-y-6">
+    <!-- Header -->
+    <div>
+      <h1 class="text-3xl font-bold text-text-primary">Issues Management</h1>
+      <p class="mt-1 text-text-secondary">Monitor and manage all reported issues</p>
+    </div>
+
+    <!-- Filters -->
+    <div class="rounded-lg bg-card shadow-sm border border-card-border p-6">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <!-- Status Filter -->
+        <div>
+          <label for="statusFilter" class="block text-sm font-medium text-text-primary mb-1">
+            Status
+          </label>
+          <select
+            id="statusFilter"
+            [value]="selectedStatusFilter()"
+            (change)="onStatusFilterChange($any($event.target).value)"
+            class="w-full rounded-md border-input-border bg-input-bg px-3 py-2 text-input-text text-sm placeholder:text-input-placeholder focus:border-input-focus-border focus:outline-none focus:ring-2 focus:ring-input-focus-border"
+          >
+            <option value="">All Statuses</option>
+            <option value="REPORTED">Reported</option>
+            <option value="IN_PROGRESS">In Progress</option>
+            <option value="RESOLVED">Resolved</option>
+            <option value="CANCELLED">Cancelled</option>
+          </select>
+        </div>
+
+        <!-- Priority Filter -->
+        <div>
+          <label for="priorityFilter" class="block text-sm font-medium text-text-primary mb-1">
+            Priority
+          </label>
+          <select
+            id="priorityFilter"
+            [value]="selectedPriorityFilter()"
+            (change)="onPriorityFilterChange($any($event.target).value)"
+            class="w-full rounded-md border-input-border bg-input-bg px-3 py-2 text-input-text text-sm placeholder:text-input-placeholder focus:border-input-focus-border focus:outline-none focus:ring-2 focus:ring-input-focus-border"
+          >
+            <option value="">All Priorities</option>
+            <option value="LOW">Low</option>
+            <option value="MEDIUM">Medium</option>
+            <option value="HIGH">High</option>
+            <option value="URGENT">Urgent</option>
+          </select>
+        </div>
+
+        <!-- Building Filter -->
+        <div>
+          <label for="buildingFilter" class="block text-sm font-medium text-text-primary mb-1">
+            Building
+          </label>
+          <select
+            id="buildingFilter"
+            [value]="selectedBuildingId()"
+            (change)="onBuildingFilterChange($any($event.target).value)"
+            class="w-full rounded-md border-input-border bg-input-bg px-3 py-2 text-input-text text-sm placeholder:text-input-placeholder focus:border-input-focus-border focus:outline-none focus:ring-2 focus:ring-input-focus-border"
+          >
+            <option value="">All Buildings</option>
+            @for (building of buildings(); track building.id) {
+              <option [value]="building.id">{{ building.name }}</option>
+            }
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Issues List -->
+    <div class="rounded-lg bg-card shadow-sm border border-card-border overflow-hidden">
+      <!-- Top Info Bar -->
+      @if (totalElements() > 0) {
+        <div class="bg-surface px-6 py-3 border-b border-card-border">
+          <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="text-sm text-text-secondary">
+              Showing {{ currentPage() * pageSize() + 1 }} to 
+              {{ Math.min((currentPage() + 1) * pageSize(), totalElements()) }} of 
+              {{ totalElements() }} results
+            </div>
+
+            <div class="flex items-center gap-2">
+              <label for="pageSize" class="text-sm text-text-secondary">Items per page:</label>
+              <select
+                id="pageSize"
+                [value]="pageSize()"
+                (change)="onPageSizeChange(+$any($event.target).value)"
+                class="rounded-md border-input-border bg-input-bg px-2 py-1 text-input-text text-sm focus:border-input-focus-border focus:outline-none focus:ring-2 focus:ring-input-focus-border"
+              >
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="20">20</option>
+                <option value="50">50</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- Issues List -->
+      <app-admin-issue-list
+        [issues]="allIssues()"
+        [isLoading]="isLoading()"
+        (changeStatus)="onChangeStatus($event)"
+      ></app-admin-issue-list>
+
+      <!-- Bottom Pagination Buttons -->
+      @if (totalElements() > 0) {
+        <div class="bg-surface px-6 py-4 border-t border-card-border">
+          <div class="flex justify-center">
+            <div class="flex gap-1">
+              <button
+                (click)="onPageChange(currentPage() - 1)"
+                [disabled]="currentPage() === 0"
+                class="px-3 py-1 rounded-md bg-card text-text-primary border border-card-border hover:bg-indigo-600 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              >
+                Previous
+              </button>
+
+              @for (pageNum of [].constructor(totalPages()); track $index) {
+                @if ($index === 0 || $index === totalPages() - 1 || ($index >= currentPage() - 1 && $index <= currentPage() + 1)) {
+                  <button
+                    (click)="onPageChange($index)"
+                    [class]="$index === currentPage() ? 'px-3 py-1 rounded-md bg-indigo-600 text-white' : 'px-3 py-1 rounded-md bg-card text-text-primary border border-card-border hover:bg-indigo-600 hover:text-white transition-colors'"
+                  >
+                    {{ $index + 1 }}
+                  </button>
+                } @else if ($index === currentPage() - 2 || $index === currentPage() + 2) {
+                  <span class="px-2 py-1 text-text-secondary">...</span>
+                }
+              }
+
+              <button
+                (click)="onPageChange(currentPage() + 1)"
+                [disabled]="currentPage() === totalPages() - 1"
+                class="px-3 py-1 rounded-md bg-card text-text-primary border border-card-border hover:bg-indigo-600 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+
+  <!-- Status Update Modal -->
+  <app-modal
+    [isOpen]="isStatusModalOpen()"
+    title="Update Issue Status"
+    size="md"
+    (close)="onCloseStatusModal()"
+  >
+    <div slot="body">
+      @if (selectedIssue()) {
+        <app-status-update-modal
+          [form]="statusForm"
+          [currentStatus]="selectedIssue()!.status"
+          [isLoading]="isLoading()"
+          (formSubmit)="onStatusFormSubmit()"
+          (cancel)="onCloseStatusModal()"
+        ></app-status-update-modal>
+      }
+    </div>
+  </app-modal>
+
+</app-main-layout>
+
