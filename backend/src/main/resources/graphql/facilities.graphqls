@@ -1,0 +1,123 @@
+type AdminBuildingPayload {
+    id: ID!
+    name: String!
+    address: String!
+    roomsCount: Int!
+    resourcesCount: Int!
+    createdAt: String!
+}
+
+type AdminRoomPayload {
+    id: ID!
+    roomNumber: String!
+    buildingId: ID!
+    buildingName: String!
+    capacity: Int!
+    occupancy: Int!
+    rentAmount: String!
+    createdAt: String!
+}
+
+type AdminResourcePayload {
+    id: ID!
+    name: String!
+    description: String
+    buildingId: ID!
+    buildingName: String!
+    isActive: Boolean!
+    createdAt: String!
+}
+
+type BuildingsPagePayload {
+    content: [AdminBuildingPayload!]!
+    totalElements: Int!
+    totalPages: Int!
+    currentPage: Int!
+    pageSize: Int!
+}
+
+type RoomsPagePayload {
+    content: [AdminRoomPayload!]!
+    totalElements: Int!
+    totalPages: Int!
+    currentPage: Int!
+    pageSize: Int!
+}
+
+type ResourcesPagePayload {
+    content: [AdminResourcePayload!]!
+    totalElements: Int!
+    totalPages: Int!
+    currentPage: Int!
+    pageSize: Int!
+}
+
+type BuildingDetailsPayload {
+    id: ID!
+    name: String!
+    address: String!
+    roomsCount: Int!
+    resourcesCount: Int!
+    createdAt: String!
+    updatedAt: String!
+}
+
+input CreateBuildingInput {
+    name: String!
+    address: String!
+}
+
+input UpdateBuildingInput {
+    name: String!
+    address: String!
+}
+
+input CreateRoomInput {
+    roomNumber: String!
+    buildingId: ID!
+    capacity: Int!
+    rentAmount: String!
+}
+
+input UpdateRoomInput {
+    roomNumber: String!
+    buildingId: ID!
+    capacity: Int!
+    rentAmount: String!
+}
+
+input CreateResourceInput {
+    name: String!
+    description: String
+    buildingId: ID!
+    isActive: Boolean!
+}
+
+input UpdateResourceInput {
+    name: String!
+    description: String
+    buildingId: ID!
+    isActive: Boolean!
+}
+
+extend type Query {
+    adminBuildings(page: Int, size: Int): BuildingsPagePayload!
+    buildingDetails(id: ID!): BuildingDetailsPayload!
+    adminRooms(page: Int, size: Int, buildingId: ID, status: String): RoomsPagePayload!
+    adminReservationResources(page: Int, size: Int, buildingId: ID, isActive: Boolean): ResourcesPagePayload!
+}
+
+extend type Mutation {
+    createBuilding(input: CreateBuildingInput!): AdminBuildingPayload!
+    updateBuilding(id: ID!, input: UpdateBuildingInput!): AdminBuildingPayload!
+    deleteBuilding(id: ID!): Boolean
+    
+    createRoom(input: CreateRoomInput!): AdminRoomPayload!
+    updateRoom(id: ID!, input: UpdateRoomInput!): AdminRoomPayload!
+    deleteRoom(id: ID!): Boolean
+    
+    createReservationResource(input: CreateResourceInput!): AdminResourcePayload!
+    updateReservationResource(id: ID!, input: UpdateResourceInput!): AdminResourcePayload!
+    toggleResourceStatus(id: ID!): AdminResourcePayload!
+}
+
