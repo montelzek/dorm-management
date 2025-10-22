@@ -1,0 +1,142 @@
+<!-- Mobile Card View -->
+<div class="md:hidden space-y-4">
+  @for (reservation of reservations(); track reservation.id) {
+    <div class="bg-card rounded-lg border border-card-border p-4 hover:bg-background transition-colors">
+      <!-- Header with Name and Resource -->
+      <div class="flex items-start justify-between mb-3">
+        <div>
+          <h3 class="text-base font-semibold text-text-primary">
+            {{ reservation.firstName }} {{ reservation.lastName }}
+          </h3>
+          <p class="text-sm text-indigo-600 dark:text-indigo-400 mt-1">{{ reservation.resourceName }}</p>
+        </div>
+      </div>
+
+      <!-- Details Grid -->
+      <div class="space-y-2 mb-3">
+        <div class="flex justify-between text-sm">
+          <span class="text-text-secondary">Building:</span>
+          <span class="text-text-primary">{{ reservation.userBuildingName }}</span>
+        </div>
+        <div class="flex justify-between text-sm">
+          <span class="text-text-secondary">Room:</span>
+          <span class="text-text-primary">{{ reservation.userRoomNumber }}</span>
+        </div>
+        <div class="flex justify-between text-sm">
+          <span class="text-text-secondary">Resource Location:</span>
+          <span class="text-text-primary">{{ reservation.resourceBuildingName }}</span>
+        </div>
+        <div class="flex justify-between text-sm">
+          <span class="text-text-secondary">Date:</span>
+          <span class="text-text-primary">{{ reservation.date }}</span>
+        </div>
+        <div class="flex justify-between text-sm">
+          <span class="text-text-secondary">Time:</span>
+          <span class="text-text-primary">{{ reservation.startTime }} - {{ reservation.endTime }}</span>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="flex gap-2 pt-3 border-t border-card-border">
+        <button
+          (click)="onViewDetails(reservation)"
+          class="flex-1 px-3 py-2 text-sm font-medium text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950 rounded-md hover:bg-indigo-100 dark:hover:bg-indigo-900 transition-colors"
+        >
+          View Details
+        </button>
+        <button
+          (click)="onCancelReservation(reservation)"
+          class="flex-1 px-3 py-2 text-sm font-medium text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-950 rounded-md hover:bg-red-100 dark:hover:bg-red-900 transition-colors"
+        >
+          Cancel
+        </button>
+      </div>
+    </div>
+  }
+</div>
+
+<!-- Desktop Table View -->
+<div class="hidden md:block overflow-x-auto">
+  <table class="min-w-full divide-y divide-card-border">
+    <thead class="bg-background">
+    <tr>
+      <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-text-secondary">
+        First Name
+      </th>
+      <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-text-secondary">
+        Last Name
+      </th>
+      <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-text-secondary">
+        Building
+      </th>
+      <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-text-secondary">
+        Room
+      </th>
+      <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-text-secondary">
+        Resource
+      </th>
+      <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-text-secondary">
+        Resource Building
+      </th>
+      <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-text-secondary">
+        Date
+      </th>
+      <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-text-secondary">
+        Time
+      </th>
+      <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-text-secondary">
+        Actions
+      </th>
+    </tr>
+    </thead>
+    <tbody class="divide-y divide-card-border bg-card">
+      @for (reservation of reservations(); track reservation.id) {
+        <tr class="hover:bg-background transition-colors">
+          <td class="whitespace-nowrap px-6 py-4 text-sm text-text-secondary">
+            {{ reservation.firstName }}
+          </td>
+          <td class="whitespace-nowrap px-6 py-4 text-sm text-text-secondary">
+            {{ reservation.lastName }}
+          </td>
+          <td class="whitespace-nowrap px-6 py-4 text-sm text-text-secondary">
+            {{ reservation.userBuildingName }}
+          </td>
+          <td class="whitespace-nowrap px-6 py-4 text-sm text-text-secondary">
+            {{ reservation.userRoomNumber }}
+          </td>
+          <td class="whitespace-nowrap px-6 py-4 text-sm text-text-secondary">
+            {{ reservation.resourceName }}
+          </td>
+          <td class="whitespace-nowrap px-6 py-4 text-sm text-text-secondary">
+            {{ reservation.resourceBuildingName }}
+          </td>
+          <td class="whitespace-nowrap px-6 py-4 text-sm text-text-secondary">
+            {{ reservation.date }}
+          </td>
+          <td class="whitespace-nowrap px-6 py-4 text-sm text-text-secondary">
+            {{ reservation.startTime }} - {{ reservation.endTime }}
+          </td>
+          <td class="whitespace-nowrap px-6 py-4 text-sm text-text-secondary">
+            <div class="flex gap-3">
+              <button
+                (click)="onViewDetails(reservation)"
+                class="text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300 font-medium transition-colors"
+                title="View Details"
+              >
+                View
+              </button>
+              <button
+                (click)="onCancelReservation(reservation)"
+                class="text-red-600 hover:text-red-500 dark:text-red-400 dark:hover:text-red-300 font-medium transition-colors"
+                title="Cancel Reservation"
+              >
+                Cancel
+              </button>
+            </div>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
+
