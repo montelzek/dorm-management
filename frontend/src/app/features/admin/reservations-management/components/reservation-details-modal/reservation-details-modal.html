@@ -1,0 +1,117 @@
+@if (isOpen()) {
+  <div class="fixed inset-0 z-50 overflow-y-auto">
+    <!-- Backdrop -->
+    <div class="fixed inset-0 bg-black/50 backdrop-blur-sm" (click)="onClose()"></div>
+
+    <!-- Modal -->
+    <div class="flex min-h-full items-center justify-center p-4">
+      <div class="relative w-full max-w-2xl rounded-lg bg-card shadow-xl border border-card-border">
+        <!-- Header -->
+        <div class="flex items-center justify-between border-b border-card-border px-6 py-4">
+          <h3 class="text-lg font-semibold text-text-primary">
+            Reservation Details
+          </h3>
+          <button
+            (click)="onClose()"
+            class="text-text-secondary hover:text-text-primary transition-colors"
+          >
+            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        <!-- Content -->
+        @if (reservation()) {
+          <div class="px-6 py-4 space-y-6">
+            <!-- User Information -->
+            <div>
+              <h4 class="text-sm font-semibold text-text-primary mb-3 uppercase tracking-wide">User Information</h4>
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <p class="text-xs text-text-secondary mb-1">First Name</p>
+                  <p class="text-sm text-text-primary font-medium">{{ reservation()!.firstName }}</p>
+                </div>
+                <div>
+                  <p class="text-xs text-text-secondary mb-1">Last Name</p>
+                  <p class="text-sm text-text-primary font-medium">{{ reservation()!.lastName }}</p>
+                </div>
+                <div>
+                  <p class="text-xs text-text-secondary mb-1">Building</p>
+                  <p class="text-sm text-text-primary font-medium">{{ reservation()!.userBuildingName }}</p>
+                </div>
+                <div>
+                  <p class="text-xs text-text-secondary mb-1">Room Number</p>
+                  <p class="text-sm text-text-primary font-medium">{{ reservation()!.userRoomNumber }}</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Resource Information -->
+            <div class="border-t border-card-border pt-4">
+              <h4 class="text-sm font-semibold text-text-primary mb-3 uppercase tracking-wide">Resource Information</h4>
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <p class="text-xs text-text-secondary mb-1">Resource Name</p>
+                  <p class="text-sm text-text-primary font-medium">{{ reservation()!.resourceName }}</p>
+                </div>
+                <div>
+                  <p class="text-xs text-text-secondary mb-1">Resource Location</p>
+                  <p class="text-sm text-text-primary font-medium">{{ reservation()!.resourceBuildingName }}</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Reservation Time -->
+            <div class="border-t border-card-border pt-4">
+              <h4 class="text-sm font-semibold text-text-primary mb-3 uppercase tracking-wide">Reservation Time</h4>
+              <div class="grid grid-cols-3 gap-4">
+                <div>
+                  <p class="text-xs text-text-secondary mb-1">Date</p>
+                  <p class="text-sm text-text-primary font-medium">{{ reservation()!.date }}</p>
+                </div>
+                <div>
+                  <p class="text-xs text-text-secondary mb-1">Start Time</p>
+                  <p class="text-sm text-text-primary font-medium">{{ reservation()!.startTime }}</p>
+                </div>
+                <div>
+                  <p class="text-xs text-text-secondary mb-1">End Time</p>
+                  <p class="text-sm text-text-primary font-medium">{{ reservation()!.endTime }}</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Status -->
+            <div class="border-t border-card-border pt-4">
+              <h4 class="text-sm font-semibold text-text-primary mb-3 uppercase tracking-wide">Status</h4>
+              <div>
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium"
+                      [class.bg-green-100]="reservation()!.status === 'CONFIRMED'"
+                      [class.text-green-800]="reservation()!.status === 'CONFIRMED'"
+                      [class.dark:bg-green-900]="reservation()!.status === 'CONFIRMED'"
+                      [class.dark:text-green-200]="reservation()!.status === 'CONFIRMED'"
+                      [class.bg-red-100]="reservation()!.status === 'CANCELLED'"
+                      [class.text-red-800]="reservation()!.status === 'CANCELLED'"
+                      [class.dark:bg-red-900]="reservation()!.status === 'CANCELLED'"
+                      [class.dark:text-red-200]="reservation()!.status === 'CANCELLED'">
+                  {{ reservation()!.status }}
+                </span>
+              </div>
+            </div>
+          </div>
+        }
+
+        <!-- Footer -->
+        <div class="flex justify-end border-t border-card-border px-6 py-4">
+          <button
+            (click)="onClose()"
+            class="px-4 py-2 rounded-lg bg-primary text-white hover:bg-primary-dark transition-colors font-medium"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+}
+
