@@ -1,6 +1,7 @@
 package com.montelzek.mydorm.room;
 
 import com.montelzek.mydorm.building.Building;
+import com.montelzek.mydorm.issue.Issue;
 import com.montelzek.mydorm.user.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Digits;
@@ -16,7 +17,9 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -55,6 +58,9 @@ public class Room {
 
     @OneToMany(mappedBy = "room")
     private Set<User> users = new HashSet<>();
+
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Issue> issues = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "building_id", nullable = false)

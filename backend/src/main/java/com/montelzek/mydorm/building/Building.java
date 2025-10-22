@@ -1,5 +1,6 @@
 package com.montelzek.mydorm.building;
 
+import com.montelzek.mydorm.issue.Issue;
 import com.montelzek.mydorm.reservation_resource.ReservationResource;
 import com.montelzek.mydorm.room.Room;
 import jakarta.persistence.*;
@@ -50,4 +51,7 @@ public class Building {
 
     @OneToMany(mappedBy = "building", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ReservationResource> reservationResources = new ArrayList<>();
+
+    @OneToMany(mappedBy = "building", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Issue> issues = new ArrayList<>();
 }

@@ -1,5 +1,6 @@
 package com.montelzek.mydorm.user;
 
+import com.montelzek.mydorm.issue.Issue;
 import com.montelzek.mydorm.reservation.Reservation;
 import com.montelzek.mydorm.reservation_resource.ReservationResource;
 import com.montelzek.mydorm.room.Room;
@@ -76,6 +77,9 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Reservation> reservations = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Issue> issues = new ArrayList<>();
 
     @Override
     public boolean equals(Object o) {
