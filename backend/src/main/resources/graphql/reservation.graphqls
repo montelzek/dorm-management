@@ -5,6 +5,7 @@ extend type Query {
     availableStandardSlots(resourceId: ID!, date: String!): [TimeSlot!]!
     myReservations: [ReservationPayload!]!
     me: UserPayload
+    adminReservations(page: Int, size: Int, sortDirection: String, resourceId: ID, buildingId: ID, date: String, search: String): ReservationPage!
 }
 
 extend type Mutation {
@@ -50,4 +51,26 @@ type ReservationPayload {
     status: String!
     resource: ReservationResourcePayload!
     user: UserPayload!
+}
+
+type ReservationPage {
+    content: [AdminReservationPayload!]!
+    totalElements: Int!
+    totalPages: Int!
+    currentPage: Int!
+    pageSize: Int!
+}
+
+type AdminReservationPayload {
+    id: ID!
+    firstName: String!
+    lastName: String!
+    userBuildingName: String!
+    userRoomNumber: String!
+    resourceName: String!
+    resourceBuildingName: String!
+    startTime: String!
+    endTime: String!
+    date: String!
+    status: String!
 }
