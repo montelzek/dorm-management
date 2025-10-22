@@ -1,0 +1,96 @@
+<div class="space-y-4">
+  <!-- Filter -->
+  <div class="flex justify-between items-center">
+    <div class="flex items-center gap-2">
+      <label for="statusFilter" class="text-sm font-medium text-text-primary">
+        Filter by status:
+      </label>
+      <select
+        id="statusFilter"
+        [value]="statusFilter()"
+        (change)="onFilterChange($event)"
+        class="rounded-md border-input-border bg-input-bg px-3 py-1.5 text-input-text text-sm placeholder:text-input-placeholder focus:border-input-focus-border focus:outline-none focus:ring-2 focus:ring-input-focus-border"
+      >
+        <option value="">All</option>
+        <option value="REPORTED">Reported</option>
+        <option value="IN_PROGRESS">In Progress</option>
+        <option value="RESOLVED">Resolved</option>
+        <option value="CANCELLED">Cancelled</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  @if (isLoading()) {
+    <div class="flex justify-center items-center py-12">
+      <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+    </div>
+  }
+
+  <!-- Empty State -->
+  @else if (issues().length === 0) {
+    <div class="text-center py-12">
+      <svg class="mx-auto h-12 w-12 text-text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+      </svg>
+      <h3 class="mt-2 text-sm font-medium text-text-primary">No issues found</h3>
+      <p class="mt-1 text-sm text-text-secondary">
+        @if (statusFilter()) {
+          Try changing the filter or report a new issue.
+        } @else {
+          Get started by reporting your first issue.
+        }
+      </p>
+    </div>
+  }
+
+  <!-- Issues List -->
+  @else {
+    <div class="space-y-3">
+      @for (issue of issues(); track issue.id) {
+        <div class="bg-card border border-card-border rounded-lg p-4">
+          <div class="flex justify-between items-start gap-4">
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-2 mb-2">
+                <h3 class="text-lg font-semibold text-text-primary truncate">
+                  {{ issue.title }}
+                </h3>
+                <span [class]="getStatusClass(issue.status)">
+                  {{ issue.status }}
+                </span>
+                <span [class]="getPriorityClass(issue.priority)">
+                  {{ issue.priority }}
+                </span>
+              </div>
+              
+              <p class="text-sm text-text-secondary mb-2">
+                {{ truncateText(issue.description, 150) }}
+              </p>
+              
+              <div class="flex items-center gap-4 text-xs text-text-secondary">
+                <span>Created: {{ issue.createdAt }}</span>
+                @if (issue.room) {
+                  <span>Room: {{ issue.room.roomNumber }}</span>
+                }
+                @if (issue.building) {
+                  <span>Building: {{ issue.building.name }}</span>
+                }
+              </div>
+            </div>
+
+            @if (issue.status === 'REPORTED') {
+              <app-button
+                variant="danger"
+                size="sm"
+                (click)="onCancelIssue(issue.id)"
+              >
+                Cancel
+              </app-button>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>
+

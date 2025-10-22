@@ -1,0 +1,49 @@
+<app-main-layout [user]="currentUser()">
+  <div class="mx-auto max-w-7xl space-y-6">
+    <div class="flex items-center justify-between">
+      <div class="flex-1">
+        <h1 class="text-3xl font-bold text-text-primary">My Issues</h1>
+        <p class="mt-1 text-text-secondary">Report and track maintenance issues</p>
+      </div>
+      <app-button
+        variant="primary"
+        size="md"
+        (click)="openModal()"
+        class="flex-shrink-0"
+      >
+        <svg class="mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+        </svg>
+        Report Issue
+      </app-button>
+    </div>
+
+    <div class="rounded-lg bg-card shadow-sm border border-card-border p-6">
+      <app-issue-list
+        [issues]="myIssues()"
+        [isLoading]="isLoading()"
+        [statusFilter]="statusFilter()"
+        (cancelIssue)="onCancelIssue($event)"
+        (filterChange)="onFilterChange($event)"
+      ></app-issue-list>
+    </div>
+  </div>
+
+  <!-- Create Issue Modal -->
+  <app-modal
+    [isOpen]="isModalOpen()"
+    title="Report New Issue"
+    size="lg"
+    (close)="closeModal()"
+  >
+    <div slot="body">
+      <app-issue-form
+        [form]="issueForm"
+        [isLoading]="isLoading()"
+        (formSubmit)="onFormSubmit()"
+        (cancel)="closeModal()"
+      ></app-issue-form>
+    </div>
+  </app-modal>
+</app-main-layout>
+

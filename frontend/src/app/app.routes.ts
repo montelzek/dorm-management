@@ -20,6 +20,12 @@ export const routes: Routes = [
   },
 
   {
+    path: 'issues',
+    loadComponent: () => import('./features/resident/issues/issues').then(m => m.IssuesComponent),
+    canActivate: [authGuard]
+  },
+
+  {
     path: 'admin/residents',
     loadComponent: () => import('./features/admin/residents-management/residents-management').then(m => m.ResidentsManagementComponent),
     canActivate: [authGuard]
