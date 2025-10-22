@@ -13,6 +13,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -40,11 +41,16 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
-    public ResidentPage getResidentsPage(Integer page, Integer size, String search) {
+    public ResidentPage getResidentsPage(Integer page, Integer size, String search, String sortBy, String sortDirection) {
         int pageNumber = page != null ? page : 0;
         int pageSize = size != null ? size : 10;
+        
+        // Default sort by firstName ascending if not specified
+        String sortField = sortBy != null && !sortBy.trim().isEmpty() ? sortBy : "firstName";
+        Sort.Direction direction = "desc".equalsIgnoreCase(sortDirection) ? Sort.Direction.DESC : Sort.Direction.ASC;
+        Sort sort = Sort.by(direction, sortField);
 
-        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
         Page<User> userPage;
 
         if (search != null && !search.trim().isEmpty()) {
@@ -66,11 +72,16 @@ public class UserService {
         );
     }
 
-    public ResidentPage getResidentsByBuildingPage(Long buildingId, Integer page, Integer size, String search) {
+    public ResidentPage getResidentsByBuildingPage(Long buildingId, Integer page, Integer size, String search, String sortBy, String sortDirection) {
         int pageNumber = page != null ? page : 0;
         int pageSize = size != null ? size : 10;
+        
+        // Default sort by firstName ascending if not specified
+        String sortField = sortBy != null && !sortBy.trim().isEmpty() ? sortBy : "firstName";
+        Sort.Direction direction = "desc".equalsIgnoreCase(sortDirection) ? Sort.Direction.DESC : Sort.Direction.ASC;
+        Sort sort = Sort.by(direction, sortField);
 
-        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
         Page<User> userPage;
 
         if (search != null && !search.trim().isEmpty()) {

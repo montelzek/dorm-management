@@ -10,8 +10,8 @@ export const GET_BUILDINGS = gql`
 `;
 
 export const GET_ALL_RESIDENTS = gql`
-  query GetAllResidents($page: Int, $size: Int, $search: String) {
-    allResidents(page: $page, size: $size, search: $search) {
+  query GetAllResidents($page: Int, $size: Int, $search: String, $sortBy: String, $sortDirection: String) {
+    allResidents(page: $page, size: $size, search: $search, sortBy: $sortBy, sortDirection: $sortDirection) {
       content {
         id
         firstName
@@ -32,8 +32,8 @@ export const GET_ALL_RESIDENTS = gql`
 `;
 
 export const GET_RESIDENTS_BY_BUILDING = gql`
-  query GetResidentsByBuilding($buildingId: ID!, $page: Int, $size: Int, $search: String) {
-    residentsByBuilding(buildingId: $buildingId, page: $page, size: $size, search: $search) {
+  query GetResidentsByBuilding($buildingId: ID!, $page: Int, $size: Int, $search: String, $sortBy: String, $sortDirection: String) {
+    residentsByBuilding(buildingId: $buildingId, page: $page, size: $size, search: $search, sortBy: $sortBy, sortDirection: $sortDirection) {
       content {
         id
         firstName

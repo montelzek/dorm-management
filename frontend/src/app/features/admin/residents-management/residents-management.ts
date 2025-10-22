@@ -38,6 +38,8 @@ export class ResidentsManagementComponent implements OnInit {
   readonly searchQuery = signal<string>('');
   readonly page = signal<number>(0);
   readonly size = signal<number>(10);
+  readonly sortBy = signal<string>('firstName');
+  readonly sortDirection = signal<'asc' | 'desc'>('asc');
 
   readonly isModalOpen = signal<boolean>(false);
   readonly selectedResident = signal<ResidentPayload | null>(null);
@@ -57,13 +59,15 @@ export class ResidentsManagementComponent implements OnInit {
     const page = this.page();
     const size = this.size();
     const search = this.searchQuery().trim() || undefined;
+    const sortBy = this.sortBy();
+    const sortDirection = this.sortDirection();
     
     // Small delay to show that loading is happening
     setTimeout(() => {
       if (buildingId === '') {
-        this.residentService.getAllResidents(page, size, search);
+        this.residentService.getAllResidents(page, size, search, sortBy, sortDirection);
       } else {
-        this.residentService.getResidentsByBuilding(buildingId, page, size, search);
+        this.residentService.getResidentsByBuilding(buildingId, page, size, search, sortBy, sortDirection);
       }
       this.isLoading.set(false);
     }, 300);
@@ -89,6 +93,18 @@ export class ResidentsManagementComponent implements OnInit {
   onPageSizeChange(newSize: number) {
     this.size.set(newSize);
     this.page.set(0); // Reset to first page
+    this.loadResidents();
+  }
+
+  onSortChange(field: string) {
+    if (this.sortBy() === field) {
+      // Toggle direction if same field
+      this.sortDirection.set(this.sortDirection() === 'asc' ? 'desc' : 'asc');
+    } else {
+      // New field, default to ascending
+      this.sortBy.set(field);
+      this.sortDirection.set('asc');
+    }
     this.loadResidents();
   }
 

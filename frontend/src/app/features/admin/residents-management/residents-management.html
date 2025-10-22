@@ -96,8 +96,11 @@
       <div class="hidden md:block rounded-lg bg-card shadow-sm border border-card-border overflow-hidden">
         <app-resident-list 
           [residents]="allResidents()"
+          [sortBy]="sortBy()"
+          [sortDirection]="sortDirection()"
           (assignRoom)="onAssignRoom($event)"
           (deleteResident)="onDeleteResident($event)"
+          (sortChange)="onSortChange($event)"
         ></app-resident-list>
       </div>
       
@@ -105,8 +108,11 @@
       <div class="md:hidden">
         <app-resident-list 
           [residents]="allResidents()"
+          [sortBy]="sortBy()"
+          [sortDirection]="sortDirection()"
           (assignRoom)="onAssignRoom($event)"
           (deleteResident)="onDeleteResident($event)"
+          (sortChange)="onSortChange($event)"
         ></app-resident-list>
       </div>
 

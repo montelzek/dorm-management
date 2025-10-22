@@ -1,6 +1,6 @@
 <!-- Mobile Card View -->
 <div class="md:hidden space-y-4">
-  @for (resident of sortedResidents(); track resident.id) {
+  @for (resident of residents(); track resident.id) {
     <div class="bg-card rounded-lg border border-card-border p-4 hover:bg-background transition-colors">
       <!-- Header with Name -->
       <div class="flex items-start justify-between mb-3">
@@ -56,7 +56,7 @@
           (click)="onSort('firstName')">
         <div class="flex items-center gap-1">
           First Name
-          @if (sortField() === 'firstName') {
+          @if (sortBy() === 'firstName') {
             <span>{{ sortDirection() === 'asc' ? '↑' : '↓' }}</span>
           }
         </div>
@@ -65,7 +65,7 @@
           (click)="onSort('lastName')">
         <div class="flex items-center gap-1">
           Last Name
-          @if (sortField() === 'lastName') {
+          @if (sortBy() === 'lastName') {
             <span>{{ sortDirection() === 'asc' ? '↑' : '↓' }}</span>
           }
         </div>
@@ -88,7 +88,7 @@
     </tr>
     </thead>
     <tbody class="divide-y divide-card-border bg-card">
-      @for (resident of sortedResidents(); track resident.id) {
+      @for (resident of residents(); track resident.id) {
         <tr class="hover:bg-background transition-colors">
           <td class="whitespace-nowrap px-6 py-4 text-sm text-text-secondary">
             {{ resident.firstName }}
