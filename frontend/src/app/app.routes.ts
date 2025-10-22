@@ -37,5 +37,11 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
 
+  {
+    path: 'admin/issues',
+    loadComponent: () => import('./features/admin/issues-management/issues-management').then(m => m.IssuesManagementComponent),
+    canActivate: [authGuard]
+  },
+
   { path: '', redirectTo: '/login', pathMatch: 'full' }
 ];
