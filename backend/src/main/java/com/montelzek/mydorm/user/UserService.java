@@ -1,10 +1,7 @@
 package com.montelzek.mydorm.user;
 
-import com.montelzek.mydorm.constants.ApplicationConstants;
 import com.montelzek.mydorm.exception.BusinessException;
 import com.montelzek.mydorm.exception.ErrorCodes;
-import com.montelzek.mydorm.reservation.ReservationRepository;
-import com.montelzek.mydorm.reservation.payload.GraphQLPayloads;
 import com.montelzek.mydorm.room.Room;
 import com.montelzek.mydorm.room.RoomRepository;
 import com.montelzek.mydorm.user.payloads.ResidentPage;
@@ -16,8 +13,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,7 +22,6 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final RoomRepository roomRepository;
-    private final ReservationRepository reservationRepository;
 
     public List<ResidentPayload> getResidentsAsPayloads() {
         return userRepository.findAllResidents().stream()
@@ -171,19 +165,7 @@ public class UserService {
                         "userId"
                 ));
 
-        // Check if user has active reservations
-        ZoneId dormitoryZone = ApplicationConstants.DORMITORY_TIMEZONE;
-        LocalDateTime now = LocalDateTime.now(dormitoryZone);
-        
-        boolean hasActiveReservations = reservationRepository.hasActiveReservations(userId, now);
-        if (hasActiveReservations) {
-            throw new BusinessException(
-                    ErrorCodes.VALIDATION_ERROR,
-                    "Cannot delete resident with active reservations",
-                    "userId"
-            );
-        }
-
+        // Reservations will be automatically deleted due to cascade = CascadeType.ALL
         userRepository.delete(user);
         return true;
     }
