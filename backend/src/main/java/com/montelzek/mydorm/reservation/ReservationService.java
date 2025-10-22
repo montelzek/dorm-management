@@ -102,6 +102,7 @@ public class ReservationService {
         LocalDateTime localStartTime = startTime.withZoneSameInstant(dormitoryZone).toLocalDateTime();
         LocalDateTime localEndTime = endTime.withZoneSameInstant(dormitoryZone).toLocalDateTime();
         
+        // Check if resource is available
         List<Reservation> conflictingReservations = reservationRepository.findConflictingReservations(
                 resourceId,
                 localStartTime,
@@ -110,6 +111,17 @@ public class ReservationService {
 
         if (!conflictingReservations.isEmpty()) {
             throw new BusinessException(ErrorCodes.RESOURCE_CONFLICT, "Resource is already reserved in the selected time slot.", "timeSlot");
+        }
+
+        // Check if user already has a reservation in this time slot
+        List<Reservation> userConflictingReservations = reservationRepository.findUserConflictingReservations(
+                currentUser.getId(),
+                localStartTime,
+                localEndTime
+        );
+
+        if (!userConflictingReservations.isEmpty()) {
+            throw new BusinessException(ErrorCodes.USER_RESERVATION_CONFLICT, "You already have a reservation in this time slot.", "timeSlot");
         }
 
         Reservation newReservation = new Reservation();

@@ -10,6 +10,7 @@ import { ReservationFormComponent, ReservationFormData } from './components/rese
 import { ModalComponent } from '../../../shared/components/ui/modal/modal';
 import { ButtonComponent } from '../../../shared/components/ui/button/button';
 import { ReservationService } from './services/reservation';
+import { ToastService } from '../../../core/services/toast.service';
 import {
   CreateReservationInput,
   ReservationResource,
@@ -34,6 +35,7 @@ import {
 export class ReservationsComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly reservationService = inject(ReservationService);
+  private readonly toastService = inject(ToastService);
 
   readonly selectedResource = signal<ReservationResource | null>(null);
   readonly isModalOpen = signal<boolean>(false);
@@ -296,7 +298,18 @@ export class ReservationsComponent implements OnInit {
   }
 
   private handleReservationError(error: any): void {
-
+    console.error('Reservation creation error:', error);
+    
+    let errorMessage = 'Failed to create reservation. Please try again.';
+    
+    // Extract error message from GraphQL error
+    if (error.graphQLErrors && error.graphQLErrors.length > 0) {
+      errorMessage = error.graphQLErrors[0].message;
+    } else if (error.message) {
+      errorMessage = error.message;
+    }
+    
+    this.toastService.showError(errorMessage);
   }
 
   private resetForm(): void {

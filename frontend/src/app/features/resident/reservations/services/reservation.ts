@@ -158,9 +158,6 @@ export class ReservationService {
       catchError(error => {
         this._isLoading.set(false);
 
-        // Uproszczenie: wszystkie błędy obsługiwane przez ErrorService
-        this.errorService.handleError(error);
-
         const errorMessage = this.extractErrorMessage(error);
         this._error.set(errorMessage);
         throw error;
