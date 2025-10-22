@@ -16,6 +16,7 @@ export class ButtonComponent {
   readonly disabled = input<boolean>(false);
   readonly loading = input<boolean>(false);
   readonly type = input<'button' | 'submit' | 'reset'>('button');
+  readonly fullWidth = input<boolean>(false);
 
   readonly click = output<Event>();
 
@@ -42,6 +43,8 @@ export class ButtonComponent {
       lg: 'px-6 py-3 text-base'
     };
 
-    return `${baseClasses} ${variantClasses[this.variant()]} ${sizeClasses[this.size()]}`;
+    const widthClass = this.fullWidth() ? 'w-full' : '';
+
+    return `${baseClasses} ${variantClasses[this.variant()]} ${sizeClasses[this.size()]} ${widthClass}`;
   }
 }
