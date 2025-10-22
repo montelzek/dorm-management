@@ -3,7 +3,9 @@ package com.montelzek.mydorm.reservation;
 import com.montelzek.mydorm.constants.ApplicationConstants;
 import com.montelzek.mydorm.exception.BusinessException;
 import com.montelzek.mydorm.exception.ErrorCodes;
+import com.montelzek.mydorm.reservation.payload.AdminReservationPayload;
 import com.montelzek.mydorm.reservation.payload.GraphQLPayloads;
+import com.montelzek.mydorm.reservation.payload.ReservationPage;
 import com.montelzek.mydorm.reservation_resource.EResourceType;
 import com.montelzek.mydorm.reservation_resource.ReservationResource;
 import com.montelzek.mydorm.reservation_resource.ReservationResourceRepository;
@@ -11,6 +13,10 @@ import com.montelzek.mydorm.user.User;
 import com.montelzek.mydorm.user.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.*;
@@ -294,5 +300,104 @@ public class ReservationService {
         reservationRepository.save(reservation);
 
         return true;
+    }
+
+    // Admin reservation management
+    public ReservationPage getAdminReservationsPage(Integer page, Integer size, String sortDirection, 
+                                                     Long resourceId, Long buildingId, String dateStr, String search) {
+        int pageNumber = page != null ? page : 0;
+        int pageSize = size != null ? size : 10;
+        
+        // Sort by startTime (date)
+        Sort.Direction direction = "desc".equalsIgnoreCase(sortDirection) ? Sort.Direction.DESC : Sort.Direction.ASC;
+        Sort sort = Sort.by(direction, "startTime");
+        
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
+        
+        // Get current time in dormitory timezone
+        ZoneId dormitoryZone = ApplicationConstants.DORMITORY_TIMEZONE;
+        LocalDateTime now = LocalDateTime.now(dormitoryZone);
+        
+        // Parse date if provided
+        LocalDate date = null;
+        if (dateStr != null && !dateStr.trim().isEmpty()) {
+            try {
+                date = LocalDate.parse(dateStr);
+            } catch (DateTimeParseException e) {
+                // Invalid date format, ignore
+            }
+        }
+        
+        Page<Reservation> reservationPage;
+        
+        // Check if any filters are applied
+        boolean hasFilters = resourceId != null || buildingId != null || date != null || 
+                            (search != null && !search.trim().isEmpty());
+        
+        if (hasFilters) {
+            reservationPage = reservationRepository.findFutureConfirmedReservationsWithFilters(
+                resourceId, buildingId, date, search, now, pageable
+            );
+        } else {
+            reservationPage = reservationRepository.findFutureConfirmedReservations(now, pageable);
+        }
+        
+        List<AdminReservationPayload> content = reservationPage.getContent().stream()
+                .map(this::toAdminPayload)
+                .collect(Collectors.toList());
+        
+        return new ReservationPage(
+                content,
+                (int) reservationPage.getTotalElements(),
+                reservationPage.getTotalPages(),
+                reservationPage.getNumber(),
+                reservationPage.getSize()
+        );
+    }
+
+    private AdminReservationPayload toAdminPayload(Reservation reservation) {
+        User user = reservation.getUser();
+        ReservationResource resource = reservation.getReservationResource();
+        
+        // User building and room
+        String userBuildingName = user.getRoom() != null && user.getRoom().getBuilding() != null
+                ? user.getRoom().getBuilding().getName()
+                : "N/A";
+        
+        String userRoomNumber = user.getRoom() != null
+                ? user.getRoom().getRoomNumber()
+                : "N/A";
+        
+        // Resource details
+        String resourceName = resource.getName();
+        String resourceBuildingName = resource.getBuilding() != null
+                ? resource.getBuilding().getName()
+                : "N/A";
+        
+        // Format date and time
+        ZoneId dormitoryZone = ApplicationConstants.DORMITORY_TIMEZONE;
+        ZonedDateTime zonedStart = reservation.getStartTime().atZone(dormitoryZone);
+        ZonedDateTime zonedEnd = reservation.getEndTime().atZone(dormitoryZone);
+        
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+        
+        String date = zonedStart.format(dateFormatter);
+        String startTime = zonedStart.format(timeFormatter);
+        String endTime = zonedEnd.format(timeFormatter);
+        
+        return new AdminReservationPayload(
+                reservation.getId(),
+                user.getFirstName(),
+                user.getLastName(),
+                userBuildingName,
+                userRoomNumber,
+                resourceName,
+                resourceBuildingName,
+                startTime,
+                endTime,
+                date,
+                reservation.getStatus()
+        );
     }
 }

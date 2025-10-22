@@ -1,6 +1,7 @@
 package com.montelzek.mydorm.reservation;
 
 import com.montelzek.mydorm.reservation.payload.GraphQLPayloads;
+import com.montelzek.mydorm.reservation.payload.ReservationPage;
 import com.montelzek.mydorm.security.UserDetailsImpl;
 import com.montelzek.mydorm.user.User;
 import jakarta.validation.Valid;
@@ -60,6 +61,20 @@ public class ReservationController {
             @Argument Long reservationId,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return reservationService.cancelReservation(reservationId, userDetails.getId());
+    }
+
+    // Admin endpoints
+    @QueryMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public ReservationPage adminReservations(
+            @Argument Integer page,
+            @Argument Integer size,
+            @Argument String sortDirection,
+            @Argument Long resourceId,
+            @Argument Long buildingId,
+            @Argument String date,
+            @Argument String search) {
+        return reservationService.getAdminReservationsPage(page, size, sortDirection, resourceId, buildingId, date, search);
     }
 
 }
