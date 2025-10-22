@@ -25,5 +25,11 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
 
+  {
+    path: 'admin/reservations',
+    loadComponent: () => import('./features/admin/reservations-management/reservations-management').then(m => m.ReservationsManagementComponent),
+    canActivate: [authGuard]
+  },
+
   { path: '', redirectTo: '/login', pathMatch: 'full' }
 ];
