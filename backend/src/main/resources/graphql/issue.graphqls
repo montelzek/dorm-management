@@ -1,0 +1,37 @@
+type IssueRoomPayload {
+    id: ID!
+    roomNumber: String!
+}
+
+type IssueBuildingPayload {
+    id: ID!
+    name: String!
+}
+
+type IssuePayload {
+    id: ID!
+    title: String!
+    description: String!
+    status: String!
+    priority: String!
+    createdAt: String!
+    updatedAt: String!
+    room: IssueRoomPayload
+    building: IssueBuildingPayload
+}
+
+input CreateIssueInput {
+    title: String!
+    description: String!
+    priority: String!
+}
+
+extend type Query {
+    myIssues(status: String): [IssuePayload!]!
+}
+
+extend type Mutation {
+    createIssue(input: CreateIssueInput!): IssuePayload!
+    cancelIssue(issueId: ID!): Boolean!
+}
+
