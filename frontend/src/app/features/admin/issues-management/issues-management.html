@@ -18,7 +18,7 @@
             id="statusFilter"
             [value]="selectedStatusFilter()"
             (change)="onStatusFilterChange($any($event.target).value)"
-            class="w-full rounded-md border-input-border bg-input-bg px-3 py-2 text-input-text text-sm placeholder:text-input-placeholder focus:border-input-focus-border focus:outline-none focus:ring-2 focus:ring-input-focus-border"
+            class="w-full rounded-lg border-2 border-input-border bg-input-bg px-3 py-2 text-input-text text-sm focus:border-input-focus-border focus:outline-none focus:ring-2 focus:ring-input-focus-border transition-all"
           >
             <option value="">All Statuses</option>
             <option value="REPORTED">Reported</option>
@@ -37,7 +37,7 @@
             id="priorityFilter"
             [value]="selectedPriorityFilter()"
             (change)="onPriorityFilterChange($any($event.target).value)"
-            class="w-full rounded-md border-input-border bg-input-bg px-3 py-2 text-input-text text-sm placeholder:text-input-placeholder focus:border-input-focus-border focus:outline-none focus:ring-2 focus:ring-input-focus-border"
+            class="w-full rounded-lg border-2 border-input-border bg-input-bg px-3 py-2 text-input-text text-sm focus:border-input-focus-border focus:outline-none focus:ring-2 focus:ring-input-focus-border transition-all"
           >
             <option value="">All Priorities</option>
             <option value="LOW">Low</option>
@@ -56,7 +56,7 @@
             id="buildingFilter"
             [value]="selectedBuildingId()"
             (change)="onBuildingFilterChange($any($event.target).value)"
-            class="w-full rounded-md border-input-border bg-input-bg px-3 py-2 text-input-text text-sm placeholder:text-input-placeholder focus:border-input-focus-border focus:outline-none focus:ring-2 focus:ring-input-focus-border"
+            class="w-full rounded-lg border-2 border-input-border bg-input-bg px-3 py-2 text-input-text text-sm focus:border-input-focus-border focus:outline-none focus:ring-2 focus:ring-input-focus-border transition-all"
           >
             <option value="">All Buildings</option>
             @for (building of buildings(); track building.id) {

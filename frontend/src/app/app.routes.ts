@@ -43,5 +43,11 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
 
+  {
+    path: 'admin/facilities',
+    loadComponent: () => import('./features/admin/facilities-management/facilities-management').then(m => m.FacilitiesManagementComponent),
+    canActivate: [authGuard]
+  },
+
   { path: '', redirectTo: '/login', pathMatch: 'full' }
 ];
