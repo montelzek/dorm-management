@@ -1,0 +1,223 @@
+<app-main-layout [user]="currentUser()">
+  <div class="space-y-6">
+    <!-- Header -->
+    <div class="flex justify-between items-center">
+      <h1 class="text-2xl font-bold text-text-primary">Reservations Management</h1>
+    </div>
+
+    <!-- Filters and Search -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <!-- Building Filter -->
+      <div>
+        <label for="building" class="block text-sm font-medium text-text-secondary mb-2">
+          Filter by building
+        </label>
+        <select
+          id="building"
+          [value]="selectedBuildingId()"
+          (change)="onBuildingFilterChange($any($event.target).value)"
+          class="w-full px-4 py-2 rounded-lg border border-card-border bg-card text-text-primary focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+        >
+          <option value="">All Buildings</option>
+          @for (building of buildings(); track building.id) {
+            <option [value]="building.id">{{ building.name }}</option>
+          }
+        </select>
+      </div>
+
+      <!-- Resource Filter -->
+      <div>
+        <label for="resource" class="block text-sm font-medium text-text-secondary mb-2">
+          Filter by resource
+        </label>
+        <select
+          id="resource"
+          [value]="selectedResourceId()"
+          (change)="onResourceFilterChange($any($event.target).value)"
+          [disabled]="!selectedBuildingId()"
+          class="w-full px-4 py-2 rounded-lg border border-card-border bg-card text-text-primary focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent disabled:opacity-50"
+        >
+          <option value="">All Resources</option>
+          @for (resource of resources(); track resource.id) {
+            <option [value]="resource.id">{{ resource.name }}</option>
+          }
+        </select>
+      </div>
+
+      <!-- Date Filter -->
+      <div>
+        <label for="date" class="block text-sm font-medium text-text-secondary mb-2">
+          Filter by date
+        </label>
+        <input
+          id="date"
+          type="date"
+          [value]="selectedDate()"
+          (input)="onDateFilterChange($any($event.target).value)"
+          class="w-full px-4 py-2 rounded-lg border border-card-border bg-card text-text-primary focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+        />
+      </div>
+
+      <!-- Search Input -->
+      <div>
+        <label for="search" class="block text-sm font-medium text-text-secondary mb-2">
+          Search
+        </label>
+        <input
+          id="search"
+          type="text"
+          [value]="searchQuery()"
+          (input)="onSearchChange($any($event.target).value)"
+          placeholder="Name, room, resource..."
+          class="w-full px-4 py-2 rounded-lg border border-card-border bg-card text-text-primary placeholder-text-secondary focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+        />
+      </div>
+    </div>
+
+    <!-- Results Count, Sort Direction, and Page Size -->
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+      <div class="text-sm text-text-secondary">
+        Showing {{ allReservations().length }} of {{ totalElements() }} reservation(s)
+      </div>
+      
+      <div class="flex items-center gap-4">
+        <!-- Sort Direction Toggle -->
+        <button
+          (click)="onSortDirectionChange()"
+          class="px-4 py-2 rounded-lg border border-card-border bg-card text-text-primary hover:bg-background transition-colors flex items-center gap-2"
+        >
+          <span>Date: {{ sortDirection() === 'asc' ? 'Oldest First' : 'Newest First' }}</span>
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            @if (sortDirection() === 'asc') {
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+            } @else {
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            }
+          </svg>
+        </button>
+
+        <!-- Page Size Selector -->
+        <div class="flex items-center gap-2">
+          <label for="pageSize" class="text-sm text-text-secondary">Items per page:</label>
+          <select
+            id="pageSize"
+            [value]="size()"
+            (change)="onPageSizeChange(+$any($event.target).value)"
+            class="px-3 py-1 rounded-lg border border-card-border bg-card text-text-primary focus:outline-none focus:ring-2 focus:ring-primary"
+          >
+            <option [value]="5">5</option>
+            <option [value]="10">10</option>
+            <option [value]="20">20</option>
+            <option [value]="50">50</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Loading State -->
+    @if (isLoading()) {
+      <div class="flex justify-center items-center py-12">
+        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+        <span class="ml-3 text-text-secondary">Loading reservations...</span>
+      </div>
+    }
+
+    <!-- Empty State -->
+    @if (!isLoading() && allReservations().length === 0) {
+      <div class="text-center py-12">
+        <svg class="mx-auto h-12 w-12 text-text-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+        </svg>
+        <h3 class="mt-2 text-sm font-medium text-text-primary">No reservations found</h3>
+        <p class="mt-1 text-sm text-text-secondary">
+          @if (searchQuery() || selectedBuildingId() || selectedResourceId() || selectedDate()) {
+            Try adjusting your filters or search query.
+          } @else {
+            There are no future confirmed reservations at this time.
+          }
+        </p>
+      </div>
+    }
+
+    <!-- Reservation List -->
+    @if (!isLoading() && allReservations().length > 0) {
+      <!-- Wrapper only for desktop table -->
+      <div class="hidden md:block rounded-lg bg-card shadow-sm border border-card-border overflow-hidden">
+        <app-reservation-list 
+          [reservations]="allReservations()"
+          [sortDirection]="sortDirection()"
+          (viewDetails)="onViewDetails($event)"
+          (cancelReservation)="onCancelReservation($event)"
+        ></app-reservation-list>
+      </div>
+      
+      <!-- Mobile cards without wrapper -->
+      <div class="md:hidden">
+        <app-reservation-list 
+          [reservations]="allReservations()"
+          [sortDirection]="sortDirection()"
+          (viewDetails)="onViewDetails($event)"
+          (cancelReservation)="onCancelReservation($event)"
+        ></app-reservation-list>
+      </div>
+
+      <!-- Pagination Controls -->
+      @if (totalPages() > 1) {
+        <div class="flex justify-center items-center gap-2 mt-6">
+          <button
+            (click)="onPageChange(currentPage() - 1)"
+            [disabled]="currentPage() === 0"
+            class="px-4 py-2 rounded-lg bg-card border border-card-border text-text-primary hover:bg-background disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          >
+            Previous
+          </button>
+
+          <div class="flex gap-1">
+            @for (pageNum of [].constructor(totalPages()); track $index) {
+              <button
+                (click)="onPageChange($index)"
+                [class.bg-indigo-600]="currentPage() === $index"
+                [class.text-white]="currentPage() === $index"
+                [class.dark:bg-indigo-500]="currentPage() === $index"
+                [class.bg-card]="currentPage() !== $index"
+                [class.text-text-primary]="currentPage() !== $index"
+                [class.hover:bg-background]="currentPage() !== $index"
+                [class.hover:text-text-primary]="currentPage() !== $index"
+                class="px-3 py-2 rounded-lg border border-card-border transition-colors"
+              >
+                {{ $index + 1 }}
+              </button>
+            }
+          </div>
+
+          <button
+            (click)="onPageChange(currentPage() + 1)"
+            [disabled]="currentPage() === totalPages() - 1"
+            class="px-4 py-2 rounded-lg bg-card border border-card-border text-text-primary hover:bg-background disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          >
+            Next
+          </button>
+        </div>
+      }
+    }
+
+    <!-- Modals -->
+    <app-reservation-details-modal
+      [isOpen]="isDetailsModalOpen()"
+      [reservation]="selectedReservation()"
+      (close)="onCloseDetailsModal()"
+    ></app-reservation-details-modal>
+
+    <app-confirmation-dialog
+      [isOpen]="isCancelDialogOpen()"
+      [title]="'Cancel Reservation'"
+      [message]="'Are you sure you want to cancel this reservation for ' + (reservationToCancel()?.firstName || '') + ' ' + (reservationToCancel()?.lastName || '') + '? This action cannot be undone.'"
+      [confirmText]="'Cancel Reservation'"
+      [cancelText]="'Keep Reservation'"
+      (confirm)="onConfirmCancel()"
+      (cancel)="onCancelDialogClose()"
+    ></app-confirmation-dialog>
+
+  </div>
+</app-main-layout>
+
