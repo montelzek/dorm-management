@@ -76,3 +76,27 @@ VALUES
     (12, 'ROLE_RESIDENT'),
     (13, 'ROLE_RESIDENT'),
     (14, 'ROLE_RESIDENT');
+
+-- Insert sample announcements
+INSERT INTO announcements (title, content, category, start_date, end_date, created_at, updated_at)
+VALUES
+    ('Water Maintenance - Building A', 'Water will be shut off in Building A on Saturday from 8 AM to 2 PM for maintenance work. Please plan accordingly.', 'WATER', CURRENT_DATE - INTERVAL '2 days', CURRENT_DATE + INTERVAL '5 days', NOW(), NOW()),
+    ('Internet Upgrade This Week', 'We are upgrading the internet infrastructure. You may experience brief interruptions during off-peak hours.', 'INTERNET', CURRENT_DATE, CURRENT_DATE + INTERVAL '7 days', NOW(), NOW()),
+    ('Power Outage Notice - Building B', 'Scheduled power outage in Building B on Sunday from 6 AM to 10 AM for electrical inspection.', 'ELECTRICITY', CURRENT_DATE, CURRENT_DATE + INTERVAL '3 days', NOW(), NOW()),
+    ('Elevator Maintenance', 'The elevator in Building C will be under maintenance from Monday to Wednesday. Please use the stairs.', 'MAINTENANCE', CURRENT_DATE, CURRENT_DATE + INTERVAL '10 days', NOW(), NOW()),
+    ('Community Meeting Next Week', 'Join us for the monthly community meeting next Thursday at 7 PM in the Common Lounge A. Pizza will be served!', 'GENERAL', CURRENT_DATE, CURRENT_DATE + INTERVAL '14 days', NOW(), NOW()),
+    ('Heating System Check', 'Annual heating system inspection will take place next month. No interruption to service expected.', 'MAINTENANCE', CURRENT_DATE - INTERVAL '1 day', CURRENT_DATE + INTERVAL '30 days', NOW(), NOW());
+
+-- Link announcements to buildings
+INSERT INTO announcement_buildings (announcement_id, building_id)
+VALUES
+    (1, 1),  -- Water maintenance in Building A
+    (3, 2),  -- Power outage in Building B
+    (4, 3),  -- Elevator maintenance in Building C
+    (5, 1),  -- Community meeting in Building A
+    (5, 2),  -- Community meeting also for Building B
+    (6, 1),  -- Heating check in Building A
+    (6, 2),  -- Heating check in Building B
+    (6, 3);  -- Heating check in Building C
+
+-- Note: Announcements 2 (Internet Upgrade) has no building assignment, making it global for all residents
