@@ -22,6 +22,7 @@ type AdminResourcePayload {
     id: ID!
     name: String!
     description: String
+    resourceType: String!
     buildingId: ID!
     buildingName: String!
     isActive: Boolean!

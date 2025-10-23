@@ -4,6 +4,7 @@ public record AdminResourcePayload(
         Long id,
         String name,
         String description,
+        String resourceType,
         Long buildingId,
         String buildingName,
         boolean isActive,

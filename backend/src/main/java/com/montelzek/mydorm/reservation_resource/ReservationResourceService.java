@@ -117,6 +117,7 @@ public class ReservationResourceService {
                 resource.getId(),
                 resource.getName(),
                 resource.getDescription(),
+                resource.getResourceType().name(),
                 resource.getBuilding().getId(),
                 resource.getBuilding().getName(),
                 resource.isActive(),
