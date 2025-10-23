@@ -134,6 +134,7 @@ export const GET_ADMIN_RESOURCES = gql`
         id
         name
         description
+        resourceType
         buildingId
         buildingName
         isActive

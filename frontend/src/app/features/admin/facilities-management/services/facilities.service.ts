@@ -48,6 +48,7 @@ export interface Resource {
   id: string;
   name: string;
   description: string | null;
+  resourceType: string;
   buildingId: string;
   buildingName: string;
   isActive: boolean;
