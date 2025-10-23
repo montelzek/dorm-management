@@ -7,6 +7,9 @@ import { InMemoryCache, ApolloClientOptions } from '@apollo/client/core';
 import { setContext } from '@apollo/client/link/context';
 import { createHttpLink } from '@apollo/client/link/http';
 import { ErrorInterceptor } from './core/interceptors/error.interceptor';
+import { provideAnimations } from '@angular/platform-browser/animations';
+import { CalendarDateFormatter, DateAdapter } from 'angular-calendar';
+import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 
 import { routes } from './app.routes';
 
@@ -41,11 +44,16 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
     provideHttpClient(withInterceptors([ErrorInterceptor])),
+    provideAnimations(),
     Apollo,
     {
       provide: APOLLO_OPTIONS,
       useFactory: createApollo,
       deps: [HttpLink]
     },
+    {
+      provide: DateAdapter,
+      useFactory: adapterFactory
+    }
   ],
 };
