@@ -1,0 +1,154 @@
+.calendar-container {
+  min-height: 700px;
+  width: 100%;
+  display: block;
+}
+
+.calendar-container mwl-calendar-month-view {
+  width: 100%;
+  display: block;
+}
+
+/* Force override any inline styles */
+::ng-deep mwl-calendar-month-view {
+  width: 100% !important;
+  display: block !important;
+}
+
+::ng-deep mwl-calendar-month-view > * {
+  width: 100% !important;
+}
+
+/* Angular Calendar Base Layout - Using Grid instead of Table */
+::ng-deep .cal-month-view {
+  background-color: var(--color-card);
+  border-radius: 0.5rem;
+  display: grid !important;
+  grid-template-rows: auto 1fr;
+  width: 100% !important;
+}
+
+::ng-deep .cal-month-view .cal-header {
+  background-color: var(--color-background);
+  border-bottom: 2px solid var(--color-card-border);
+  display: grid !important;
+  grid-template-columns: repeat(7, 1fr) !important;
+  width: 100% !important;
+}
+
+::ng-deep .cal-month-view .cal-header .cal-cell {
+  color: var(--color-text-primary);
+  font-weight: 700;
+  font-size: 1rem;
+  padding: 1rem;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-right: 1px solid var(--color-card-border);
+}
+
+::ng-deep .cal-month-view .cal-header .cal-cell:last-child {
+  border-right: none;
+}
+
+::ng-deep .cal-month-view .cal-days {
+  border: 1px solid var(--color-card-border);
+  border-radius: 0.5rem;
+  display: grid !important;
+  grid-template-rows: repeat(auto-fill, minmax(120px, 1fr));
+  width: 100% !important;
+}
+
+::ng-deep .cal-month-view .cal-cell-row {
+  display: grid !important;
+  grid-template-columns: repeat(7, 1fr) !important;
+  border-bottom: 1px solid var(--color-card-border);
+  width: 100% !important;
+}
+
+::ng-deep .cal-month-view .cal-cell-row:last-child {
+  border-bottom: none;
+}
+
+::ng-deep .cal-month-view .cal-day-cell {
+  min-height: 120px;
+  height: 120px;
+  border-right: 1px solid var(--color-card-border);
+  background-color: var(--color-card);
+  color: var(--color-text-primary);
+  position: relative;
+  padding: 0.5rem;
+  box-sizing: border-box;
+  width: auto !important;
+}
+
+::ng-deep .cal-month-view .cal-day-cell:last-child {
+  border-right: none;
+}
+
+::ng-deep .cal-month-view .cal-day-cell:hover {
+  background-color: var(--color-background);
+  cursor: pointer;
+}
+
+::ng-deep .cal-month-view .cal-day-cell.cal-out-month {
+  background-color: var(--color-background);
+  opacity: 0.5;
+}
+
+::ng-deep .cal-month-view .cal-day-cell.cal-today {
+  background-color: rgba(79, 70, 229, 0.1);
+  border: 2px solid #4F46E5 !important;
+}
+
+html.dark ::ng-deep .cal-month-view .cal-day-cell.cal-today {
+  background-color: rgba(79, 70, 229, 0.2);
+}
+
+/* Hide default event rendering */
+::ng-deep .cal-month-view .cal-events {
+  display: none !important;
+}
+
+/* Custom cell layout */
+::ng-deep .cal-month-view .cal-cell-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+}
+
+::ng-deep .cal-month-view .cal-day-number {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  order: 2;
+}
+
+::ng-deep .cal-month-view .cal-day-cell.cal-weekend .cal-day-number {
+  color: #EF4444;
+}
+
+::ng-deep .cal-month-view .cal-day-badge {
+  background-color: #4F46E5;
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  order: 1;
+  flex-shrink: 0;
+}
+
+/* Remove unused event styles */
+::ng-deep .cal-month-view .cal-event {
+  display: none !important;
+}
+
+::ng-deep .cal-month-view .cal-open-day-events {
+  background-color: var(--color-background);
+  border: 1px solid var(--color-card-border);
+  padding: 1rem;
+  margin: 0.5rem;
+  border-radius: 0.5rem;
+}
