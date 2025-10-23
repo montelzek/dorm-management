@@ -1,0 +1,62 @@
+type EventBuildingPayload {
+    id: ID!
+    name: String!
+}
+
+type EventResourcePayload {
+    id: ID!
+    name: String!
+}
+
+type EventPayload {
+    id: ID!
+    title: String!
+    description: String
+    eventDate: String!
+    startTime: String!
+    endTime: String!
+    building: EventBuildingPayload
+    resource: EventResourcePayload
+    createdAt: String!
+    updatedAt: String!
+}
+
+type EventsPagePayload {
+    content: [EventPayload!]!
+    totalElements: Int!
+    totalPages: Int!
+    currentPage: Int!
+    pageSize: Int!
+}
+
+input CreateEventInput {
+    title: String!
+    description: String
+    eventDate: String!
+    startTime: String!
+    endTime: String!
+    buildingId: ID
+    resourceId: ID
+}
+
+input UpdateEventInput {
+    title: String!
+    description: String
+    eventDate: String!
+    startTime: String!
+    endTime: String!
+    buildingId: ID
+    resourceId: ID
+}
+
+extend type Query {
+    adminEvents(page: Int, size: Int, buildingId: ID, startDate: String, endDate: String): EventsPagePayload!
+    residentEvents(startDate: String!, endDate: String!): [EventPayload!]!
+}
+
+extend type Mutation {
+    createEvent(input: CreateEventInput!): EventPayload!
+    updateEvent(id: ID!, input: UpdateEventInput!): EventPayload!
+    deleteEvent(id: ID!): Boolean
+}
+
