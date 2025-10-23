@@ -61,5 +61,17 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
 
+  {
+    path: 'admin/announcements',
+    loadComponent: () => import('./features/admin/announcements-management/announcements-management').then(m => m.AnnouncementsManagementComponent),
+    canActivate: [authGuard]
+  },
+
+  {
+    path: 'announcements',
+    loadComponent: () => import('./features/resident/announcements/announcements').then(m => m.ResidentAnnouncementsComponent),
+    canActivate: [authGuard]
+  },
+
   { path: '', redirectTo: '/login', pathMatch: 'full' }
 ];
