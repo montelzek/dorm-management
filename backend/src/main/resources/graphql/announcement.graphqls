@@ -1,0 +1,54 @@
+type AnnouncementPayload {
+    id: ID!
+    title: String!
+    content: String!
+    category: String!
+    startDate: String!
+    endDate: String!
+    buildings: [AnnouncementBuildingPayload!]!
+    createdAt: String!
+    updatedAt: String!
+}
+
+type AnnouncementBuildingPayload {
+    id: ID!
+    name: String!
+}
+
+type AnnouncementsPagePayload {
+    content: [AnnouncementPayload!]!
+    totalElements: Int!
+    totalPages: Int!
+    currentPage: Int!
+}
+
+input CreateAnnouncementInput {
+    title: String!
+    content: String!
+    category: String!
+    startDate: String!
+    endDate: String!
+    buildingIds: [ID!]!
+}
+
+input UpdateAnnouncementInput {
+    title: String!
+    content: String!
+    category: String!
+    startDate: String!
+    endDate: String!
+    buildingIds: [ID!]!
+}
+
+extend type Query {
+    adminAnnouncements(page: Int, size: Int): AnnouncementsPagePayload!
+    residentAnnouncements: [AnnouncementPayload!]!
+}
+
+extend type Mutation {
+    createAnnouncement(input: CreateAnnouncementInput!): AnnouncementPayload!
+    updateAnnouncement(id: ID!, input: UpdateAnnouncementInput!): AnnouncementPayload!
+    deleteAnnouncement(id: ID!): Boolean!
+}
+
+
