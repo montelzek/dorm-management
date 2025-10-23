@@ -62,7 +62,8 @@ export class AuthService {
           this.setAuthToken(userData.token);
           this._currentUser.set(userData);
           this._isLoggedIn.set(true);
-          this.apollo.client.resetStore();
+          // Use clearStore instead of resetStore to avoid refetching previous user's queries
+          this.apollo.client.clearStore();
         }
         return userData;
       }),
@@ -82,7 +83,8 @@ export class AuthService {
     this.clearAuthToken();
     this._currentUser.set(null);
     this._isLoggedIn.set(false);
-    this.apollo.client.resetStore();
+    // Use clearStore instead of resetStore to avoid refetching queries after logout
+    this.apollo.client.clearStore();
   }
 
   private setAuthToken(token: string): void {
