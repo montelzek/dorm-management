@@ -49,5 +49,17 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
 
+  {
+    path: 'admin/events',
+    loadComponent: () => import('./features/admin/events-management/events-management').then(m => m.EventsManagementComponent),
+    canActivate: [authGuard]
+  },
+
+  {
+    path: 'events',
+    loadComponent: () => import('./features/resident/events/events').then(m => m.ResidentEventsComponent),
+    canActivate: [authGuard]
+  },
+
   { path: '', redirectTo: '/login', pathMatch: 'full' }
 ];
