@@ -100,3 +100,17 @@ VALUES
     (6, 3);  -- Heating check in Building C
 
 -- Note: Announcements 2 (Internet Upgrade) has no building assignment, making it global for all residents
+
+-- Insert sample marketplace listings
+INSERT INTO marketplace_listings (user_id, title, description, listing_type, category, price, image_filenames, created_at, updated_at)
+VALUES
+    (2, 'Calculus Textbook for Sale', 'Used calculus textbook in good condition. All chapters intact, minimal highlighting. Perfect for Math 101.', 'SELL', 'TEXTBOOKS', 45.00, '[]'::jsonb, NOW(), NOW()),
+    (5, 'Looking for Chemistry Lab Manual', 'Need to buy Chemistry Lab Manual for second semester. Willing to pay good price if in decent condition.', 'BUY', 'TEXTBOOKS', 30.00, '[]'::jsonb, NOW(), NOW()),
+    (6, 'IKEA Desk and Chair Set', 'Moving out, selling my desk and chair. Very sturdy, bought 6 months ago. Pickup only from Building B.', 'SELL', 'FURNITURE', 120.00, '[]'::jsonb, NOW(), NOW()),
+    (7, 'Gaming Laptop - RTX 3060', 'Selling my gaming laptop. RTX 3060, 16GB RAM, 512GB SSD. Great for gaming and programming. Reason for selling: upgraded to desktop.', 'SELL', 'ELECTRONICS', 850.00, '[]'::jsonb, NOW(), NOW()),
+    (8, 'Need Mini Fridge', 'Looking to buy a mini fridge for my dorm room. Budget around 100 PLN. Please contact if you have one available.', 'BUY', 'ELECTRONICS', 100.00, '[]'::jsonb, NOW(), NOW()),
+    (9, 'Bookshelf - 5 Shelves', 'White bookshelf with 5 shelves. Great condition. Must pick up from Building C, Room C102.', 'SELL', 'FURNITURE', 80.00, '[]'::jsonb, NOW(), NOW()),
+    (10, 'Physics Textbook Bundle', 'Selling complete physics textbook bundle - Physics I, II, and Lab Manual. All three for one price. Saved me last year!', 'SELL', 'TEXTBOOKS', 90.00, '[]'::jsonb, NOW(), NOW()),
+    (11, 'Wireless Headphones', 'Sony WH-1000XM4 noise-cancelling headphones. Barely used, comes with original box and accessories.', 'SELL', 'ELECTRONICS', 200.00, '[]'::jsonb, NOW(), NOW()),
+    (12, 'Desk Lamp and Organizer', 'LED desk lamp with USB charging port + desk organizer. Both items together. Perfect for studying late nights.', 'SELL', 'OTHER', 35.00, '[]'::jsonb, NOW(), NOW()),
+    (13, 'Looking for Study Desk', 'Need a sturdy desk for my room. Budget up to 150 PLN. Preferably with drawers. Can pick up from any building.', 'BUY', 'FURNITURE', 150.00, '[]'::jsonb, NOW(), NOW());
