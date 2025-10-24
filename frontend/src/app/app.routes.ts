@@ -73,5 +73,11 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
 
+  {
+    path: 'marketplace',
+    loadComponent: () => import('./features/resident/marketplace/marketplace').then(m => m.MarketplaceComponent),
+    canActivate: [authGuard]
+  },
+
   { path: '', redirectTo: '/login', pathMatch: 'full' }
 ];
