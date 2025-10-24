@@ -1,0 +1,51 @@
+type ContactInfoPayload {
+    email: String!
+    phone: String!
+    firstName: String!
+    lastName: String!
+}
+
+type MarketplaceListingPayload {
+    id: ID!
+    title: String!
+    description: String!
+    listingType: String!
+    category: String!
+    price: Float!
+    imageFilenames: [String!]!
+    contactInfo: ContactInfoPayload!
+    createdAt: String!
+    updatedAt: String!
+    isOwnListing: Boolean!
+}
+
+input CreateListingInput {
+    title: String!
+    description: String!
+    listingType: String!
+    category: String!
+    price: Float!
+    imageFilenames: [String!]
+}
+
+input UpdateListingInput {
+    title: String!
+    description: String!
+    listingType: String!
+    category: String!
+    price: Float!
+    imageFilenames: [String!]
+}
+
+extend type Query {
+    allMarketplaceListings(category: String, listingType: String): [MarketplaceListingPayload!]!
+    myMarketplaceListings: [MarketplaceListingPayload!]!
+}
+
+extend type Mutation {
+    createMarketplaceListing(input: CreateListingInput!): MarketplaceListingPayload!
+    updateMarketplaceListing(id: ID!, input: UpdateListingInput!): MarketplaceListingPayload!
+    deleteMarketplaceListing(id: ID!): Boolean!
+}
+
+
