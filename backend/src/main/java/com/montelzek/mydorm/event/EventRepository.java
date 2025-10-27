@@ -34,5 +34,16 @@ public interface EventRepository extends JpaRepository<Event, Long> {
     );
 
     List<Event> findByBuildingIdOrderByEventDateAscStartTimeAsc(Long buildingId);
+
+    @Query("SELECT e FROM Event e WHERE e.eventDate >= :date ORDER BY e.eventDate ASC, e.startTime ASC")
+    List<Event> findTop5ByEventDateGreaterThanEqualOrderByEventDateAscStartTimeAsc(@Param("date") LocalDate date);
+
+    @Query("SELECT e FROM Event e WHERE e.eventDate >= :date AND " +
+           "(:buildingId IS NULL OR e.building.id = :buildingId OR e.building IS NULL) " +
+           "ORDER BY e.eventDate ASC, e.startTime ASC")
+    List<Event> findTop5ByEventDateAndBuildingOrderByEventDateAsc(
+        @Param("date") LocalDate date,
+        @Param("buildingId") Long buildingId
+    );
 }
 

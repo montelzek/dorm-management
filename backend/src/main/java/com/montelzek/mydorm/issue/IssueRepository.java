@@ -39,5 +39,10 @@ public interface IssueRepository extends JpaRepository<Issue, Long> {
                                @Param("priority") EIssuePriority priority,
                                @Param("buildingId") Long buildingId,
                                Pageable pageable);
+
+    Long countByPriority(EIssuePriority priority);
+
+    @Query("SELECT i FROM Issue i LEFT JOIN FETCH i.user u LEFT JOIN FETCH i.building b ORDER BY i.createdAt DESC")
+    List<Issue> findTop5ByOrderByCreatedAtDesc();
 }
 
