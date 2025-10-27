@@ -1,0 +1,80 @@
+type AdminDashboardStats {
+    totalResidents: Int!
+    totalRooms: Int!
+    totalBuildings: Int!
+    occupiedRooms: Int!
+    availableRooms: Int!
+    totalReservations: Int!
+    totalIssues: Int!
+}
+
+type IssueStats {
+    reported: Int!
+    inProgress: Int!
+    resolved: Int!
+    lowPriority: Int!
+    mediumPriority: Int!
+    highPriority: Int!
+}
+
+type RecentIssuePayload {
+    id: ID!
+    title: String!
+    status: String!
+    priority: String!
+    userName: String!
+    buildingName: String
+    createdAt: String!
+}
+
+type RecentReservationPayload {
+    id: ID!
+    userName: String!
+    resourceName: String!
+    buildingName: String!
+    startTime: String!
+    endTime: String!
+    status: String!
+}
+
+type AdminDashboardData {
+    stats: AdminDashboardStats!
+    issueStats: IssueStats!
+    recentIssues: [RecentIssuePayload!]!
+    upcomingEvents: [EventPayload!]!
+    recentReservations: [RecentReservationPayload!]!
+    activeAnnouncements: [AnnouncementPayload!]!
+}
+
+type ResidentStats {
+    totalReservations: Int!
+    totalIssues: Int!
+    activeListings: Int!
+}
+
+type ResidentUserInfo {
+    id: ID!
+    firstName: String!
+    lastName: String!
+    email: String!
+    phone: String
+    roomNumber: String
+    buildingName: String
+}
+
+type ResidentDashboardData {
+    userInfo: ResidentUserInfo!
+    stats: ResidentStats!
+    myActiveReservations: [ReservationPayload!]!
+    myIssues: [IssuePayload!]!
+    upcomingEvents: [EventPayload!]!
+    activeAnnouncements: [AnnouncementPayload!]!
+    myActiveListings: [MarketplaceListingPayload!]!
+}
+
+extend type Query {
+    adminDashboard: AdminDashboardData!
+    residentDashboard: ResidentDashboardData!
+}
+
+
