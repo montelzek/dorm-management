@@ -21,4 +21,10 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
     Page<Room> findByFilters(@Param("buildingId") Long buildingId,
                                @Param("status") String status,
                                Pageable pageable);
+
+    @Query("SELECT COUNT(r) FROM Room r WHERE SIZE(r.users) > 0")
+    Long countOccupiedRooms();
+
+    @Query("SELECT COUNT(r) FROM Room r WHERE SIZE(r.users) = 0")
+    Long countAvailableRooms();
 }

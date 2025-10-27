@@ -102,7 +102,7 @@ public class MarketplaceListingService {
         return true;
     }
 
-    private MarketplaceListingPayload toPayload(MarketplaceListing listing, Long currentUserId) {
+    public MarketplaceListingPayload toPayload(MarketplaceListing listing, Long currentUserId) {
         User user = listing.getUser();
         
         ContactInfoPayload contactInfo = new ContactInfoPayload(

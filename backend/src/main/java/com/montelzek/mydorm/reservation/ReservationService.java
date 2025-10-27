@@ -257,8 +257,10 @@ public class ReservationService {
 
         GraphQLPayloads.BuildingPayload buildingPayload = user.getRoom() != null && user.getRoom().getBuilding() != null ?
                 new GraphQLPayloads.BuildingPayload(user.getRoom().getBuilding().getId(), user.getRoom().getBuilding().getName()) : null;
+        GraphQLPayloads.RoomPayload roomPayload = user.getRoom() != null ?
+                new GraphQLPayloads.RoomPayload(user.getRoom().getId(), user.getRoom().getRoomNumber()) : null;
 
-        GraphQLPayloads.UserPayload userPayload = new GraphQLPayloads.UserPayload(user.getId(), user.getFirstName(), user.getLastName(), user.getRoles().iterator().next().name(), buildingPayload);
+        GraphQLPayloads.UserPayload userPayload = new GraphQLPayloads.UserPayload(user.getId(), user.getFirstName(), user.getLastName(), user.getRoles().iterator().next().name(), buildingPayload, roomPayload);
         GraphQLPayloads.ReservationResourcePayload resourcePayload = new GraphQLPayloads.ReservationResourcePayload(resource.getId(), resource.getName(), resource.getResourceType().name());
 
         ZoneId dormitoryZone = ApplicationConstants.DORMITORY_TIMEZONE;

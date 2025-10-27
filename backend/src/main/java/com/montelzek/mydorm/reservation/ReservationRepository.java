@@ -54,4 +54,9 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
             @Param("now") LocalDateTime now,
             Pageable pageable
     );
+
+    List<Reservation> findTop5ByOrderByCreatedAtDesc();
+
+    @Query("SELECT r FROM Reservation r WHERE r.user.id = :userId AND r.startTime > :now AND r.status = 'CONFIRMED' ORDER BY r.startTime ASC")
+    List<Reservation> findByUserIdAndStartTimeAfter(@Param("userId") Long userId, @Param("now") LocalDateTime now);
 }

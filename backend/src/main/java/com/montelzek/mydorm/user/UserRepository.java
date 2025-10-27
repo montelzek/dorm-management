@@ -34,4 +34,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("SELECT u FROM User u JOIN u.roles r LEFT JOIN u.room room WHERE r = 'ROLE_RESIDENT' AND u.room.building.id = :buildingId AND (LOWER(u.firstName) LIKE LOWER(CONCAT('%', :search, '%')) OR LOWER(u.lastName) LIKE LOWER(CONCAT('%', :search, '%')) OR LOWER(room.roomNumber) LIKE LOWER(CONCAT('%', :search, '%')))")
     Page<User> findResidentsByBuildingIdWithSearch(@Param("buildingId") Long buildingId, @Param("search") String search, Pageable pageable);
+
+    @Query("SELECT COUNT(u) FROM User u JOIN u.roles r WHERE r = :role")
+    Long countByRolesContaining(@Param("role") ERole role);
 }

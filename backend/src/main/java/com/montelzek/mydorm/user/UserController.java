@@ -1,8 +1,5 @@
 package com.montelzek.mydorm.user;
 
-import com.montelzek.mydorm.building.Building;
-import com.montelzek.mydorm.room.Room;
-import com.montelzek.mydorm.room.RoomService;
 import com.montelzek.mydorm.room.payloads.RoomPayload;
 import com.montelzek.mydorm.security.UserDetailsImpl;
 import com.montelzek.mydorm.user.payloads.ResidentPage;
@@ -15,6 +12,8 @@ import org.springframework.graphql.data.method.annotation.SchemaMapping;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import com.montelzek.mydorm.reservation.payload.GraphQLPayloads;
+import com.montelzek.mydorm.room.RoomService;
 
 import java.util.List;
 
@@ -33,21 +32,42 @@ public class UserController {
     }
 
     @SchemaMapping(typeName = "UserPayload", field = "building")
-    public Building getBuildingForUser(User user) {
-        if (user.getRoom() != null) {
-            return user.getRoom().getBuilding();
+    public Object getBuildingForUser(Object source) {
+        // support both domain User and payload UserPayload
+        if (source instanceof User user) {
+            if (user.getRoom() != null) {
+                return user.getRoom().getBuilding();
+            }
+            return null;
         }
+
+        if (source instanceof GraphQLPayloads.UserPayload up) {
+            return up.building(); // return payload building (id,name) - GraphQL will map fields
+        }
+
         return null;
     }
 
     @SchemaMapping(typeName = "UserPayload", field = "role")
-    public String getRoleForUser(User user) {
-        return user.getRoles().iterator().next().name();
+    public String getRoleForUser(Object source) {
+        if (source instanceof User user) {
+            return user.getRoles().iterator().next().name();
+        }
+        if (source instanceof GraphQLPayloads.UserPayload up) {
+            return up.role();
+        }
+        return null;
     }
 
     @SchemaMapping(typeName = "UserPayload", field = "room")
-    public Room getRoomForUser(User user) {
-        return user.getRoom();
+    public Object getRoomForUser(Object source) {
+        if (source instanceof User user) {
+            return user.getRoom();
+        }
+        if (source instanceof GraphQLPayloads.UserPayload up) {
+            return up.room();
+        }
+        return null;
     }
 
     // Resident management

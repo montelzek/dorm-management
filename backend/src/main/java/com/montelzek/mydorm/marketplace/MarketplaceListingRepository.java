@@ -26,6 +26,6 @@ public interface MarketplaceListingRepository extends JpaRepository<MarketplaceL
 
     @Query("SELECT DISTINCT m FROM MarketplaceListing m LEFT JOIN FETCH m.user WHERE m.id = :id")
     Optional<MarketplaceListing> findByIdWithUser(@Param("id") Long id);
+
+    Long countByUserId(Long userId);
 }
-
-
