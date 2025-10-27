@@ -14,6 +14,12 @@ export const routes: Routes = [
   },
 
   {
+    path: 'admin/dashboard',
+    loadComponent: () => import('./features/admin/dashboard/dashboard').then(m => m.AdminDashboardComponent),
+    canActivate: [authGuard]
+  },
+
+  {
     path: 'reservation',
     loadComponent: () => import('./features/resident/reservations/reservations').then(m => m.ReservationsComponent),
     canActivate: [authGuard]

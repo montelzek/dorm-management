@@ -63,14 +63,21 @@ export class LoginComponent implements OnInit {
     const loginData = this.loginForm.value as LoginInput;
 
     this.authService.login(loginData).subscribe({
-      next: () => this.handleLoginSuccess(),
+      next: (userData) => this.handleLoginSuccess(userData),
       error: (error) => this.handleLoginError(error)
     });
   }
 
-  private handleLoginSuccess(): void {
+  private handleLoginSuccess(userData: any): void {
     this.setLoading(false);
-    this.router.navigate(['/dashboard']);
+    
+    // Redirect based on user role
+    const userRole = userData?.role;
+    if (userRole === 'ROLE_ADMIN') {
+      this.router.navigate(['/admin/dashboard']);
+    } else {
+      this.router.navigate(['/dashboard']);
+    }
   }
 
   private handleLoginError(error: any): void {

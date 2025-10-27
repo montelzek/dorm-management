@@ -1,26 +1,262 @@
 <app-main-layout [user]="currentUser()">
   <div class="space-y-6">
-    <h1 class="text-3xl font-bold text-gray-800">Witaj na Dashboardzie!</h1>
-
     @if (isLoading()) {
-      <div class="rounded-lg bg-white p-6 text-center text-gray-500 shadow-md">
-        <p>Ładowanie danych...</p>
+      <div class="bg-card border border-card-border rounded-lg shadow-sm p-6 text-center text-text-secondary">
+        <p>Loading dashboard...</p>
       </div>
     } @else if (error()) {
-      <div class="rounded-lg bg-red-100 p-6 text-center text-red-800 shadow-md">
+      <div class="bg-red-50 border border-red-200 rounded-lg shadow-sm p-6 text-center text-red-800">
         <p>{{ error() }}</p>
       </div>
-    } @else {
-      <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-        <div class="rounded-lg bg-white p-6 shadow-md">
-          <h3 class="text-lg font-semibold text-gray-800">Szybkie akcje</h3>
-          <p class="mt-2 text-gray-600">Dostępne funkcje</p>
+    } @else if (dashboardData()) {
+      <!-- Welcome Card -->
+      <div class="bg-card border border-card-border rounded-lg shadow-sm p-6">
+        <h1 class="text-3xl font-bold text-text-primary">Welcome, {{ dashboardData()!.userInfo.firstName }}!</h1>
+        <div class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div>
+            <p class="text-sm text-text-secondary">Email</p>
+            <p class="font-medium text-text-primary">{{ dashboardData()!.userInfo.email }}</p>
+          </div>
+          @if (dashboardData()!.userInfo.roomNumber) {
+            <div>
+              <p class="text-sm text-text-secondary">Room</p>
+              <p class="font-medium text-text-primary">{{ dashboardData()!.userInfo.roomNumber }}</p>
+            </div>
+          }
+          @if (dashboardData()!.userInfo.buildingName) {
+            <div>
+              <p class="text-sm text-text-secondary">Building</p>
+              <p class="font-medium text-text-primary">{{ dashboardData()!.userInfo.buildingName }}</p>
+            </div>
+          }
         </div>
       </div>
-    }
 
-    <div class="flex justify-end">
-      <app-theme-toggle />
-    </div>
+      <!-- Statistics Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-card border border-card-border rounded-lg shadow-sm p-6">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-sm text-text-secondary">My Reservations</p>
+              <p class="text-3xl font-bold text-text-primary">{{ dashboardData()!.stats.totalReservations }}</p>
+            </div>
+            <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+              <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-card border border-card-border rounded-lg shadow-sm p-6">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-sm text-text-secondary">My Issues</p>
+              <p class="text-3xl font-bold text-text-primary">{{ dashboardData()!.stats.totalIssues }}</p>
+            </div>
+            <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
+              <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-card border border-card-border rounded-lg shadow-sm p-6">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-sm text-text-secondary">Active Listings</p>
+              <p class="text-3xl font-bold text-text-primary">{{ dashboardData()!.stats.activeListings }}</p>
+            </div>
+            <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+              <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- My Active Reservations and My Issues -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- My Active Reservations -->
+        <div class="bg-card border border-card-border rounded-lg shadow-sm p-6">
+          <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-semibold text-text-primary">My Active Reservations</h2>
+            <button (click)="navigateToReservations()" class="text-sm text-primary-color hover:text-primary-color-hover font-medium">
+              View All →
+            </button>
+          </div>
+          @if (dashboardData()!.myActiveReservations.length === 0) {
+            <p class="text-text-secondary text-center py-4">No active reservations</p>
+          } @else {
+            <div class="space-y-3">
+              @for (reservation of dashboardData()!.myActiveReservations; track reservation.id) {
+                <div class="border border-card-border rounded-lg p-4 hover:bg-card-hover cursor-pointer" (click)="navigateToReservations()">
+                  <div class="flex justify-between items-start">
+                    <div class="flex-1">
+                      <p class="font-medium text-text-primary">{{ reservation.resource.name }}</p>
+                      <p class="text-sm text-text-secondary">{{ reservation.resource.resourceType }}</p>
+                    </div>
+                    <span [class]="getStatusBadgeColor(reservation.status) + ' px-2 py-1 rounded-full text-xs font-medium'">
+                      {{ reservation.status }}
+                    </span>
+                  </div>
+                  <div class="mt-2 text-xs text-text-secondary">
+                    {{ formatDateTime(reservation.startTime) }} - {{ formatDateTime(reservation.endTime) }}
+                  </div>
+                </div>
+              }
+            </div>
+          }
+        </div>
+
+        <!-- My Issues -->
+        <div class="bg-card border border-card-border rounded-lg shadow-sm p-6">
+          <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-semibold text-text-primary">My Issues</h2>
+            <button (click)="navigateToIssues()" class="text-sm text-primary-color hover:text-primary-color-hover font-medium">
+              View All →
+            </button>
+          </div>
+          @if (dashboardData()!.myIssues.length === 0) {
+            <p class="text-text-secondary text-center py-4">No issues reported</p>
+          } @else {
+            <div class="space-y-3">
+              @for (issue of dashboardData()!.myIssues.slice(0, 5); track issue.id) {
+                <div class="border border-card-border rounded-lg p-4 hover:bg-card-hover cursor-pointer" (click)="navigateToIssues()">
+                  <div class="flex justify-between items-start gap-2">
+                    <div class="flex-1 min-w-0">
+                      <p class="font-medium text-text-primary truncate">{{ issue.title }}</p>
+                      @if (issue.building) {
+                        <p class="text-sm text-text-secondary">{{ issue.building.name }}</p>
+                      }
+                    </div>
+                    <div class="flex gap-2 flex-shrink-0">
+                      <span [class]="getPriorityBadgeColor(issue.priority) + ' px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap'">
+                        {{ issue.priority }}
+                      </span>
+                      <span [class]="getStatusBadgeColor(issue.status) + ' px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap'">
+                        {{ issue.status }}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              }
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Upcoming Events and Announcements -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Upcoming Events -->
+        <div class="bg-card border border-card-border rounded-lg shadow-sm p-6">
+          <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-semibold text-text-primary">Upcoming Events</h2>
+            <button (click)="navigateToEvents()" class="text-sm text-primary-color hover:text-primary-color-hover font-medium">
+              View All →
+            </button>
+          </div>
+          @if (dashboardData()!.upcomingEvents.length === 0) {
+            <p class="text-text-secondary text-center py-4">No upcoming events</p>
+          } @else {
+            <div class="space-y-3">
+              @for (event of dashboardData()!.upcomingEvents; track event.id) {
+                <div class="border border-card-border rounded-lg p-4 hover:bg-card-hover cursor-pointer" (click)="navigateToEvents()">
+                  <p class="font-medium text-text-primary">{{ event.title }}</p>
+                  @if (event.description) {
+                    <p class="text-sm text-text-secondary mt-1 line-clamp-2">{{ event.description }}</p>
+                  }
+                  <div class="mt-2 flex items-center gap-4 text-xs text-text-secondary">
+                    <span>📅 {{ formatDate(event.eventDate) }}</span>
+                    <span>🕒 {{ event.startTime }} - {{ event.endTime }}</span>
+                  </div>
+                  @if (event.building) {
+                    <div class="mt-2 text-xs text-text-secondary">
+                      📍 {{ event.building.name }}
+                    </div>
+                  }
+                </div>
+              }
+            </div>
+          }
+        </div>
+
+        <!-- Active Announcements -->
+        <div class="bg-card border border-card-border rounded-lg shadow-sm p-6">
+          <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-semibold text-text-primary">Active Announcements</h2>
+            <button (click)="navigateToAnnouncements()" class="text-sm text-primary-color hover:text-primary-color-hover font-medium">
+              View All →
+            </button>
+          </div>
+          @if (dashboardData()!.activeAnnouncements.length === 0) {
+            <p class="text-text-secondary text-center py-4">No active announcements</p>
+          } @else {
+            <div class="space-y-3">
+              @for (announcement of dashboardData()!.activeAnnouncements.slice(0, 5); track announcement.id) {
+                <div class="border border-card-border rounded-lg p-4 hover:bg-card-hover cursor-pointer" (click)="navigateToAnnouncements()">
+                  <div class="flex items-center gap-2">
+                    <p class="font-medium text-text-primary flex-1">{{ announcement.title }}</p>
+                    <span [class]="getCategoryBadgeColor(announcement.category) + ' px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap'">
+                      {{ announcement.category }}
+                    </span>
+                  </div>
+                  <p class="text-sm text-text-secondary mt-1 line-clamp-2">{{ announcement.content }}</p>
+                  <div class="mt-2 text-xs text-text-secondary">
+                    📅 {{ formatDate(announcement.startDate) }} - {{ formatDate(announcement.endDate) }}
+                  </div>
+                </div>
+              }
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- My Marketplace Listings -->
+      @if (dashboardData()!.myActiveListings.length > 0) {
+        <div class="bg-card border border-card-border rounded-lg shadow-sm p-6">
+          <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-semibold text-text-primary">My Marketplace Listings</h2>
+            <button (click)="navigateToMarketplace()" class="text-sm text-primary-color hover:text-primary-color-hover font-medium">
+              View All →
+            </button>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            @for (listing of dashboardData()!.myActiveListings.slice(0, 3); track listing.id) {
+              <div class="border border-card-border rounded-lg overflow-hidden hover:shadow-md transition-shadow cursor-pointer" (click)="navigateToMarketplace()">
+                @if (listing.imageFilenames.length > 0) {
+                  <div class="h-48 overflow-hidden bg-gray-100">
+                    <img [src]="'http://localhost:8080/api/files/' + listing.imageFilenames[0]" [alt]="listing.title" class="w-full h-full object-cover" />
+                  </div>
+                } @else {
+                  <div class="h-48 bg-gray-100 flex items-center justify-center">
+                    <svg class="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                    </svg>
+                  </div>
+                }
+                <div class="p-4">
+                  <div class="flex items-start justify-between gap-2 mb-2">
+                    <h3 class="font-semibold text-text-primary truncate flex-1">{{ listing.title }}</h3>
+                    <span [class]="getListingTypeBadgeColor(listing.listingType) + ' px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap'">
+                      {{ listing.listingType }}
+                    </span>
+                  </div>
+                  <p class="text-sm text-text-secondary line-clamp-2 mb-2">{{ listing.description }}</p>
+                  <div class="flex items-center justify-between">
+                    <span class="text-lg font-bold text-primary-color">{{ formatPrice(listing.price) }}</span>
+                    <span [class]="getCategoryBadgeColor(listing.category) + ' px-2 py-1 rounded-full text-xs font-medium'">
+                      {{ listing.category }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      }
+    }
   </div>
 </app-main-layout>
