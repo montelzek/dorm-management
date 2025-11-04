@@ -1,5 +1,6 @@
 package com.montelzek.mydorm.config;
 
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
@@ -9,6 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+@Getter
 @Configuration
 public class FileUploadConfig {
 
@@ -28,8 +30,5 @@ public class FileUploadConfig {
         }
     }
 
-    public String getUploadDir() {
-        return uploadDir;
-    }
 }
 
