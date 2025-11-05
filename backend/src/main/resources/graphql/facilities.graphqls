@@ -14,7 +14,10 @@ type AdminRoomPayload {
     buildingName: String!
     capacity: Int!
     occupancy: Int!
-    rentAmount: String!
+    standardId: ID
+    standardName: String
+    standardCapacity: Int
+    standardPrice: String
     createdAt: String!
 }
 
@@ -63,6 +66,16 @@ type BuildingDetailsPayload {
     updatedAt: String!
 }
 
+type RoomStandard {
+    id: ID!
+    code: String
+    name: String!
+    capacity: Int!
+    price: String!
+    createdAt: String
+    updatedAt: String
+}
+
 input CreateBuildingInput {
     name: String!
     address: String!
@@ -77,14 +90,14 @@ input CreateRoomInput {
     roomNumber: String!
     buildingId: ID!
     capacity: Int!
-    rentAmount: String!
+    standardId: ID!
 }
 
 input UpdateRoomInput {
     roomNumber: String!
     buildingId: ID!
     capacity: Int!
-    rentAmount: String!
+    standardId: ID!
 }
 
 input CreateResourceInput {
@@ -101,11 +114,25 @@ input UpdateResourceInput {
     isActive: Boolean!
 }
 
+input CreateRoomStandardInput {
+    name: String!
+    capacity: Int!
+    price: String!
+}
+
+input UpdateRoomStandardInput {
+    name: String!
+    capacity: Int!
+    price: String!
+}
+
 extend type Query {
     adminBuildings(page: Int, size: Int): BuildingsPagePayload!
     buildingDetails(id: ID!): BuildingDetailsPayload!
     adminRooms(page: Int, size: Int, buildingId: ID, status: String): RoomsPagePayload!
     adminReservationResources(page: Int, size: Int, buildingId: ID, isActive: Boolean): ResourcesPagePayload!
+    adminRoomStandards: [RoomStandard!]!
+    roomStandard(id: ID!): RoomStandard
 }
 
 extend type Mutation {
@@ -120,5 +147,8 @@ extend type Mutation {
     createReservationResource(input: CreateResourceInput!): AdminResourcePayload!
     updateReservationResource(id: ID!, input: UpdateResourceInput!): AdminResourcePayload!
     toggleResourceStatus(id: ID!): AdminResourcePayload!
-}
 
+    createRoomStandard(input: CreateRoomStandardInput!): RoomStandard!
+    updateRoomStandard(id: ID!, input: UpdateRoomStandardInput!): RoomStandard!
+    deleteRoomStandard(id: ID!): Boolean
+}
