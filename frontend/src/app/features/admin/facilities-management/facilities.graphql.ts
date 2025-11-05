@@ -67,7 +67,7 @@ export const DELETE_BUILDING = gql`
   }
 `;
 
-// Rooms Queries
+// Rooms Queries (updated to include standard fields)
 export const GET_ADMIN_ROOMS = gql`
   query GetAdminRooms($page: Int, $size: Int, $buildingId: ID, $status: String) {
     adminRooms(page: $page, size: $size, buildingId: $buildingId, status: $status) {
@@ -78,7 +78,10 @@ export const GET_ADMIN_ROOMS = gql`
         buildingName
         capacity
         occupancy
-        rentAmount
+        standardId
+        standardName
+        standardCapacity
+        standardPrice
         createdAt
       }
       totalElements
@@ -89,7 +92,7 @@ export const GET_ADMIN_ROOMS = gql`
   }
 `;
 
-// Rooms Mutations
+// Rooms Mutations (updated)
 export const CREATE_ROOM = gql`
   mutation CreateRoom($input: CreateRoomInput!) {
     createRoom(input: $input) {
@@ -99,7 +102,10 @@ export const CREATE_ROOM = gql`
       buildingName
       capacity
       occupancy
-      rentAmount
+      standardId
+      standardName
+      standardCapacity
+      standardPrice
       createdAt
     }
   }
@@ -114,7 +120,10 @@ export const UPDATE_ROOM = gql`
       buildingName
       capacity
       occupancy
-      rentAmount
+      standardId
+      standardName
+      standardCapacity
+      standardPrice
       createdAt
     }
   }
@@ -191,6 +200,69 @@ export const TOGGLE_RESOURCE_STATUS = gql`
   }
 `;
 
+// Room Standards Queries / Mutations
+export const GET_ADMIN_ROOM_STANDARDS = gql`
+  query GetAdminRoomStandards {
+    adminRoomStandards {
+      id
+      code
+      name
+      capacity
+      price
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+export const GET_ROOM_STANDARD = gql`
+  query GetRoomStandard($id: ID!) {
+    roomStandard(id: $id) {
+      id
+      code
+      name
+      capacity
+      price
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+export const CREATE_ROOM_STANDARD = gql`
+  mutation CreateRoomStandard($input: CreateRoomStandardInput!) {
+    createRoomStandard(input: $input) {
+      id
+      code
+      name
+      capacity
+      price
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+export const UPDATE_ROOM_STANDARD = gql`
+  mutation UpdateRoomStandard($id: ID!, $input: UpdateRoomStandardInput!) {
+    updateRoomStandard(id: $id, input: $input) {
+      id
+      code
+      name
+      capacity
+      price
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+export const DELETE_ROOM_STANDARD = gql`
+  mutation DeleteRoomStandard($id: ID!) {
+    deleteRoomStandard(id: $id)
+  }
+`;
+
 // Get all buildings for dropdowns
 export const GET_ALL_BUILDINGS = gql`
   query GetAllBuildings {
@@ -200,4 +272,3 @@ export const GET_ALL_BUILDINGS = gql`
     }
   }
 `;
-
