@@ -86,15 +86,15 @@
             <div class="space-y-2">
               <div class="flex justify-between items-center">
                 <span class="text-text-primary">Reported</span>
-                <span class="px-3 py-1 bg-status-error text-white rounded-full text-sm font-medium">{{ dashboardData()!.issueStats.reported }}</span>
+                <span class="px-3 py-1 bg-status-error text-text-primary rounded-full text-sm font-medium">{{ dashboardData()!.issueStats.reported }}</span>
               </div>
               <div class="flex justify-between items-center">
                 <span class="text-text-primary">In Progress</span>
-                <span class="px-3 py-1 bg-status-warning text-white rounded-full text-sm font-medium">{{ dashboardData()!.issueStats.inProgress }}</span>
+                <span class="px-3 py-1 bg-status-warning text-text-primary rounded-full text-sm font-medium">{{ dashboardData()!.issueStats.inProgress }}</span>
               </div>
               <div class="flex justify-between items-center">
                 <span class="text-text-primary">Resolved</span>
-                <span class="px-3 py-1 bg-status-success text-white rounded-full text-sm font-medium">{{ dashboardData()!.issueStats.resolved }}</span>
+                <span class="px-3 py-1 bg-status-success text-text-primary rounded-full text-sm font-medium">{{ dashboardData()!.issueStats.resolved }}</span>
               </div>
             </div>
           </div>
@@ -118,7 +118,7 @@
           <div>
             <p class="text-sm text-text-secondary mb-2">Total Issues</p>
             <p class="text-4xl font-bold text-text-primary">{{ dashboardData()!.stats.totalIssues }}</p>
-            <button (click)="navigateToIssues()" class="mt-4 text-sm text-primary-color hover:text-primary-color-hover font-medium">
+            <button (click)="navigateToIssues()" class="mt-4 text-sm text-text-primary cursor-pointer  hover:text-primary-color-hover font-medium">
               View All Issues →
             </button>
           </div>
@@ -129,7 +129,7 @@
       <div class="bg-card border border-card-border rounded-lg shadow-sm p-6">
         <div class="flex justify-between items-center mb-4">
           <h2 class="text-xl font-semibold text-text-primary">Recent Issues</h2>
-          <button (click)="navigateToIssues()" class="text-sm text-primary-color hover:text-primary-color-hover font-medium">
+          <button (click)="navigateToIssues()" class="text-sm text-text-primary cursor-pointer hover:text-primary-color-hover font-medium">
             View All →
           </button>
         </div>
@@ -179,7 +179,7 @@
         <div class="bg-card border border-card-border rounded-lg shadow-sm p-6">
           <div class="flex justify-between items-center mb-4">
             <h2 class="text-xl font-semibold text-text-primary">Recent Reservations</h2>
-            <button (click)="navigateToReservations()" class="text-sm text-primary-color hover:text-primary-color-hover font-medium">
+            <button (click)="navigateToReservations()" class="text-sm text-text-primary cursor-pointer hover:text-primary-color-hover font-medium">
               View All →
             </button>
           </div>
@@ -212,7 +212,7 @@
         <div class="bg-card border border-card-border rounded-lg shadow-sm p-6">
           <div class="flex justify-between items-center mb-4">
             <h2 class="text-xl font-semibold text-text-primary">Upcoming Events</h2>
-            <button (click)="navigateToEvents()" class="text-sm text-primary-color hover:text-primary-color-hover font-medium">
+            <button (click)="navigateToEvents()" class="text-sm text-text-primary cursor-pointer hover:text-primary-color-hover font-medium">
               View All →
             </button>
           </div>
@@ -246,7 +246,7 @@
       <div class="bg-card border border-card-border rounded-lg shadow-sm p-6">
         <div class="flex justify-between items-center mb-4">
           <h2 class="text-xl font-semibold text-text-primary">Active Announcements</h2>
-          <button (click)="navigateToAnnouncements()" class="text-sm text-primary-color hover:text-primary-color-hover font-medium">
+          <button (click)="navigateToAnnouncements()" class="text-sm text-text-primary cursor-pointer hover:text-primary-color-hover font-medium">
             View All →
           </button>
         </div>

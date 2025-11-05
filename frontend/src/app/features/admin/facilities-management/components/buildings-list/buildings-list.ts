@@ -1,12 +1,12 @@
 import { Component, input, output } from '@angular/core';
-import { CommonModule, DatePipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { Building } from '../../services/facilities.service';
 import { ButtonComponent } from '../../../../../shared/components/ui/button/button';
 
 @Component({
   selector: 'app-buildings-list',
   standalone: true,
-  imports: [CommonModule, ButtonComponent, DatePipe],
+  imports: [CommonModule, ButtonComponent],
   templateUrl: './buildings-list.html'
 })
 export class BuildingsListComponent {
