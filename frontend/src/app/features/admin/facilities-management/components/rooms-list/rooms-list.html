@@ -72,7 +72,7 @@
                   </span>
                 </div>
               </td>
-              <td class="px-6 py-4 text-sm text-text-primary">{{ room.rentAmount }} PLN</td>
+              <td class="px-6 py-4 text-sm text-text-primary">{{ room.standardPrice ? (room.standardPrice + ' PLN') : 'Brak standardu' }}</td>
               <td class="px-6 py-4">
                 <div class="flex gap-2">
                   <button
@@ -108,7 +108,7 @@
               {{ room.occupancy }}/{{ room.capacity }}
             </span>
           </div>
-          <p class="text-sm text-text-primary mb-3">Rent: {{ room.rentAmount }} PLN</p>
+          <p class="text-sm text-text-primary mb-3">Rent: {{ room.standardPrice ? (room.standardPrice + ' PLN') : 'Brak standardu' }}</p>
           <div class="grid grid-cols-2 gap-2">
             <app-button variant="secondary" size="sm" [fullWidth]="true" (click)="edit.emit(room)">
               Edit
@@ -122,4 +122,3 @@
     </div>
   }
 </div>
-

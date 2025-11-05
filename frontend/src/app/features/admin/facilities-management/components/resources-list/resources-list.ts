@@ -1,12 +1,12 @@
 import { Component, input, output } from '@angular/core';
-import { CommonModule, DatePipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { Resource, SimpleBuild } from '../../services/facilities.service';
 import { ButtonComponent } from '../../../../../shared/components/ui/button/button';
 
 @Component({
   selector: 'app-resources-list',
   standalone: true,
-  imports: [CommonModule, ButtonComponent, DatePipe],
+  imports: [CommonModule, ButtonComponent],
   templateUrl: './resources-list.html'
 })
 export class ResourcesListComponent {
@@ -22,4 +22,3 @@ export class ResourcesListComponent {
   readonly buildingFilterChange = output<string>();
   readonly statusFilterChange = output<string>();
 }
-

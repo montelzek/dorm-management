@@ -1,12 +1,12 @@
 import { Component, input, output } from '@angular/core';
-import { CommonModule, DatePipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { Room, SimpleBuild } from '../../services/facilities.service';
 import { ButtonComponent } from '../../../../../shared/components/ui/button/button';
 
 @Component({
   selector: 'app-rooms-list',
   standalone: true,
-  imports: [CommonModule, ButtonComponent, DatePipe],
+  imports: [CommonModule, ButtonComponent],
   templateUrl: './rooms-list.html'
 })
 export class RoomsListComponent {
@@ -34,4 +34,3 @@ export class RoomsListComponent {
     return 'Full';
   }
 }
-
