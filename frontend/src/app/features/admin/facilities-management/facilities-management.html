@@ -11,8 +11,8 @@
       <nav class="-mb-px flex space-x-8">
         <button
           (click)="switchTab('buildings')"
-          [class]="activeTab() === 'buildings' 
-            ? 'border-indigo-500 text-indigo-600 dark:text-indigo-400' 
+          [class]="activeTab() === 'buildings'
+            ? 'border-indigo-500 text-indigo-600 dark:text-indigo-400'
             : 'border-transparent text-text-secondary hover:text-text-primary hover:border-gray-300'"
           class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors"
         >
@@ -20,8 +20,8 @@
         </button>
         <button
           (click)="switchTab('rooms')"
-          [class]="activeTab() === 'rooms' 
-            ? 'border-indigo-500 text-indigo-600 dark:text-indigo-400' 
+          [class]="activeTab() === 'rooms'
+            ? 'border-indigo-500 text-indigo-600 dark:text-indigo-400'
             : 'border-transparent text-text-secondary hover:text-text-primary hover:border-gray-300'"
           class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors"
         >
@@ -29,12 +29,21 @@
         </button>
         <button
           (click)="switchTab('resources')"
-          [class]="activeTab() === 'resources' 
-            ? 'border-indigo-500 text-indigo-600 dark:text-indigo-400' 
+          [class]="activeTab() === 'resources'
+            ? 'border-indigo-500 text-indigo-600 dark:text-indigo-400'
             : 'border-transparent text-text-secondary hover:text-text-primary hover:border-gray-300'"
           class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors"
         >
           Common Spaces
+        </button>
+        <button
+          (click)="switchTab('standards')"
+          [class]="activeTab() === 'standards'
+            ? 'border-indigo-500 text-indigo-600 dark:text-indigo-400'
+            : 'border-transparent text-text-secondary hover:text-text-primary hover:border-gray-300'"
+          class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors"
+        >
+          Room Standards
         </button>
       </nav>
     </div>
@@ -56,8 +65,8 @@
         @if (roomsTotalElements() > 0) {
           <div class="mb-6 flex flex-col sm:flex-row items-center justify-between gap-4 pb-4 border-b border-card-border">
             <div class="text-sm text-text-secondary">
-              Showing {{ roomsCurrentPage() * roomsPageSize() + 1 }} to 
-              {{ Math.min((roomsCurrentPage() + 1) * roomsPageSize(), roomsTotalElements()) }} of 
+              Showing {{ roomsCurrentPage() * roomsPageSize() + 1 }} to
+              {{ Math.min((roomsCurrentPage() + 1) * roomsPageSize(), roomsTotalElements()) }} of
               {{ roomsTotalElements() }} rooms
             </div>
           </div>
@@ -120,8 +129,8 @@
         @if (resourcesTotalElements() > 0) {
           <div class="mb-6 flex flex-col sm:flex-row items-center justify-between gap-4 pb-4 border-b border-card-border">
             <div class="text-sm text-text-secondary">
-              Showing {{ resourcesCurrentPage() * resourcesPageSize() + 1 }} to 
-              {{ Math.min((resourcesCurrentPage() + 1) * resourcesPageSize(), resourcesTotalElements()) }} of 
+              Showing {{ resourcesCurrentPage() * resourcesPageSize() + 1 }} to
+              {{ Math.min((resourcesCurrentPage() + 1) * resourcesPageSize(), resourcesTotalElements()) }} of
               {{ resourcesTotalElements() }} spaces
             </div>
           </div>
@@ -178,6 +187,16 @@
           </div>
         }
       }
+
+      @if (activeTab() === 'standards') {
+        <app-room-standards-list
+          [standards]="roomStandards()"
+          [isLoading]="roomStandardsLoading()"
+          (add)="openStandardModal()"
+          (edit)="openStandardModal($event)"
+          (delete)="confirmDeleteStandard($event)"
+        ></app-room-standards-list>
+      }
     </div>
   </div>
 
@@ -210,6 +229,7 @@
       <app-room-form-modal
         [form]="roomForm"
         [buildings]="allBuildings()"
+        [standards]="getAvailableStandardsForCapacity(roomForm.get('capacity')?.value)"
         [isLoading]="roomsLoading()"
         [isEdit]="isEditMode()"
         (formSubmit)="onRoomFormSubmit()"
@@ -237,6 +257,24 @@
     </div>
   </app-modal>
 
+  <!-- Standard Modal -->
+  <app-modal
+    [isOpen]="isStandardModalOpen()"
+    [title]="isEditMode() ? 'Edit Standard' : 'Add Standard'"
+    size="md"
+    (close)="closeStandardModal()"
+  >
+    <div slot="body">
+      <app-room-standard-form-modal
+        [form]="standardForm"
+        [isLoading]="roomStandardsLoading()"
+        [isEdit]="isEditMode()"
+        (formSubmit)="onStandardFormSubmit()"
+        (cancel)="closeStandardModal()"
+      ></app-room-standard-form-modal>
+    </div>
+  </app-modal>
+
   <!-- Delete Confirmation Modal -->
   <app-modal
     [isOpen]="isDeleteModalOpen()"
@@ -258,4 +296,3 @@
     </div>
   </app-modal>
 </app-main-layout>
-

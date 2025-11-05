@@ -17,7 +17,11 @@ import {
   CREATE_RESOURCE,
   UPDATE_RESOURCE,
   TOGGLE_RESOURCE_STATUS,
-  GET_ALL_BUILDINGS
+  GET_ALL_BUILDINGS,
+  GET_ADMIN_ROOM_STANDARDS,
+  CREATE_ROOM_STANDARD,
+  UPDATE_ROOM_STANDARD,
+  DELETE_ROOM_STANDARD
 } from '../facilities.graphql';
 
 export interface Building {
@@ -40,7 +44,10 @@ export interface Room {
   buildingName: string;
   capacity: number;
   occupancy: number;
-  rentAmount: string;
+  standardId?: string;
+  standardName?: string;
+  standardCapacity?: number;
+  standardPrice?: string;
   createdAt: string;
 }
 
@@ -69,7 +76,7 @@ export interface CreateRoomInput {
   roomNumber: string;
   buildingId: string;
   capacity: number;
-  rentAmount: string;
+  standardId: string;
 }
 
 export interface CreateResourceInput {
@@ -77,6 +84,22 @@ export interface CreateResourceInput {
   description: string | null;
   buildingId: string;
   isActive: boolean;
+}
+
+export interface RoomStandard {
+  id: string;
+  code?: string;
+  name: string;
+  capacity: number;
+  price: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface CreateRoomStandardInput {
+  name: string;
+  capacity: number;
+  price: string;
 }
 
 @Injectable({
@@ -107,6 +130,13 @@ export class FacilitiesService {
   private readonly _resourcesCurrentPage = signal<number>(0);
   private readonly _resourcesPageSize = signal<number>(10);
 
+  // Room standards state
+  private readonly _roomStandards = signal<RoomStandard[]>([]);
+  private readonly _roomStandardsTotalElements = signal<number>(0);
+  private readonly _roomStandardsTotalPages = signal<number>(0);
+  private readonly _roomStandardsCurrentPage = signal<number>(0);
+  private readonly _roomStandardsPageSize = signal<number>(10);
+
   // All buildings for dropdowns
   private readonly _allBuildings = signal<SimpleBuild[]>([]);
 
@@ -114,6 +144,7 @@ export class FacilitiesService {
   private readonly _buildingsLoading = signal<boolean>(false);
   private readonly _roomsLoading = signal<boolean>(false);
   private readonly _resourcesLoading = signal<boolean>(false);
+  private readonly _roomStandardsLoading = signal<boolean>(false);
 
   // Public computed signals
   readonly buildings = computed(() => this._buildings());
@@ -134,11 +165,18 @@ export class FacilitiesService {
   readonly resourcesCurrentPage = computed(() => this._resourcesCurrentPage());
   readonly resourcesPageSize = computed(() => this._resourcesPageSize());
 
+  readonly roomStandards = computed(() => this._roomStandards());
+  readonly roomStandardsTotalElements = computed(() => this._roomStandardsTotalElements());
+  readonly roomStandardsTotalPages = computed(() => this._roomStandardsTotalPages());
+  readonly roomStandardsCurrentPage = computed(() => this._roomStandardsCurrentPage());
+  readonly roomStandardsPageSize = computed(() => this._roomStandardsPageSize());
+
   readonly allBuildings = computed(() => this._allBuildings());
 
   readonly buildingsLoading = computed(() => this._buildingsLoading());
   readonly roomsLoading = computed(() => this._roomsLoading());
   readonly resourcesLoading = computed(() => this._resourcesLoading());
+  readonly roomStandardsLoading = computed(() => this._roomStandardsLoading());
 
   // Buildings Methods
   getBuildings(page: number = 0, size: number = 10): void {
@@ -232,11 +270,11 @@ export class FacilitiesService {
     this._roomsLoading.set(true);
     this.apollo.watchQuery<{ adminRooms: any }>({
       query: GET_ADMIN_ROOMS,
-      variables: { 
-        page, 
-        size, 
-        buildingId: buildingId || null, 
-        status: status || null 
+      variables: {
+        page,
+        size,
+        buildingId: buildingId || null,
+        status: status || null
       },
       fetchPolicy: 'network-only'
     }).valueChanges.pipe(
@@ -324,11 +362,11 @@ export class FacilitiesService {
     this._resourcesLoading.set(true);
     this.apollo.watchQuery<{ adminReservationResources: any }>({
       query: GET_ADMIN_RESOURCES,
-      variables: { 
-        page, 
-        size, 
-        buildingId: buildingId || null, 
-        isActive: isActive !== undefined ? isActive : null 
+      variables: {
+        page,
+        size,
+        buildingId: buildingId || null,
+        isActive: isActive !== undefined ? isActive : null
       },
       fetchPolicy: 'network-only'
     }).valueChanges.pipe(
@@ -406,6 +444,88 @@ export class FacilitiesService {
     );
   }
 
+  // Room Standards Methods
+  getRoomStandards(page: number = 0, size: number = 10): void {
+    this._roomStandardsLoading.set(true);
+    this.apollo.watchQuery<{ adminRoomStandards: RoomStandard[] }>({
+      query: GET_ADMIN_ROOM_STANDARDS,
+      fetchPolicy: 'network-only'
+    }).valueChanges.pipe(
+      map(result => result.data.adminRoomStandards),
+      tap(() => this._roomStandardsLoading.set(false)),
+      catchError(error => {
+        this._roomStandardsLoading.set(false);
+        this.toastService.showError('Error loading room standards: ' + error.message);
+        throw error;
+      })
+    ).subscribe(response => {
+      this._roomStandards.set(response || []);
+    });
+  }
+
+  createRoomStandard(input: CreateRoomStandardInput): Observable<RoomStandard> {
+    return this.apollo.mutate<{ createRoomStandard: RoomStandard }>({
+      mutation: CREATE_ROOM_STANDARD,
+      variables: { input }
+    }).pipe(
+      map(result => {
+        if (!result.data) {
+          throw new Error('Failed to create room standard');
+        }
+        this.toastService.showSuccess('Room standard created successfully!');
+        return result.data.createRoomStandard;
+      }),
+      catchError(error => {
+        this.toastService.showError('Error creating room standard: ' + error.message);
+        throw error;
+      })
+    );
+  }
+
+  updateRoomStandard(id: string, input: CreateRoomStandardInput): Observable<RoomStandard> {
+    return this.apollo.mutate<{ updateRoomStandard: RoomStandard }>({
+      mutation: UPDATE_ROOM_STANDARD,
+      variables: { id, input }
+    }).pipe(
+      map(result => {
+        if (!result.data) {
+          throw new Error('Failed to update room standard');
+        }
+        this.toastService.showSuccess('Room standard updated successfully!');
+        return result.data.updateRoomStandard;
+      }),
+      catchError(error => {
+        this.toastService.showError('Error updating room standard: ' + error.message);
+        throw error;
+      })
+    );
+  }
+
+  deleteRoomStandard(id: string): Observable<boolean> {
+    return this.apollo.mutate<{ deleteRoomStandard: boolean }>({
+      mutation: DELETE_ROOM_STANDARD,
+      variables: { id },
+      fetchPolicy: 'no-cache',
+      errorPolicy: 'all'
+    }).pipe(
+      take(1),
+      map(result => {
+        console.log('Delete room standard result:', result);
+        const success = result.data?.deleteRoomStandard ?? false;
+        if (success) {
+          this.toastService.showSuccess('Room standard deleted successfully!');
+        }
+        return success;
+      }),
+      catchError(error => {
+        console.error('Delete room standard error:', error);
+        const errorMsg = error?.graphQLErrors?.[0]?.message || error?.message || 'Unknown error';
+        this.toastService.showError('Error deleting room standard: ' + errorMsg);
+        return of(false);
+      })
+    );
+  }
+
   // Get all buildings for dropdowns
   getAllBuildings(): void {
     this.apollo.watchQuery<{ allBuildings: SimpleBuild[] }>({
@@ -422,4 +542,3 @@ export class FacilitiesService {
     });
   }
 }
-

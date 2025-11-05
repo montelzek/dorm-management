@@ -66,29 +66,23 @@
     }
   </div>
 
-  <!-- Rent Amount -->
+  <!-- Room Standard Select -->
   <div>
-    <label for="rentAmount" class="block text-sm font-medium text-text-primary mb-1">
-      Rent Amount (PLN) <span class="text-red-500">*</span>
+    <label for="standardId" class="block text-sm font-medium text-text-primary mb-1">
+      Room Standard <span class="text-red-500">*</span>
     </label>
-    <input
-      id="rentAmount"
-      type="number"
-      formControlName="rentAmount"
-      min="0"
-      step="0.01"
-      class="w-full rounded-lg border-2 border-input-border bg-input-bg px-4 py-3 text-input-text placeholder:text-input-placeholder focus:border-input-focus-border focus:outline-none focus:ring-2 focus:ring-input-focus-border focus:ring-opacity-50 transition-all duration-200 hover:border-input-focus-border/50"
-      placeholder="e.g. 500.00"
-    />
-    @if (form().get('rentAmount')?.invalid && form().get('rentAmount')?.touched) {
-      <p class="mt-1 text-sm text-red-500">
-        @if (form().get('rentAmount')?.errors?.['required']) {
-          Rent amount is required
-        }
-        @if (form().get('rentAmount')?.errors?.['min']) {
-          Rent amount must be positive
-        }
-      </p>
+    <select
+      id="standardId"
+      formControlName="standardId"
+      class="w-full rounded-lg border-2 border-input-border bg-input-bg px-4 py-3 text-input-text focus:border-input-focus-border focus:outline-none focus:ring-2 focus:ring-input-focus-border focus:ring-opacity-50 transition-all duration-200"
+    >
+      <option value="">Select standard</option>
+      @for (std of standards(); track std.id) {
+        <option [value]="std.id">{{ std.name }} — {{ std.capacity }} os. — {{ std.price }} PLN</option>
+      }
+    </select>
+    @if (form().get('standardId')?.invalid && form().get('standardId')?.touched) {
+      <p class="mt-1 text-sm text-red-500">Room standard is required</p>
     }
   </div>
 
@@ -105,4 +99,3 @@
     </app-button>
   </div>
 </form>
-

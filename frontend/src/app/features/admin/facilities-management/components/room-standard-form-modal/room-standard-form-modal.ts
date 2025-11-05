@@ -2,18 +2,15 @@ import { Component, input, output } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ButtonComponent } from '../../../../../shared/components/ui/button/button';
-import { SimpleBuild } from '../../services/facilities.service';
 
 @Component({
-  selector: 'app-room-form-modal',
+  selector: 'app-room-standard-form-modal',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, ButtonComponent],
-  templateUrl: './room-form-modal.html'
+  templateUrl: './room-standard-form-modal.html'
 })
-export class RoomFormModalComponent {
+export class RoomStandardFormModalComponent {
   readonly form = input.required<FormGroup>();
-  readonly buildings = input.required<SimpleBuild[]>();
-  readonly standards = input.required<any[]>();
   readonly isLoading = input<boolean>(false);
   readonly isEdit = input<boolean>(false);
 
@@ -32,3 +29,4 @@ export class RoomFormModalComponent {
     this.cancel.emit();
   }
 }
+
