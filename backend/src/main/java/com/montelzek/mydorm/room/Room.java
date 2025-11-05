@@ -4,7 +4,6 @@ import com.montelzek.mydorm.building.Building;
 import com.montelzek.mydorm.issue.Issue;
 import com.montelzek.mydorm.user.User;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -15,7 +14,6 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -43,10 +41,9 @@ public class Room {
     @Column(nullable = false)
     private Integer capacity = 2;
 
-    @Column(name = "rent_amount", nullable = false)
-    @NotNull
-    @Digits(integer = 8, fraction = 2)
-    private BigDecimal rentAmount = BigDecimal.ZERO;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "room_standard_id")
+    private RoomStandard roomStandard;
 
     @Column(name = "created_at", updatable = false)
     @CreationTimestamp

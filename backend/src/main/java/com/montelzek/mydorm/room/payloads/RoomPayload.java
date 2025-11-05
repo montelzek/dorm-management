@@ -7,8 +7,10 @@ public record RoomPayload(
         String roomNumber,
         Integer capacity,
         Integer currentOccupancy,
-        BigDecimal rentAmount,
+        Long standardId,
+        String standardName,
+        Integer standardCapacity,
+        BigDecimal standardPrice,
         Long buildingId,
         String buildingName
 ) {}
-

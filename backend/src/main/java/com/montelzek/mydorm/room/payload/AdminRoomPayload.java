@@ -7,7 +7,9 @@ public record AdminRoomPayload(
         String buildingName,
         int capacity,
         int occupancy,
-        String rentAmount,
+        Long standardId,
+        String standardName,
+        int standardCapacity,
+        String standardPrice,
         String createdAt
 ) {}
-
