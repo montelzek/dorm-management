@@ -15,6 +15,7 @@ public enum ErrorCodes {
     VALIDATION_ERROR("VALIDATION_ERROR", "Data validation error"),
     INVALID_CREDENTIALS("INVALID_CREDENTIALS", "Invalid login credentials"),
     EMAIL_TAKEN("EMAIL_TAKEN", "Email is already taken"),
+    STANDARD_IN_USE("STANDARD_IN_USE", "Room standard is assigned to one or more rooms"),
     INTERNAL_ERROR("INTERNAL_ERROR", "Server error occurred");
     
     private final String code;
