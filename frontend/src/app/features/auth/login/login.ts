@@ -70,11 +70,14 @@ export class LoginComponent implements OnInit {
 
   private handleLoginSuccess(userData: any): void {
     this.setLoading(false);
-    
+
     // Redirect based on user role
     const userRole = userData?.role;
     if (userRole === 'ROLE_ADMIN') {
       this.router.navigate(['/admin/dashboard']);
+    } else if (userRole === 'ROLE_TECHNICIAN') {
+      // Technician should be redirected to technician-specific dashboard
+      this.router.navigate(['/technician/dashboard']);
     } else {
       this.router.navigate(['/dashboard']);
     }

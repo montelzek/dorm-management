@@ -1,0 +1,11 @@
+<app-main-layout [user]="currentUser()">
+  <div class="p-6">
+    <h1 class="text-3xl font-bold text-text-primary">Technician Dashboard</h1>
+    @if (currentUser()) {
+      <p class="mt-4 text-text-secondary">Witaj, {{ currentUser()!.firstName }}! Jesteś zalogowany jako technik.</p>
+    } @else {
+      <p class="mt-4 text-text-secondary">Loading user...</p>
+    }
+  </div>
+</app-main-layout>
+

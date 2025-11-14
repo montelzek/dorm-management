@@ -20,6 +20,12 @@ export const routes: Routes = [
   },
 
   {
+    path: 'technician/dashboard',
+    loadComponent: () => import('./features/technician/dashboard/dashboard').then(m => m.TechnicianDashboardComponent),
+    canActivate: [authGuard]
+  },
+
+  {
     path: 'reservation',
     loadComponent: () => import('./features/resident/reservations/reservations').then(m => m.ReservationsComponent),
     canActivate: [authGuard]
