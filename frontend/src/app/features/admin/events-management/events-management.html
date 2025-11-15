@@ -12,7 +12,7 @@
       <div class="flex items-center justify-between mb-6">
         <button
           (click)="previousMonth()"
-          class="px-4 py-2 text-sm font-medium text-text-primary bg-background rounded-lg hover:bg-card-border transition-colors flex items-center gap-2"
+          class="px-4 py-2 text-sm font-medium text-text-primary bg-background rounded-lg hover:bg-card-border transition-colors flex items-center gap-2 cursor-pointer"
         >
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
@@ -26,7 +26,7 @@
 
         <button
           (click)="nextMonth()"
-          class="px-4 py-2 text-sm font-medium text-text-primary bg-background rounded-lg hover:bg-card-border transition-colors flex items-center gap-2"
+          class="px-4 py-2 text-sm font-medium text-text-primary bg-background rounded-lg hover:bg-card-border transition-colors flex items-center gap-2 cursor-pointer"
         >
           Next
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -46,6 +46,7 @@
             [viewDate]="viewDate()"
             [events]="calendarEvents()"
             [cellTemplate]="customCellTemplate"
+            [weekStartsOn]="1"
             (dayClicked)="onDayClicked($event)"
             (viewDateChange)="onViewDateChange($event)"
           >
@@ -79,7 +80,7 @@
         <!-- Add Event Button -->
         <button
           (click)="onAddEventForDay()"
-          class="w-full px-4 py-3 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors flex items-center justify-center gap-2"
+          class="w-full px-4 py-3 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors flex items-center justify-center gap-2 cursor-pointer"
         >
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
@@ -112,13 +113,13 @@
                     <div class="flex gap-2 ml-4">
                       <button
                         (click)="openEventModal(event)"
-                        class="px-3 py-1 text-sm text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300"
+                        class="px-3 py-1 text-sm text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300 cursor-pointer"
                       >
                         Edit
                       </button>
                       <button
                         (click)="confirmDeleteEvent(event)"
-                        class="px-3 py-1 text-sm text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300"
+                        class="px-3 py-1 text-sm text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 cursor-pointer"
                       >
                         Delete
                       </button>

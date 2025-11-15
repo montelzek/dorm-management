@@ -143,7 +143,7 @@
               <button
                 (click)="goToPage(currentPage() - 1)"
                 [disabled]="currentPage() === 0"
-                class="px-3 py-1 border border-card-border rounded-lg hover:bg-muted transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                class="px-3 py-1 border border-card-border rounded-lg hover:bg-muted transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
               >
                 Previous
               </button>
@@ -152,7 +152,7 @@
                   (click)="goToPage($index)"
                   [class.bg-indigo-600]="currentPage() === $index"
                   [class.text-white]="currentPage() === $index"
-                  class="px-3 py-1 border border-card-border rounded-lg hover:bg-muted transition-colors"
+                  class="px-3 py-1 border border-card-border rounded-lg hover:bg-muted transition-colors cursor-pointer"
                 >
                   {{ $index + 1 }}
                 </button>
@@ -160,7 +160,7 @@
               <button
                 (click)="goToPage(currentPage() + 1)"
                 [disabled]="currentPage() >= totalPages() - 1"
-                class="px-3 py-1 border border-card-border rounded-lg hover:bg-muted transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                class="px-3 py-1 border border-card-border rounded-lg hover:bg-muted transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
               >
                 Next
               </button>

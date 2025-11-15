@@ -34,7 +34,7 @@ type RoomPayload {
     roomNumber: String!
     capacity: Int!
     currentOccupancy: Int!
-    rentAmount: Float!
+    rentAmount: Float
     buildingId: ID!
     buildingName: String!
 }

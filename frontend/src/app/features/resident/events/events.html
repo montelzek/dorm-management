@@ -12,7 +12,7 @@
       <div class="flex items-center justify-between mb-6">
         <button
           (click)="previousMonth()"
-          class="px-4 py-2 text-sm font-medium text-text-primary bg-background rounded-lg hover:bg-card-border transition-colors flex items-center gap-2"
+          class="px-4 py-2 text-sm cursor-pointer font-medium text-text-primary bg-background rounded-lg hover:bg-card-border transition-colors flex items-center gap-2"
         >
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
@@ -26,7 +26,7 @@
 
         <button
           (click)="nextMonth()"
-          class="px-4 py-2 text-sm font-medium text-text-primary bg-background rounded-lg hover:bg-card-border transition-colors flex items-center gap-2"
+          class="px-4 py-2 text-sm cursor-pointer font-medium text-text-primary bg-background rounded-lg hover:bg-card-border transition-colors flex items-center gap-2"
         >
           Next
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -45,6 +45,7 @@
             [viewDate]="viewDate()"
             [events]="calendarEvents()"
             [cellTemplate]="customCellTemplate"
+            [weekStartsOn]="1"
             (dayClicked)="onDayClicked($event)"
             (viewDateChange)="onViewDateChange($event)"
           >

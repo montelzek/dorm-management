@@ -7,13 +7,13 @@
         <p class="mt-1 text-text-secondary">Buy, sell, or trade items with other residents</p>
       </div>
       <div class="flex gap-3 flex-shrink-0">
-        <button (click)="openMyListings()" class="flex items-center gap-2 px-5 py-2.5 bg-card border border-card-border text-text-primary rounded-lg hover:bg-background transition-colors">
+        <button (click)="openMyListings()" class="flex items-center gap-2 px-5 py-2.5 bg-card border border-card-border text-text-primary rounded-lg hover:bg-background transition-colors cursor-pointer">
           <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
           </svg>
           My Listings
         </button>
-        <button (click)="openCreateModal()" class="flex items-center gap-2 px-5 py-2.5 bg-button-bg hover:bg-button-hover text-button-text rounded-lg transition-colors">
+        <button (click)="openCreateModal()" class="flex items-center gap-2 px-5 py-2.5 bg-button-bg hover:bg-button-hover text-button-text rounded-lg transition-colors cursor-pointer">
           <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
           </svg>
@@ -31,8 +31,8 @@
             <button
               (click)="selectListingType(type.value)"
               [class]="selectedListingType() === type.value 
-                ? 'px-4 py-2 bg-button-bg text-button-text border border-button-bg rounded-lg text-sm font-medium transition-colors'
-                : 'px-4 py-2 bg-card text-text-primary border border-card-border rounded-lg text-sm hover:bg-background transition-colors'">
+                ? 'px-4 py-2 bg-button-bg text-button-text border border-button-bg rounded-lg text-sm font-medium transition-colors cursor-pointer'
+                : 'px-4 py-2 bg-card text-text-primary border border-card-border rounded-lg text-sm hover:bg-background transition-colors cursor-pointer'">
               {{ type.label }}
             </button>
           }
@@ -46,8 +46,8 @@
             <button
               (click)="selectCategory(category.value)"
               [class]="selectedCategory() === category.value 
-                ? 'px-4 py-2 bg-button-bg text-button-text border border-button-bg rounded-lg text-sm font-medium transition-colors'
-                : 'px-4 py-2 bg-card text-text-primary border border-card-border rounded-lg text-sm hover:bg-background transition-colors'">
+                ? 'px-4 py-2 bg-button-bg text-button-text border border-button-bg rounded-lg text-sm font-medium transition-colors cursor-pointer'
+                : 'px-4 py-2 bg-card text-text-primary border border-card-border rounded-lg text-sm hover:bg-background transition-colors cursor-pointer'">
               {{ category.label }}
             </button>
           }
@@ -111,7 +111,7 @@
         </svg>
         <h3 class="text-2xl font-semibold text-text-primary mb-2">No listings found</h3>
         <p class="text-text-secondary mb-8">Try adjusting your filters or be the first to create a listing!</p>
-        <button (click)="openCreateModal()" class="px-6 py-3 bg-button-bg hover:bg-button-hover text-button-text rounded-lg transition-colors">Create Listing</button>
+        <button (click)="openCreateModal()" class="px-6 py-3 bg-button-bg hover:bg-button-hover text-button-text rounded-lg transition-colors cursor-pointer">Create Listing</button>
       </div>
     }
   </div>
