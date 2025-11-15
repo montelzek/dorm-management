@@ -6,6 +6,7 @@ import com.montelzek.mydorm.payment.PaymentService;
 import com.montelzek.mydorm.user.User;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -13,6 +14,7 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class RoomStandardService {
 
     private final RoomStandardRepository repository;
