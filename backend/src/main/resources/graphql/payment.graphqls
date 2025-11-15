@@ -1,0 +1,15 @@
+type PaymentPayload {
+    id: ID!
+    month: String!
+    amount: Float!
+    paid: Boolean!
+    paidAt: String
+}
+
+extend type Query {
+    myPayments: [PaymentPayload!]!
+}
+
+extend type Mutation {
+    markPaymentAsPaid(paymentId: ID!): PaymentPayload!
+}
