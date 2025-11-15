@@ -91,5 +91,11 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
 
+  {
+    path: 'finance-center',
+    loadComponent: () => import('./features/resident/finance-center/finance-center').then(m => m.FinanceCenterComponent),
+    canActivate: [authGuard]
+  },
+
   { path: '', redirectTo: '/login', pathMatch: 'full' }
 ];
