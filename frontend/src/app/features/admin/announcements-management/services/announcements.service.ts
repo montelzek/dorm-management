@@ -1,6 +1,8 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import { Observable, tap, catchError, of } from 'rxjs';
+import { map, take } from 'rxjs/operators';
+import { ToastService } from '../../../../core/services/toast.service';
 import {
   GET_ADMIN_ANNOUNCEMENTS,
   CREATE_ANNOUNCEMENT,
@@ -55,6 +57,7 @@ export interface UpdateAnnouncementInput {
 })
 export class AnnouncementsService {
   private readonly apollo = inject(Apollo);
+  private readonly toastService = inject(ToastService);
 
   readonly announcements = signal<Announcement[]>([]);
   readonly loading = signal<boolean>(false);
@@ -133,17 +136,29 @@ export class AnnouncementsService {
     return this.apollo
       .mutate<{ deleteAnnouncement: boolean }>({
         mutation: DELETE_ANNOUNCEMENT,
-        variables: { id }
+        variables: { id },
+        fetchPolicy: 'no-cache',
+        errorPolicy: 'all'
       })
       .pipe(
-        tap(() => {
-          this.announcements.set(
-            this.announcements().filter(announcement => announcement.id !== id)
-          );
-          this.totalElements.set(Math.max(0, this.totalElements() - 1));
+        take(1),
+        map(result => {
+          const success = result.data?.deleteAnnouncement ?? false;
+          if (success) {
+            this.announcements.set(
+              this.announcements().filter(announcement => announcement.id !== id)
+            );
+            this.totalElements.set(Math.max(0, this.totalElements() - 1));
+            this.toastService.showSuccess('Announcement deleted successfully');
+          }
+          return success;
         }),
-        tap(result => result.data!.deleteAnnouncement)
-      ) as any as Observable<boolean>;
+        catchError(error => {
+          const msg = error?.graphQLErrors?.[0]?.message || error?.message || 'Unknown error';
+          this.toastService.showError('Failed to delete announcement: ' + msg);
+          return of(false);
+        })
+      );
   }
 }
 

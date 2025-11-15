@@ -8,6 +8,7 @@ import { FacilitiesService } from '../facilities-management/services/facilities.
 import { ToastService } from '../../../core/services/toast.service';
 import { AnnouncementFormModalComponent } from './components/announcement-form-modal/announcement-form-modal';
 import { DeleteConfirmationModalComponent } from '../facilities-management/components/delete-confirmation-modal/delete-confirmation-modal';
+import { ModalComponent } from '../../../shared/components/ui/modal/modal';
 
 @Component({
   selector: 'app-announcements-management',
@@ -17,7 +18,8 @@ import { DeleteConfirmationModalComponent } from '../facilities-management/compo
     ReactiveFormsModule,
     MainLayoutComponent,
     AnnouncementFormModalComponent,
-    DeleteConfirmationModalComponent
+    DeleteConfirmationModalComponent,
+    ModalComponent
   ],
   templateUrl: './announcements-management.html',
   styleUrls: ['./announcements-management.css']
@@ -82,6 +84,7 @@ export class AnnouncementsManagementComponent implements OnInit {
   });
 
   ngOnInit(): void {
+    this.userService.loadCurrentUser();
     this.facilitiesService.getAllBuildings();
     this.loadAnnouncements();
   }
@@ -191,14 +194,11 @@ export class AnnouncementsManagementComponent implements OnInit {
     if (!announcement) return;
 
     this.announcementsService.deleteAnnouncement(announcement.id).subscribe({
-      next: () => {
-        this.toastService.showSuccess('Announcement deleted successfully');
-        this.closeDeleteModal();
-        this.loadAnnouncements();
-      },
-      error: (error) => {
-        console.error('Delete error:', error);
-        this.toastService.showError('Failed to delete announcement');
+      next: (success) => {
+        if (success) {
+          this.closeDeleteModal();
+          this.loadAnnouncements();
+        }
       }
     });
   }
@@ -217,7 +217,7 @@ export class AnnouncementsManagementComponent implements OnInit {
     return cat?.label || category;
   }
 
-  formatDate(dateString: string): string {
+  readonly formatDate = (dateString: string): string => {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
   }

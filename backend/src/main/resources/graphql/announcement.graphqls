@@ -48,7 +48,7 @@ extend type Query {
 extend type Mutation {
     createAnnouncement(input: CreateAnnouncementInput!): AnnouncementPayload!
     updateAnnouncement(id: ID!, input: UpdateAnnouncementInput!): AnnouncementPayload!
-    deleteAnnouncement(id: ID!): Boolean!
+    deleteAnnouncement(id: ID!): Boolean
 }
 
 

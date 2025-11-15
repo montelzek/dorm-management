@@ -184,13 +184,22 @@
   }
 
   <!-- Delete Confirmation Modal -->
-  @if (isDeleteModalOpen() && announcementToDelete()) {
-    <app-delete-confirmation-modal
-      [itemName]="announcementToDelete()!.title"
-      [itemType]="'announcement'"
-      (confirm)="confirmDelete()"
-      (cancel)="closeDeleteModal()"
-    />
-  }
+  <app-modal
+    [isOpen]="isDeleteModalOpen()"
+    title="Confirm Deletion"
+    size="md"
+    (close)="closeDeleteModal()"
+  >
+    <div slot="body">
+      @if (announcementToDelete()) {
+        <app-delete-confirmation-modal
+          [itemName]="announcementToDelete()!.title"
+          [itemType]="'announcement'"
+          [isLoading]="loading()"
+          (confirm)="confirmDelete()"
+          (cancel)="closeDeleteModal()"
+        ></app-delete-confirmation-modal>
+      }
+    </div>
+  </app-modal>
 </app-main-layout>
-
