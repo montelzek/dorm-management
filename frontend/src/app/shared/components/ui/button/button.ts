@@ -21,6 +21,7 @@ export class ButtonComponent {
   readonly click = output<Event>();
 
   onClick(event: Event): void {
+    event.stopPropagation(); // Zatrzymaj propagację do rodzica
     if (!this.disabled() && !this.loading()) {
       this.click.emit(event);
     }
