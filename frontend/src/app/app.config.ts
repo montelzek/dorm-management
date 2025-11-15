@@ -37,7 +37,19 @@ export function createApollo(httpLink: HttpLink): ApolloClientOptions<any> {
 
   return {
     link: auth.concat(http),
-    cache: new InMemoryCache(),
+    cache: new InMemoryCache({
+      typePolicies: {
+        AnnouncementPayload: {
+          fields: {
+            buildings: {
+              merge(existing, incoming) {
+                return incoming;
+              }
+            }
+          }
+        }
+      }
+    }),
   };
 }
 
