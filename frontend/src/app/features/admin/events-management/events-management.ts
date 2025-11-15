@@ -135,7 +135,6 @@ export class EventsManagementComponent implements OnInit {
       format(end, 'yyyy-MM-dd')
     ).subscribe({
       next: (events) => {
-        console.log('Events loaded:', events);
         this.dormEvents.set(events);
         this.convertToCalendarEvents(events);
         this.eventsLoading.set(false);

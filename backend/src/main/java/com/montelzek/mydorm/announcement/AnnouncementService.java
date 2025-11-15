@@ -7,6 +7,7 @@ import com.montelzek.mydorm.user.User;
 import com.montelzek.mydorm.user.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class AnnouncementService {
 
     private final AnnouncementRepository announcementRepository;
@@ -90,12 +92,9 @@ public class AnnouncementService {
                     .map(this::toPayload)
                     .collect(Collectors.toList());
             
-            System.out.println("Returning " + result.size() + " announcement payloads");
             return result;
         } catch (Exception e) {
-            System.err.println("ERROR in getActiveAnnouncementsForResident: " + e.getMessage());
-            e.printStackTrace();
-            // Return empty list instead of throwing to prevent GraphQL null error
+            log.error("Error in getActiveAnnouncementsForResident: {}", e.getMessage(), e);
             return new ArrayList<>();
         }
     }

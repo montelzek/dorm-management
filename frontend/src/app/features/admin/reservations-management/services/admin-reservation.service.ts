@@ -57,7 +57,7 @@ export class AdminReservationService {
           this.pageSize.set(reservationPage.pageSize);
         },
         error: (err) => {
-          console.log('Error fetching reservations: ', err)
+          console.error('Error fetching reservations:', err);
         }
       });
   }
@@ -77,7 +77,7 @@ export class AdminReservationService {
           this.buildings.set(buildings);
         },
         error: (err) => {
-          console.log('Error fetching buildings: ', err)
+          console.error('Error fetching buildings:', err);
         }
       });
   }
@@ -98,7 +98,7 @@ export class AdminReservationService {
           this.resources.set(resources);
         },
         error: (err) => {
-          console.log('Error fetching resources: ', err)
+          console.error('Error fetching resources:', err);
         }
       });
   }

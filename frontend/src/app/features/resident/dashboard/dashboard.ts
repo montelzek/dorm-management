@@ -32,11 +32,8 @@ export class DashboardComponent implements OnInit {
       const user = this.currentUser();
       // react to user changes: load or clear dashboard depending on role
       if (user && user.role === 'ROLE_RESIDENT') {
-        console.log('[ResidentDashboard] User loaded, loading dashboard for:', user.firstName, user.role);
         this.dashboardService.loadResidentDashboard();
       } else if (user && user.role !== 'ROLE_RESIDENT') {
-        // different role, clear dashboard
-        console.log('[ResidentDashboard] User is not resident, clearing dashboard. Role:', user.role);
         this.dashboardService.dashboardData.set(null);
         this.dashboardService.error.set(null);
       }
@@ -44,7 +41,6 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log('[ResidentDashboard] Component initialized, loading user...');
     this.userService.loadCurrentUser();
   }
 

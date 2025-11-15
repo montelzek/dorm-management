@@ -110,7 +110,6 @@ export class AdminDashboardService {
       return;
     }
 
-    console.log('[AdminDashboardService] Loading dashboard for admin:', currentUser.firstName);
     this.isLoading.set(true);
     this.error.set(null);
 

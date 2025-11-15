@@ -5,6 +5,7 @@ import com.montelzek.mydorm.user.User;
 import com.montelzek.mydorm.user.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class IssueService {
 
     private final IssueRepository issueRepository;
@@ -157,8 +159,7 @@ public class IssueService {
                     issuesPage.getSize()
             );
         } catch (Exception e) {
-            System.err.println("Error in getAllIssues: " + e.getMessage());
-            e.printStackTrace();
+            log.error("Error in getAllIssues: {}", e.getMessage(), e);
             throw new RuntimeException("Failed to get issues", e);
         }
     }

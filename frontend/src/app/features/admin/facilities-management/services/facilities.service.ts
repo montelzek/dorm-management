@@ -249,7 +249,6 @@ export class FacilitiesService {
     }).pipe(
       take(1),
       map(result => {
-        console.log('Delete building result:', result);
         const success = result.data?.deleteBuilding ?? false;
         if (success) {
           this.toastService.showSuccess('Building deleted successfully!');
@@ -341,7 +340,6 @@ export class FacilitiesService {
     }).pipe(
       take(1),
       map(result => {
-        console.log('Delete room result:', result);
         const success = result.data?.deleteRoom ?? false;
         if (success) {
           this.toastService.showSuccess('Room deleted successfully!');
@@ -510,7 +508,6 @@ export class FacilitiesService {
     }).pipe(
       take(1),
       map(result => {
-        console.log('Delete room standard result:', result);
         const success = result.data?.deleteRoomStandard ?? false;
         if (success) {
           this.toastService.showSuccess('Room standard deleted successfully!');

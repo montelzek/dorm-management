@@ -48,7 +48,7 @@ export class ResidentService {
           this.pageSize.set(residentPage.pageSize);
         },
         error: (err) => {
-          console.log('Error fetching residents: ', err)
+          console.error('Error fetching residents:', err);
         }
       });
   }
@@ -80,7 +80,7 @@ export class ResidentService {
           this.pageSize.set(residentPage.pageSize);
         },
         error: (err) => {
-          console.log('Error fetching residents by building: ', err)
+          console.error('Error fetching residents by building:', err);
         }
       });
   }
@@ -100,7 +100,7 @@ export class ResidentService {
           this.buildings.set(buildings);
         },
         error: (err) => {
-          console.log('Error fetching buildings: ', err)
+          console.error('Error fetching buildings:', err);
         }
       });
   }

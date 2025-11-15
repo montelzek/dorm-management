@@ -31,7 +31,6 @@ export class AdminDashboardComponent implements OnInit {
     effect(() => {
       const user = this.currentUser();
       if (user && !this.dashboardLoaded) {
-        console.log('[AdminDashboard] User loaded, loading dashboard for:', user.firstName, user.role);
         this.dashboardLoaded = true;
         this.dashboardService.loadAdminDashboard();
       }
@@ -39,7 +38,6 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log('[AdminDashboard] Component initialized, loading user...');
     this.userService.loadCurrentUser();
   }
 

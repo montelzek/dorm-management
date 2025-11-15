@@ -160,7 +160,6 @@ export class ResidentDashboardService {
       return;
     }
 
-    console.log('[ResidentDashboardService] Loading dashboard for resident:', currentUser.firstName);
     this.isLoading.set(true);
     this.error.set(null);
 
