@@ -35,6 +35,7 @@ export interface User {
   id: string;
   firstName: string;
   lastName: string;
+  email: string;
   building: Building | null;
   room: Room | null;
   role: string;

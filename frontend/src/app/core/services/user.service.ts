@@ -11,6 +11,7 @@ const GET_CURRENT_USER = gql`
       id
       firstName
       lastName
+      email
       role
       building {
         id
