@@ -7,6 +7,7 @@ extend type Query {
 extend type Mutation {
     assignRoom(userId: ID!, roomId: ID!): ResidentPayload!
     deleteResident(userId: ID!): Boolean!
+    updateMyProfile(input: UpdateProfileInput!): UserProfilePayload!
 }
 
 type ResidentPage {
@@ -37,4 +38,17 @@ type RoomPayload {
     rentAmount: Float
     buildingId: ID!
     buildingName: String!
+}
+
+input UpdateProfileInput {
+    firstName: String!
+    lastName: String!
+    email: String!
+}
+
+type UserProfilePayload {
+    id: ID!
+    firstName: String!
+    lastName: String!
+    email: String!
 }
