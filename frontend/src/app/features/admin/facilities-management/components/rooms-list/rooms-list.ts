@@ -15,12 +15,14 @@ export class RoomsListComponent {
   readonly isLoading = input<boolean>(false);
   readonly selectedBuilding = input<string>('');
   readonly selectedStatus = input<string>('');
+  readonly searchQuery = input<string>('');
 
   readonly edit = output<Room>();
   readonly delete = output<Room>();
   readonly add = output<void>();
   readonly buildingFilterChange = output<string>();
   readonly statusFilterChange = output<string>();
+  readonly searchChange = output<string>();
 
   getOccupancyBadgeClass(occupancy: number, capacity: number): string {
     if (occupancy === 0) return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200';

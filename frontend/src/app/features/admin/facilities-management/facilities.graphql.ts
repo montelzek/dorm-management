@@ -69,8 +69,8 @@ export const DELETE_BUILDING = gql`
 
 // Rooms Queries (updated to include standard fields)
 export const GET_ADMIN_ROOMS = gql`
-  query GetAdminRooms($page: Int, $size: Int, $buildingId: ID, $status: String) {
-    adminRooms(page: $page, size: $size, buildingId: $buildingId, status: $status) {
+  query GetAdminRooms($page: Int, $size: Int, $buildingId: ID, $status: String, $search: String) {
+    adminRooms(page: $page, size: $size, buildingId: $buildingId, status: $status, search: $search) {
       content {
         id
         roomNumber

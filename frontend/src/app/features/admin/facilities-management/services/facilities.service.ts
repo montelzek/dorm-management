@@ -265,7 +265,7 @@ export class FacilitiesService {
   }
 
   // Rooms Methods
-  getRooms(page: number = 0, size: number = 10, buildingId?: string, status?: string): void {
+  getRooms(page: number = 0, size: number = 10, buildingId?: string, status?: string, search?: string): void {
     this._roomsLoading.set(true);
     this.apollo.watchQuery<{ adminRooms: any }>({
       query: GET_ADMIN_ROOMS,
@@ -273,7 +273,8 @@ export class FacilitiesService {
         page,
         size,
         buildingId: buildingId || null,
-        status: status || null
+        status: status || null,
+        search: search || null
       },
       fetchPolicy: 'network-only'
     }).valueChanges.pipe(

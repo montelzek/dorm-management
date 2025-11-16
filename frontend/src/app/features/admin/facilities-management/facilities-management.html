@@ -78,11 +78,13 @@
           [isLoading]="roomsLoading()"
           [selectedBuilding]="roomsBuildingFilter()"
           [selectedStatus]="roomsStatusFilter()"
+          [searchQuery]="roomsSearchFilter()"
           (add)="openRoomModal()"
           (edit)="openRoomModal($event)"
           (delete)="confirmDeleteRoom($event)"
           (buildingFilterChange)="onRoomBuildingFilterChange($event)"
           (statusFilterChange)="onRoomStatusFilterChange($event)"
+          (searchChange)="onRoomSearchChange($event)"
         ></app-rooms-list>
 
         <!-- Pagination for Rooms -->

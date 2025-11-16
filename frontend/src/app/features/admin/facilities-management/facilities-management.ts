@@ -100,6 +100,7 @@ export class FacilitiesManagementComponent implements OnInit {
   // Filters
   readonly roomsBuildingFilter = signal<string>('');
   readonly roomsStatusFilter = signal<string>('');
+  readonly roomsSearchFilter = signal<string>('');
   readonly resourcesBuildingFilter = signal<string>('');
   readonly resourcesStatusFilter = signal<string>('');
 
@@ -233,7 +234,8 @@ export class FacilitiesManagementComponent implements OnInit {
   loadRooms(): void {
     const buildingId = this.roomsBuildingFilter() || undefined;
     const status = this.roomsStatusFilter() || undefined;
-    this.facilitiesService.getRooms(this.roomsPage(), 10, buildingId, status);
+    const search = this.roomsSearchFilter() || undefined;
+    this.facilitiesService.getRooms(this.roomsPage(), 10, buildingId, status, search);
   }
 
   openRoomModal(room?: Room): void {
@@ -298,6 +300,12 @@ export class FacilitiesManagementComponent implements OnInit {
 
   onRoomStatusFilterChange(status: string): void {
     this.roomsStatusFilter.set(status);
+    this.roomsPage.set(0);
+    this.loadRooms();
+  }
+
+  onRoomSearchChange(search: string): void {
+    this.roomsSearchFilter.set(search);
     this.roomsPage.set(0);
     this.loadRooms();
   }
