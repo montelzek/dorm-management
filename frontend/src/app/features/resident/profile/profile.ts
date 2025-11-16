@@ -37,7 +37,8 @@ export class ProfileComponent implements OnInit {
         this.profileForm.patchValue({
           firstName: user.firstName,
           lastName: user.lastName,
-          email: user.email || ''
+          email: user.email || '',
+          phone: user.phone || ''
         });
       }
     });
@@ -49,7 +50,8 @@ export class ProfileComponent implements OnInit {
     this.profileForm = this.fb.group({
       firstName: ['', [Validators.required, Validators.maxLength(100)]],
       lastName: ['', [Validators.required, Validators.maxLength(100)]],
-      email: ['', [Validators.required, Validators.email, Validators.maxLength(255)]]
+      email: ['', [Validators.required, Validators.email, Validators.maxLength(255)]],
+      phone: ['', [Validators.maxLength(20)]]
     });
   }
 
@@ -65,7 +67,8 @@ export class ProfileComponent implements OnInit {
     const input = {
       firstName: this.profileForm.value.firstName,
       lastName: this.profileForm.value.lastName,
-      email: this.profileForm.value.email
+      email: this.profileForm.value.email,
+      phone: this.profileForm.value.phone || null
     };
 
     this.apollo.mutate({
@@ -116,5 +119,9 @@ export class ProfileComponent implements OnInit {
 
   get email() {
     return this.profileForm.get('email');
+  }
+
+  get phone() {
+    return this.profileForm.get('phone');
   }
 }

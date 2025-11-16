@@ -69,6 +69,24 @@
               </div>
             </div>
 
+            <!-- Phone -->
+            <div class="mb-6">
+              <label for="phone" class="block text-sm font-medium text-text-primary mb-2">
+                Phone Number
+              </label>
+              <input
+                type="tel"
+                id="phone"
+                formControlName="phone"
+                class="w-full px-4 py-2 border border-card-border rounded-lg bg-card text-text-primary focus:ring-2 focus:ring-button-bg focus:border-transparent transition-colors"
+                [class.border-red-500]="phone?.invalid && phone?.touched"
+                placeholder="Enter your phone number"
+              />
+              <div *ngIf="phone?.invalid && phone?.touched" class="mt-1 text-sm text-red-600">
+                <span *ngIf="phone?.errors?.['maxlength']">Phone number must not exceed 20 characters</span>
+              </div>
+            </div>
+
             <!-- Error Message -->
             <div *ngIf="errorMessage" class="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
               <p class="text-sm text-red-600">{{ errorMessage }}</p>
