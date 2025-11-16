@@ -4,6 +4,8 @@ import com.montelzek.mydorm.room.payloads.RoomPayload;
 import com.montelzek.mydorm.security.UserDetailsImpl;
 import com.montelzek.mydorm.user.payloads.ResidentPage;
 import com.montelzek.mydorm.user.payloads.ResidentPayload;
+import com.montelzek.mydorm.user.payloads.UpdateProfileInput;
+import com.montelzek.mydorm.user.payloads.UserProfilePayload;
 import lombok.AllArgsConstructor;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
@@ -100,5 +102,11 @@ public class UserController {
     @PreAuthorize("hasRole('ADMIN')")
     public Boolean deleteResident(@Argument Long userId) {
         return userService.deleteResident(userId);
+    }
+
+    @MutationMapping
+    @PreAuthorize("isAuthenticated()")
+    public UserProfilePayload updateMyProfile(@Argument UpdateProfileInput input, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return userService.updateMyProfile(userDetails.getId(), input);
     }
 }
