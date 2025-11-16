@@ -7,6 +7,8 @@ import com.montelzek.mydorm.room.Room;
 import com.montelzek.mydorm.room.RoomRepository;
 import com.montelzek.mydorm.user.payloads.ResidentPage;
 import com.montelzek.mydorm.user.payloads.ResidentPayload;
+import com.montelzek.mydorm.user.payloads.UpdateProfileInput;
+import com.montelzek.mydorm.user.payloads.UserProfilePayload;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -179,6 +181,41 @@ public class UserService {
         // Reservations will be automatically deleted due to cascade = CascadeType.ALL
         userRepository.delete(user);
         return true;
+    }
+
+    public UserProfilePayload updateMyProfile(Long userId, UpdateProfileInput input) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new BusinessException(
+                        ErrorCodes.RESOURCE_NOT_FOUND,
+                        "User not found with id: " + userId,
+                        "userId"
+                ));
+
+        // Check if email is being changed and if it's already taken by another user
+        if (!user.getEmail().equals(input.email())) {
+            userRepository.findByEmail(input.email()).ifPresent(existingUser -> {
+                if (!existingUser.getId().equals(userId)) {
+                    throw new BusinessException(
+                            ErrorCodes.VALIDATION_ERROR,
+                            "Email is already taken",
+                            "email"
+                    );
+                }
+            });
+        }
+
+        user.setFirstName(input.firstName());
+        user.setLastName(input.lastName());
+        user.setEmail(input.email());
+
+        User savedUser = userRepository.save(user);
+
+        return new UserProfilePayload(
+                savedUser.getId(),
+                savedUser.getFirstName(),
+                savedUser.getLastName(),
+                savedUser.getEmail()
+        );
     }
 
 }
