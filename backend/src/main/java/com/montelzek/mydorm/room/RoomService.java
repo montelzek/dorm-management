@@ -27,12 +27,12 @@ public class RoomService {
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @Transactional
-    public RoomsPagePayload getAllRooms(Integer page, Integer size, Long buildingId, String status) {
+    public RoomsPagePayload getAllRooms(Integer page, Integer size, Long buildingId, String status, String search) {
         int pageNumber = (page != null && page >= 0) ? page : 0;
         int pageSize = (size != null && size > 0) ? size : 10;
 
         Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.ASC, "roomNumber"));
-        Page<Room> roomsPage = roomRepository.findByFilters(buildingId, status, pageable);
+        Page<Room> roomsPage = roomRepository.findByFilters(buildingId, status, search, pageable);
 
         List<AdminRoomPayload> content = roomsPage.getContent().stream()
                 .map(this::toAdminPayload)

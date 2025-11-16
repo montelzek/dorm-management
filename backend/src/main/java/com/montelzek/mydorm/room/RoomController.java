@@ -21,8 +21,9 @@ public class RoomController {
             @Argument Integer page,
             @Argument Integer size,
             @Argument Long buildingId,
-            @Argument String status) {
-        return roomService.getAllRooms(page, size, buildingId, status);
+            @Argument String status,
+            @Argument String search) {
+        return roomService.getAllRooms(page, size, buildingId, status, search);
     }
 
     @MutationMapping

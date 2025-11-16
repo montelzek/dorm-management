@@ -129,7 +129,7 @@ input UpdateRoomStandardInput {
 extend type Query {
     adminBuildings(page: Int, size: Int): BuildingsPagePayload!
     buildingDetails(id: ID!): BuildingDetailsPayload!
-    adminRooms(page: Int, size: Int, buildingId: ID, status: String): RoomsPagePayload!
+    adminRooms(page: Int, size: Int, buildingId: ID, status: String, search: String): RoomsPagePayload!
     adminReservationResources(page: Int, size: Int, buildingId: ID, isActive: Boolean): ResourcesPagePayload!
     adminRoomStandards: [RoomStandard!]!
     roomStandard(id: ID!): RoomStandard

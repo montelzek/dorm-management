@@ -17,9 +17,11 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
             "(:status IS NULL OR :status = 'ALL' OR " +
             "(:status = 'FREE' AND SIZE(r.users) = 0) OR " +
             "(:status = 'PARTIALLY_OCCUPIED' AND SIZE(r.users) > 0 AND SIZE(r.users) < r.capacity) OR " +
-            "(:status = 'FULL' AND SIZE(r.users) >= r.capacity))")
+            "(:status = 'FULL' AND SIZE(r.users) >= r.capacity)) AND " +
+            "(:search IS NULL OR :search = '' OR LOWER(r.roomNumber) LIKE LOWER(CONCAT('%', :search, '%')))")
     Page<Room> findByFilters(@Param("buildingId") Long buildingId,
                                @Param("status") String status,
+                               @Param("search") String search,
                                Pageable pageable);
 
     @Query("SELECT COUNT(r) FROM Room r WHERE SIZE(r.users) > 0")
