@@ -3,7 +3,7 @@ export interface ResidentPayload {
   firstName: string;
   lastName: string;
   email: string;
-  phone: string;
+  phone: string | null;
   buildingName: string;
   buildingId?: string;
   roomNumber: string;

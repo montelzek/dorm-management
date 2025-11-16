@@ -41,6 +41,7 @@ type UserPayload {
     firstName: String!
     lastName: String!
     email: String!
+    phone: String
     role: String!
     building: BuildingPayload
     room: RoomPayload

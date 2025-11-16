@@ -23,7 +23,7 @@ type ResidentPayload {
     firstName: String!
     lastName: String!
     email: String!
-    phone: String!
+    phone: String
     buildingName: String!
     buildingId: ID
     roomNumber: String!
@@ -44,6 +44,7 @@ input UpdateProfileInput {
     firstName: String!
     lastName: String!
     email: String!
+    phone: String
 }
 
 type UserProfilePayload {
@@ -51,4 +52,5 @@ type UserProfilePayload {
     firstName: String!
     lastName: String!
     email: String!
+    phone: String
 }
