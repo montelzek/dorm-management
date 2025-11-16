@@ -16,6 +16,9 @@ public record UpdateProfileInput(
         @NotBlank(message = "Email is required")
         @Email(message = "Email must be valid")
         @Size(max = 255, message = "Email must not exceed 255 characters")
-        String email
+        String email,
+
+        @Size(max = 20, message = "Phone must not exceed 20 characters")
+        String phone
 ) {
 }

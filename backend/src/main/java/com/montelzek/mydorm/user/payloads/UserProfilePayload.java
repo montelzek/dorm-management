@@ -4,6 +4,7 @@ public record UserProfilePayload(
         Long id,
         String firstName,
         String lastName,
-        String email
+        String email,
+        String phone
 ) {
 }

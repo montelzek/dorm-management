@@ -207,6 +207,7 @@ public class UserService {
         user.setFirstName(input.firstName());
         user.setLastName(input.lastName());
         user.setEmail(input.email());
+        user.setPhone(input.phone());
 
         User savedUser = userRepository.save(user);
 
@@ -214,7 +215,8 @@ public class UserService {
                 savedUser.getId(),
                 savedUser.getFirstName(),
                 savedUser.getLastName(),
-                savedUser.getEmail()
+                savedUser.getEmail(),
+                savedUser.getPhone()
         );
     }
 
