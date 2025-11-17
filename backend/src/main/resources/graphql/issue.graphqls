@@ -26,6 +26,19 @@ type IssueUserPayload {
     lastName: String!
 }
 
+type IssueTechnicianPayload {
+    id: ID!
+    firstName: String!
+    lastName: String!
+}
+
+type TechnicianPayload {
+    id: ID!
+    firstName: String!
+    lastName: String!
+    email: String!
+}
+
 type AdminIssuePayload {
     id: ID!
     title: String!
@@ -37,6 +50,37 @@ type AdminIssuePayload {
     user: IssueUserPayload!
     room: IssueRoomPayload
     building: IssueBuildingPayload
+    assignedTechnician: IssueTechnicianPayload
+}
+
+type TechnicianIssuePayload {
+    id: ID!
+    title: String!
+    description: String!
+    status: String!
+    priority: String!
+    createdAt: String!
+    updatedAt: String!
+    user: IssueUserPayload!
+    room: IssueRoomPayload
+    building: IssueBuildingPayload
+}
+
+type TechnicianIssuesPagePayload {
+    content: [TechnicianIssuePayload!]!
+    totalElements: Int!
+    totalPages: Int!
+    currentPage: Int!
+    pageSize: Int!
+}
+
+type TechnicianDashboardStats {
+    activeTasks: Int!
+    resolvedTasks: Int!
+    inProgressTasks: Int!
+    reportedTasks: Int!
+    highPriorityTasks: Int!
+    urgentPriorityTasks: Int!
 }
 
 type AdminIssuesPagePayload {
@@ -56,11 +100,17 @@ input CreateIssueInput {
 extend type Query {
     myIssues(status: String): [IssuePayload!]!
     allIssues(page: Int, size: Int, status: String, priority: String, buildingId: ID): AdminIssuesPagePayload!
+    availableTechnicians: [TechnicianPayload!]!
+    myAssignedTasks(page: Int, size: Int, status: String): TechnicianIssuesPagePayload!
+    myTasksHistory(page: Int, size: Int, buildingId: ID): TechnicianIssuesPagePayload!
+    technicianDashboardStats: TechnicianDashboardStats!
 }
 
 extend type Mutation {
     createIssue(input: CreateIssueInput!): IssuePayload!
     cancelIssue(issueId: ID!): Boolean!
     updateIssueStatus(issueId: ID!, status: String!): AdminIssuePayload!
+    assignTechnician(issueId: ID!, technicianId: ID!): AdminIssuePayload!
+    updateTaskStatus(issueId: ID!, status: String!): TechnicianIssuePayload!
 }
 
