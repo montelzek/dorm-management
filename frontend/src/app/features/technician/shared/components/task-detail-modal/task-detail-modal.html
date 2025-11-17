@@ -1,0 +1,70 @@
+<div class="space-y-6">
+  <!-- Task Info -->
+  <div class="space-y-4">
+    <div>
+      <h3 class="text-lg font-semibold text-text-primary mb-2">{{ task().title }}</h3>
+      <p class="text-sm text-text-secondary">{{ task().description }}</p>
+    </div>
+
+    <div class="grid grid-cols-2 gap-4">
+      <div>
+        <label class="block text-xs font-medium text-text-secondary mb-1">Status</label>
+        <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium" [ngClass]="getStatusClasses(task().status)">
+          {{ formatStatus(task().status) | titlecase }}
+        </span>
+      </div>
+      <div>
+        <label class="block text-xs font-medium text-text-secondary mb-1">Priority</label>
+        <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium" [ngClass]="getPriorityClasses(task().priority)">
+          {{ task().priority | titlecase }}
+        </span>
+      </div>
+    </div>
+
+    <div class="border-t border-card-border pt-4">
+      <h4 class="text-sm font-semibold text-text-primary mb-3">Reporter Information</h4>
+      <div class="space-y-2 text-sm">
+        <div class="flex justify-between">
+          <span class="text-text-secondary">Name:</span>
+          <span class="text-text-primary font-medium">{{ task().user.firstName }} {{ task().user.lastName }}</span>
+        </div>
+        @if (task().room) {
+          <div class="flex justify-between">
+            <span class="text-text-secondary">Room:</span>
+            <span class="text-text-primary font-medium">{{ task().room!.roomNumber }}</span>
+          </div>
+        }
+        @if (task().building) {
+          <div class="flex justify-between">
+            <span class="text-text-secondary">Building:</span>
+            <span class="text-text-primary font-medium">{{ task().building!.name }}</span>
+          </div>
+        }
+      </div>
+    </div>
+
+    <div class="border-t border-card-border pt-4">
+      <h4 class="text-sm font-semibold text-text-primary mb-3">Timestamps</h4>
+      <div class="space-y-2 text-sm">
+        <div class="flex justify-between">
+          <span class="text-text-secondary">Created:</span>
+          <span class="text-text-primary">{{ task().createdAt | date:'dd.MM.yyyy HH:mm' }}</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-text-secondary">Last Updated:</span>
+          <span class="text-text-primary">{{ task().updatedAt | date:'dd.MM.yyyy HH:mm' }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Actions -->
+  <div class="flex justify-end gap-3 pt-4 border-t border-card-border">
+    <app-button
+      variant="secondary"
+      (click)="onCancel()"
+    >
+      Close
+    </app-button>
+  </div>
+</div>
