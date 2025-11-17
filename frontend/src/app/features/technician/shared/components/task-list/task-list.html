@@ -1,0 +1,159 @@
+@if (isLoading()) {
+  <div class="flex justify-center items-center py-12">
+    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+    <span class="ml-3 text-text-secondary">Loading tasks...</span>
+  </div>
+} @else if (tasks().length === 0) {
+  <div class="text-center py-12">
+    <svg class="mx-auto h-12 w-12 text-text-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2-10H7a4 4 0 00-4 4v10a2 2 0 002 2h14a2 2 0 002-2V7a4 4 0 00-4-4z" />
+    </svg>
+    <h3 class="mt-2 text-sm font-medium text-text-primary">No tasks found</h3>
+    <p class="mt-1 text-sm text-text-secondary">You don't have any assigned tasks at the moment.</p>
+  </div>
+} @else {
+  <!-- Desktop Table View -->
+  <div class="hidden md:block overflow-x-auto">
+    <table class="min-w-full divide-y divide-card-border">
+      <thead class="bg-surface">
+        <tr>
+          <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider">
+            Title
+          </th>
+          <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider">
+            Status
+          </th>
+          <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider">
+            Priority
+          </th>
+          <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider">
+            Reporter
+          </th>
+          <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider">
+            Location
+          </th>
+          <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider">
+            Created
+          </th>
+          <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider">
+            Actions
+          </th>
+        </tr>
+      </thead>
+      <tbody class="bg-card divide-y divide-card-border">
+        @for (task of tasks(); track task.id) {
+          <tr class="hover:bg-surface transition-colors">
+            <td class="px-6 py-4">
+              <div class="text-sm font-medium text-text-primary">{{ task.title }}</div>
+              <div class="text-sm text-text-secondary truncate max-w-xs">{{ task.description }}</div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-medium" [ngClass]="getStatusClasses(task.status)">
+                {{ formatStatus(task.status) | titlecase }}
+              </span>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-medium" [ngClass]="getPriorityClasses(task.priority)">
+                {{ task.priority | titlecase }}
+              </span>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <div class="text-sm text-text-primary">{{ task.user.firstName }} {{ task.user.lastName }}</div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <div class="text-sm text-text-primary">
+                @if (task.room) {
+                  Room {{ task.room.roomNumber }}
+                } @else if (task.building) {
+                  {{ task.building.name }}
+                } @else {
+                  N/A
+                }
+              </div>
+              @if (task.building) {
+                <div class="text-xs text-text-secondary">{{ task.building.name }}</div>
+              }
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-text-secondary">
+              {{ task.createdAt | date:'dd.MM.yyyy HH:mm' }}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+              <div class="flex gap-2">
+                @if (!readonly()) {
+                  <button
+                    (click)="onChangeStatus(task)"
+                    class="text-blue-600 dark:text-blue-400 hover:text-blue-900 dark:hover:text-blue-300"
+                  >
+                    Change Status
+                  </button>
+                }
+                <button
+                  (click)="onViewTask(task)"
+                  class="text-indigo-600 dark:text-indigo-400 hover:text-indigo-900 dark:hover:text-indigo-300"
+                >
+                  Details
+                </button>
+              </div>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Mobile Card View -->
+  <div class="md:hidden space-y-4">
+    @for (task of tasks(); track task.id) {
+      <div class="bg-card border border-card-border rounded-lg p-4">
+        <div class="flex justify-between items-start mb-3">
+          <div class="flex-1">
+            <h3 class="text-base font-semibold text-text-primary mb-1">{{ task.title }}</h3>
+            <p class="text-sm text-text-secondary line-clamp-2 mb-2">{{ task.description }}</p>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap gap-2 mb-3">
+          <span class="px-2.5 py-0.5 rounded-full text-xs font-medium" [ngClass]="getStatusClasses(task.status)">
+            {{ formatStatus(task.status) | titlecase }}
+          </span>
+          <span class="px-2.5 py-0.5 rounded-full text-xs font-medium" [ngClass]="getPriorityClasses(task.priority)">
+            {{ task.priority | titlecase }}
+          </span>
+        </div>
+
+        <div class="text-sm space-y-1 mb-3">
+          <div class="text-text-secondary">
+            <span class="font-medium">Reporter:</span> {{ task.user.firstName }} {{ task.user.lastName }}
+          </div>
+          <div class="text-text-secondary">
+            <span class="font-medium">Location:</span>
+            @if (task.room) {
+              Room {{ task.room.roomNumber }}
+            } @else if (task.building) {
+              {{ task.building.name }}
+            } @else {
+              N/A
+            }
+            @if (task.building) {
+              ({{ task.building.name }})
+            }
+          </div>
+          <div class="text-text-secondary">
+            <span class="font-medium">Created:</span> {{ task.createdAt | date:'dd.MM.yyyy HH:mm' }}
+          </div>
+        </div>
+
+        <div class="flex gap-2">
+          @if (!readonly()) {
+            <app-button variant="primary" size="sm" (click)="onChangeStatus(task)" class="flex-1">
+              Change Status
+            </app-button>
+          }
+          <app-button variant="secondary" size="sm" (click)="onViewTask(task)" [class]="readonly() ? 'w-full' : 'flex-1'">
+            View Details
+          </app-button>
+        </div>
+      </div>
+    }
+  </div>
+}
