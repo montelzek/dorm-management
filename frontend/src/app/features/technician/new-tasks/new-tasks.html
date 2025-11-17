@@ -1,0 +1,152 @@
+<app-main-layout [user]="currentUser()">
+  <div class="mx-auto max-w-7xl space-y-6">
+    <!-- Header -->
+    <div>
+      <h1 class="text-3xl font-bold text-text-primary">New Tasks</h1>
+      <p class="mt-1 text-text-secondary">Manage your assigned maintenance tasks</p>
+    </div>
+
+    <!-- Tasks List -->
+    <div class="rounded-lg bg-card shadow-sm border border-card-border overflow-hidden">
+      <!-- Top Info Bar -->
+      @if (totalElements() > 0) {
+        <div class="bg-surface px-6 py-3 border-b border-card-border">
+          <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="text-sm text-text-secondary">
+              Showing {{ currentPage() * pageSize() + 1 }} to 
+              {{ Math.min((currentPage() + 1) * pageSize(), totalElements()) }} of 
+              {{ totalElements() }} tasks
+            </div>
+
+            <div class="flex items-center gap-2">
+              <label for="pageSize" class="text-sm text-text-secondary">Items per page:</label>
+              <select
+                id="pageSize"
+                [value]="pageSize()"
+                (change)="onPageSizeChange(+$any($event.target).value)"
+                class="rounded-md border-input-border bg-input-bg px-2 py-1 text-input-text text-sm focus:border-input-focus-border focus:outline-none focus:ring-2 focus:ring-input-focus-border"
+              >
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="20">20</option>
+                <option value="50">50</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- Tasks List -->
+      <app-task-list
+        [tasks]="tasks()"
+        [isLoading]="isLoading()"
+        (viewTask)="onViewTask($event)"
+        (changeStatus)="onChangeStatus($event)"
+      ></app-task-list>
+
+      <!-- Bottom Pagination Buttons -->
+      @if (totalElements() > 0) {
+        <div class="bg-surface px-6 py-4 border-t border-card-border">
+          <div class="flex justify-center">
+            <div class="flex gap-1">
+              <button
+                (click)="onPageChange(currentPage() - 1)"
+                [disabled]="currentPage() === 0"
+                class="px-3 py-1 rounded-md bg-card text-text-primary border border-card-border hover:bg-indigo-600 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              >
+                Previous
+              </button>
+
+              @for (pageNum of [].constructor(totalPages()); track $index) {
+                @if ($index === 0 || $index === totalPages() - 1 || ($index >= currentPage() - 1 && $index <= currentPage() + 1)) {
+                  <button
+                    (click)="onPageChange($index)"
+                    [class]="$index === currentPage() ? 'px-3 py-1 rounded-md bg-indigo-600 text-white' : 'px-3 py-1 rounded-md bg-card text-text-primary border border-card-border hover:bg-indigo-600 hover:text-white transition-colors'"
+                  >
+                    {{ $index + 1 }}
+                  </button>
+                } @else if ($index === currentPage() - 2 || $index === currentPage() + 2) {
+                  <span class="px-2 py-1 text-text-secondary">...</span>
+                }
+              }
+
+              <button
+                (click)="onPageChange(currentPage() + 1)"
+                [disabled]="currentPage() === totalPages() - 1"
+                class="px-3 py-1 rounded-md bg-card text-text-primary border border-card-border hover:bg-indigo-600 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+
+  <!-- Task Detail Modal -->
+  <app-modal
+    [isOpen]="isDetailModalOpen()"
+    title="Task Details"
+    size="lg"
+    (close)="onCloseDetailModal()"
+  >
+    <div slot="body">
+      @if (selectedTask()) {
+        <app-task-detail-modal
+          [task]="selectedTask()!"
+          (cancel)="onCloseDetailModal()"
+        ></app-task-detail-modal>
+      }
+    </div>
+  </app-modal>
+
+  <!-- Change Status Modal -->
+  <app-modal
+    [isOpen]="isStatusModalOpen()"
+    title="Change Task Status"
+    size="md"
+    (close)="onCloseStatusModal()"
+  >
+    <div slot="body">
+      @if (selectedTask()) {
+        <div class="space-y-4">
+          <div>
+            <p class="text-sm text-text-secondary mb-4">
+              Update the status for: <span class="font-semibold text-text-primary">{{ selectedTask()!.title }}</span>
+            </p>
+            <label for="statusSelect" class="block text-sm font-medium text-text-primary mb-2">
+              New Status
+            </label>
+            <select
+              id="statusSelect"
+              #statusSelect
+              [value]="selectedTask()!.status"
+              class="w-full rounded-lg border-2 border-input-border bg-input-bg px-3 py-2 text-input-text focus:border-input-focus-border focus:outline-none focus:ring-2 focus:ring-input-focus-border transition-all"
+            >
+              <option value="REPORTED">Reported</option>
+              <option value="IN_PROGRESS">In Progress</option>
+              <option value="RESOLVED">Resolved</option>
+            </select>
+          </div>
+          <div class="flex justify-end gap-3 pt-4 border-t border-card-border">
+            <app-button
+              variant="secondary"
+              (click)="onCloseStatusModal()"
+            >
+              Cancel
+            </app-button>
+            <app-button
+              variant="primary"
+              (click)="onUpdateStatus(selectedTask()!.id, statusSelect.value)"
+              [disabled]="statusSelect.value === selectedTask()!.status"
+            >
+              Update Status
+            </app-button>
+          </div>
+        </div>
+      }
+    </div>
+  </app-modal>
+
+</app-main-layout>
