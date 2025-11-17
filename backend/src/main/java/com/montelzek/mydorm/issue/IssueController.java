@@ -83,5 +83,56 @@ public class IssueController {
             @Argument String status) {
         return issueService.updateIssueStatus(issueId, status);
     }
+
+    @QueryMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<TechnicianPayload> availableTechnicians() {
+        return issueService.getAvailableTechnicians();
+    }
+
+    @MutationMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public AdminIssuePayload assignTechnician(
+            @Argument Long issueId,
+            @Argument Long technicianId) {
+        return issueService.assignTechnician(issueId, technicianId);
+    }
+
+    // Technician endpoints
+    @QueryMapping
+    @PreAuthorize("hasRole('TECHNICIAN')")
+    public TechnicianIssuesPagePayload myAssignedTasks(
+            @Argument Integer page,
+            @Argument Integer size,
+            @Argument String status,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return issueService.getMyAssignedTasks(userDetails.getId(), page, size, status);
+    }
+
+    @QueryMapping
+    @PreAuthorize("hasRole('TECHNICIAN')")
+    public TechnicianIssuesPagePayload myTasksHistory(
+            @Argument Integer page,
+            @Argument Integer size,
+            @Argument Long buildingId,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return issueService.getMyTasksHistory(userDetails.getId(), page, size, buildingId);
+    }
+
+    @QueryMapping
+    @PreAuthorize("hasRole('TECHNICIAN')")
+    public TechnicianDashboardStats technicianDashboardStats(
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return issueService.getTechnicianDashboardStats(userDetails.getId());
+    }
+
+    @MutationMapping
+    @PreAuthorize("hasRole('TECHNICIAN')")
+    public TechnicianIssuePayload updateTaskStatus(
+            @Argument Long issueId,
+            @Argument String status,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return issueService.updateTaskStatus(issueId, userDetails.getId(), status);
+    }
 }
 
