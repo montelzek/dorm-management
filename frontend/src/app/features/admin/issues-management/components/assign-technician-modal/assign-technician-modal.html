@@ -1,0 +1,38 @@
+<div class="space-y-4">
+  <div>
+    <label for="technician" class="block text-sm font-medium text-text-primary mb-2">
+      Select Technician
+    </label>
+    <select
+      id="technician"
+      [(ngModel)]="selectedTechnicianId"
+      class="w-full rounded-lg border-2 border-input-border bg-input-bg px-3 py-2 text-input-text focus:border-input-focus-border focus:outline-none focus:ring-2 focus:ring-input-focus-border transition-all"
+      [disabled]="isLoading()"
+    >
+      <option value="">-- Select a technician --</option>
+      @for (technician of technicians(); track technician.id) {
+        <option [value]="technician.id">
+          {{ technician.firstName }} {{ technician.lastName }} ({{ technician.email }})
+        </option>
+      }
+    </select>
+  </div>
+
+  <div class="flex justify-end gap-3 pt-4">
+    <app-button
+      variant="secondary"
+      (click)="onCancel()"
+      [disabled]="isLoading()"
+    >
+      Cancel
+    </app-button>
+    <app-button
+      variant="primary"
+      (click)="onAssign()"
+      [disabled]="!selectedTechnicianId || isLoading()"
+      [loading]="isLoading()"
+    >
+      Assign Technician
+    </app-button>
+  </div>
+</div>
