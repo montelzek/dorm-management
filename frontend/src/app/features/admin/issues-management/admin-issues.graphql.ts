@@ -24,6 +24,11 @@ export const GET_ALL_ISSUES = gql`
           id
           name
         }
+        assignedTechnician {
+          id
+          firstName
+          lastName
+        }
       }
       totalElements
       totalPages
@@ -56,6 +61,11 @@ export const UPDATE_ISSUE_STATUS = gql`
         id
         name
       }
+      assignedTechnician {
+        id
+        firstName
+        lastName
+      }
     }
   }
 `;
@@ -69,3 +79,51 @@ export const GET_BUILDINGS = gql`
   }
 `;
 
+export const GET_AVAILABLE_TECHNICIANS = gql`
+  query GetAvailableTechnicians {
+    availableTechnicians {
+      id
+      firstName
+      lastName
+      email
+    }
+  }
+`;
+
+export const ASSIGN_TECHNICIAN = gql`
+  mutation AssignTechnician($issueId: ID!, $technicianId: ID!) {
+    assignTechnician(issueId: $issueId, technicianId: $technicianId) {
+      id
+      title
+      description
+      status
+      priority
+      createdAt
+      updatedAt
+      user {
+        id
+        firstName
+        lastName
+      }
+      room {
+        id
+        roomNumber
+      }
+      building {
+        id
+        name
+      }
+      assignedTechnician {
+        id
+        firstName
+        lastName
+      }
+    }
+  }
+`;
+
+export const CANCEL_ISSUE = gql`
+  mutation CancelIssue($issueId: ID!) {
+    cancelIssue(issueId: $issueId)
+  }
+`;
