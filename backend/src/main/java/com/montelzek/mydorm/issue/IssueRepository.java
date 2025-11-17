@@ -44,5 +44,16 @@ public interface IssueRepository extends JpaRepository<Issue, Long> {
 
     @Query("SELECT i FROM Issue i LEFT JOIN FETCH i.user u LEFT JOIN FETCH i.building b ORDER BY i.createdAt DESC")
     List<Issue> findTop5ByOrderByCreatedAtDesc();
+
+    // Technician methods
+    Page<Issue> findByAssignedTechnicianIdAndStatusIn(Long technicianId, List<EIssueStatus> statuses, Pageable pageable);
+    
+    Page<Issue> findByAssignedTechnicianIdAndStatusInAndBuildingId(Long technicianId, List<EIssueStatus> statuses, Long buildingId, Pageable pageable);
+    
+    Long countByAssignedTechnicianIdAndStatusIn(Long technicianId, List<EIssueStatus> statuses);
+    
+    Long countByAssignedTechnicianIdAndStatus(Long technicianId, EIssueStatus status);
+    
+    Long countByAssignedTechnicianIdAndPriority(Long technicianId, EIssuePriority priority);
 }
 
