@@ -26,6 +26,18 @@ export const routes: Routes = [
   },
 
   {
+    path: 'technician/new-tasks',
+    loadComponent: () => import('./features/technician/new-tasks/new-tasks').then(m => m.NewTasksComponent),
+    canActivate: [authGuard]
+  },
+
+  {
+    path: 'technician/tasks-history',
+    loadComponent: () => import('./features/technician/tasks-history/tasks-history').then(m => m.TasksHistoryComponent),
+    canActivate: [authGuard]
+  },
+
+  {
     path: 'reservation',
     loadComponent: () => import('./features/resident/reservations/reservations').then(m => m.ReservationsComponent),
     canActivate: [authGuard]
