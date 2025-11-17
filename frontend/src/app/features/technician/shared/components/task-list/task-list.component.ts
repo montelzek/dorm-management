@@ -7,7 +7,7 @@ import { ButtonComponent } from '../../../../../shared/components/ui/button/butt
   selector: 'app-task-list',
   standalone: true,
   imports: [CommonModule, ButtonComponent, DatePipe],
-  templateUrl: './task-list.html'
+  templateUrl: './task-list.component.html'
 })
 export class TaskListComponent {
   readonly tasks = input.required<TechnicianTask[]>();

@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { MainLayoutComponent } from '../../../shared/components/layout/main-layout/main-layout';
 import { UserService } from '../../../core/services/user.service';
 import { TechnicianService, TechnicianTask } from '../shared/technician.service';
-import { TaskListComponent } from '../shared/components/task-list/task-list';
+import { TaskListComponent } from '../shared/components/task-list/task-list.component';
 import { ModalComponent } from '../../../shared/components/ui/modal/modal';
 
 @Component({

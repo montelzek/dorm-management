@@ -7,7 +7,7 @@ import { ButtonComponent } from '../../../../../shared/components/ui/button/butt
   selector: 'app-task-detail-modal',
   standalone: true,
   imports: [CommonModule, ButtonComponent],
-  templateUrl: './task-detail-modal.html'
+  templateUrl: './task-detail-modal.component.html'
 })
 export class TaskDetailModalComponent {
   readonly task = input.required<TechnicianTask>();
