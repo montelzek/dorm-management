@@ -1,30 +1,27 @@
-import { Component, inject, OnInit, effect } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { MainLayoutComponent } from '../../../shared/components/layout/main-layout/main-layout';
 import { UserService } from '../../../core/services/user.service';
+import { TechnicianService } from '../shared/technician.service';
 
 @Component({
   selector: 'app-technician-dashboard',
   standalone: true,
-  imports: [CommonModule, MainLayoutComponent],
+  imports: [CommonModule, MainLayoutComponent, RouterLink],
   templateUrl: './dashboard.html'
 })
 export class TechnicianDashboardComponent implements OnInit {
   private readonly userService = inject(UserService);
+  private readonly technicianService = inject(TechnicianService);
+  
   readonly currentUser = this.userService.currentUser;
-
-  constructor() {
-    // reactively check user role; if not technician we won't load technician-specific data
-    effect(() => {
-      const user = this.currentUser();
-      if (user && user.role !== 'ROLE_TECHNICIAN') {
-        // nothing for now; component will still render but could be protected elsewhere
-      }
-    });
-  }
+  readonly stats = this.technicianService.dashboardStats;
+  readonly isLoading = this.technicianService.isLoading;
 
   ngOnInit(): void {
     this.userService.loadCurrentUser();
+    this.technicianService.getDashboardStats();
   }
 }
 
