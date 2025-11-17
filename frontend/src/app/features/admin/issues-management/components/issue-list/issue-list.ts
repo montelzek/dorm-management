@@ -13,10 +13,15 @@ export class IssueListComponent {
   readonly issues = input.required<AdminIssue[]>();
   readonly isLoading = input<boolean>(false);
 
-  readonly changeStatus = output<AdminIssue>();
+  readonly cancelIssue = output<AdminIssue>();
+  readonly assignTechnician = output<AdminIssue>();
 
-  onChangeStatus(issue: AdminIssue): void {
-    this.changeStatus.emit(issue);
+  onCancelIssue(issue: AdminIssue): void {
+    this.cancelIssue.emit(issue);
+  }
+
+  onAssignTechnician(issue: AdminIssue): void {
+    this.assignTechnician.emit(issue);
   }
   
   formatStatus(status: string): string {
