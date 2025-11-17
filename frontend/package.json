@@ -30,6 +30,8 @@
     "@angular/platform-browser": "^20.3.4",
     "@angular/router": "^20.3.4",
     "@apollo/client": "^3.0.0",
+    "@ngx-translate/core": "^17.0.0",
+    "@ngx-translate/http-loader": "^17.0.0",
     "@tailwindcss/postcss": "^4.1.14",
     "angular-calendar": "^0.32.0",
     "apollo-angular": "^11.0.0",

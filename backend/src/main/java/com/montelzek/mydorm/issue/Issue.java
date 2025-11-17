@@ -41,6 +41,10 @@ public class Issue {
     @JoinColumn(name = "building_id")
     private Building building;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "assigned_technician_id")
+    private User assignedTechnician;
+
     @Column(nullable = false, length = 200)
     @NotBlank
     @Size(max = 200)
