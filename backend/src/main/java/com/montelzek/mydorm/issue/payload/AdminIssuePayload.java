@@ -10,6 +10,7 @@ public record AdminIssuePayload(
         String updatedAt,
         IssueUserPayload user,
         IssueRoomPayload room,
-        IssueBuildingPayload building
+        IssueBuildingPayload building,
+        IssueTechnicianPayload assignedTechnician
 ) {}
 
