@@ -1,12 +1,11 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MainLayoutComponent } from '../../../shared/components/layout/main-layout/main-layout';
 import { UserService } from '../../../core/services/user.service';
 import { AdminIssueService, AdminIssue } from './services/admin-issue.service';
 import { ToastService } from '../../../core/services/toast.service';
 import { IssueListComponent } from './components/issue-list/issue-list';
 import { ModalComponent } from '../../../shared/components/ui/modal/modal';
-import { StatusUpdateModalComponent } from './components/status-update-modal/status-update-modal';
+import { AssignTechnicianModalComponent } from './components/assign-technician-modal/assign-technician-modal';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -16,14 +15,12 @@ import { FormsModule } from '@angular/forms';
     MainLayoutComponent,
     IssueListComponent,
     ModalComponent,
-    StatusUpdateModalComponent,
-    FormsModule,
-    ReactiveFormsModule
+    AssignTechnicianModalComponent,
+    FormsModule
   ],
   templateUrl: './issues-management.html'
 })
 export class IssuesManagementComponent implements OnInit {
-  private readonly fb = inject(FormBuilder);
   private readonly issueService = inject(AdminIssueService);
   private readonly userService = inject(UserService);
   private readonly toastService = inject(ToastService);
@@ -32,6 +29,7 @@ export class IssuesManagementComponent implements OnInit {
   readonly currentUser = this.userService.currentUser;
   readonly allIssues = this.issueService.allIssues;
   readonly buildings = this.issueService.buildings;
+  readonly technicians = this.issueService.technicians;
   readonly totalElements = this.issueService.totalElements;
   readonly totalPages = this.issueService.totalPages;
   readonly currentPage = this.issueService.currentPage;
@@ -44,17 +42,14 @@ export class IssuesManagementComponent implements OnInit {
   readonly page = signal<number>(0);
   readonly size = signal<number>(10);
 
-  readonly isStatusModalOpen = signal<boolean>(false);
+  readonly isAssignModalOpen = signal<boolean>(false);
   readonly selectedIssue = signal<AdminIssue | null>(null);
-
-  readonly statusForm = this.fb.group({
-    status: ['', Validators.required]
-  });
 
   ngOnInit(): void {
     this.userService.loadCurrentUser();
     this.loadIssues();
     this.issueService.getBuildings();
+    this.issueService.getTechnicians();
   }
 
   private loadIssues(): void {
@@ -100,28 +95,38 @@ export class IssuesManagementComponent implements OnInit {
     this.loadIssues();
   }
 
-  onChangeStatus(issue: AdminIssue): void {
+  onCancelIssue(issue: AdminIssue): void {
+    if (issue.status === 'CANCELLED' || issue.status === 'RESOLVED') {
+      return;
+    }
+
+    if (confirm(`Are you sure you want to cancel the issue "${issue.title}"?`)) {
+      this.issueService.cancelIssue(issue.id).subscribe({
+        next: () => {
+          this.loadIssues();
+        },
+        error: (error) => this.handleError(error)
+      });
+    }
+  }
+
+  onAssignTechnician(issue: AdminIssue): void {
     this.selectedIssue.set(issue);
-    this.statusForm.patchValue({ status: issue.status });
-    this.isStatusModalOpen.set(true);
+    this.isAssignModalOpen.set(true);
   }
 
-  onCloseStatusModal(): void {
-    this.isStatusModalOpen.set(false);
+  onCloseAssignModal(): void {
+    this.isAssignModalOpen.set(false);
     this.selectedIssue.set(null);
-    this.statusForm.reset();
   }
 
-  onStatusFormSubmit(): void {
+  onAssignTechnicianSubmit(technicianId: string): void {
     const issue = this.selectedIssue();
-    if (!issue || this.statusForm.invalid) return;
+    if (!issue) return;
 
-    const newStatus = this.statusForm.get('status')?.value;
-    if (!newStatus) return;
-
-    this.issueService.updateStatus(issue.id, newStatus).subscribe({
+    this.issueService.assignTechnician(issue.id, technicianId).subscribe({
       next: () => {
-        this.onCloseStatusModal();
+        this.onCloseAssignModal();
         this.loadIssues();
       },
       error: (error) => this.handleError(error)

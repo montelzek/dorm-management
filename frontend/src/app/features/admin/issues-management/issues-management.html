@@ -101,7 +101,8 @@
       <app-admin-issue-list
         [issues]="allIssues()"
         [isLoading]="isLoading()"
-        (changeStatus)="onChangeStatus($event)"
+        (cancelIssue)="onCancelIssue($event)"
+        (assignTechnician)="onAssignTechnician($event)"
       ></app-admin-issue-list>
 
       <!-- Bottom Pagination Buttons -->
@@ -144,22 +145,22 @@
     </div>
   </div>
 
-  <!-- Status Update Modal -->
+  <!-- Assign Technician Modal -->
   <app-modal
-    [isOpen]="isStatusModalOpen()"
-    title="Update Issue Status"
+    [isOpen]="isAssignModalOpen()"
+    title="Assign Technician"
     size="md"
-    (close)="onCloseStatusModal()"
+    (close)="onCloseAssignModal()"
   >
     <div slot="body">
       @if (selectedIssue()) {
-        <app-status-update-modal
-          [form]="statusForm"
-          [currentStatus]="selectedIssue()!.status"
+        <app-assign-technician-modal
+          [technicians]="technicians()"
+          [currentTechnicianId]="selectedIssue()!.assignedTechnician?.id || null"
           [isLoading]="isLoading()"
-          (formSubmit)="onStatusFormSubmit()"
-          (cancel)="onCloseStatusModal()"
-        ></app-status-update-modal>
+          (assign)="onAssignTechnicianSubmit($event)"
+          (cancel)="onCloseAssignModal()"
+        ></app-assign-technician-modal>
       }
     </div>
   </app-modal>
