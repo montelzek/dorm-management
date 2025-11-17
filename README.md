@@ -14,19 +14,12 @@
 - Announcements system
 - Marketplace listings
 - Admin dashboard with statistics
-- Database migrations (Flyway)
 
 ### 🚧 In Progress / Planned Features
 - Email notifications
-- Advanced reporting and analytics
-- Mobile app support
-- Payment integration
 - Package management system
 - Visitor management
-- Comprehensive test coverage
-- API documentation improvements
-- **Complete Receptionist role implementation** (reservation management interface, facility bookings, check-in/check-out functionality)
-- **Complete Technician role implementation** (dedicated issue management interface, status updates, priority management, resolution tracking)
+- **Complete Technician role implementation** (dedicated issue management interface, status updates)
 
 ## 📋 Table of Contents
 
@@ -34,7 +27,6 @@
 - [Overview](#-overview)
 - [Features](#-features)
 - [License](#-license)
-- [Author](#-author)
 
 ## 🎯 Overview
 
@@ -129,9 +121,3 @@ The system supports four distinct user roles, each with tailored functionality:
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 👤 Author
-
-**montelzek**
-
-**Made with ❤️ for better dormitory management**
