@@ -1,5 +1,6 @@
 import { Component, inject, OnInit, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Apollo } from 'apollo-angular';
 import { MainLayoutComponent } from '../../../shared/components/layout/main-layout/main-layout';
@@ -12,7 +13,8 @@ import { UPDATE_MY_PROFILE } from './profile.graphql';
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    MainLayoutComponent
+    MainLayoutComponent,
+    TranslateModule
   ],
   templateUrl: './profile.html',
   styleUrls: ['./profile.css']
@@ -77,7 +79,7 @@ export class ProfileComponent implements OnInit {
     }).subscribe({
       next: (result: any) => {
         this.isSubmitting = false;
-        this.toastService.showSuccess('Profile updated successfully');
+        this.toastService.showSuccess('toast.success.profileUpdated');
         
         // Reload user data to reflect changes in header
         this.userService.loadCurrentUser();
@@ -87,7 +89,7 @@ export class ProfileComponent implements OnInit {
       error: (error) => {
         this.isSubmitting = false;
         this.errorMessage = this.extractErrorMessage(error);
-        this.toastService.showError(this.errorMessage);
+        this.toastService.showError('toast.error.updatingProfile');
       }
     });
   }

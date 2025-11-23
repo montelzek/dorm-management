@@ -1,6 +1,7 @@
 import { Component, input, output } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { DatePipe } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { Building, ReservationResource, TimeSlot } from '../../../../../shared/models/graphql.types';
 
@@ -17,7 +18,7 @@ export interface ReservationFormData {
 
 @Component({
   selector: 'app-reservation-form',
-  imports: [ReactiveFormsModule, DatePipe],
+  imports: [ReactiveFormsModule, DatePipe, TranslateModule],
   templateUrl: './reservation-form.html',
   styleUrl: './reservation-form.css'
 })

@@ -151,7 +151,7 @@ export class ReservationService {
               throw new Error(result.errors[0]?.message || 'Failed to create reservation');
             }
         this._isLoading.set(false);
-        this.toastService.showSuccess('Reservation created successfully!');
+        this.toastService.showSuccess('toast.success.reservationCreated');
         this.loadMyReservations();
         return result.data;
       }),
@@ -262,7 +262,7 @@ export class ReservationService {
     }).pipe(
       map(result => {
         this._isLoading.set(false);
-        this.toastService.showSuccess('Reservation cancelled successfully!');
+        this.toastService.showSuccess('toast.success.reservationCancelled');
         this.loadMyReservations(); 
         return result.data!.cancelReservation;
       }),

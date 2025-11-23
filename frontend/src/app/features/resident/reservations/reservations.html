@@ -2,8 +2,8 @@
   <div class="mx-auto max-w-7xl space-y-6">
     <div class="flex items-center justify-between">
       <div class="flex-1">
-        <h1 class="text-3xl font-bold text-text-primary">My Reservations</h1>
-        <p class="mt-1 text-text-secondary">Manage your room and laundry reservations</p>
+        <h1 class="text-3xl font-bold text-text-primary">{{ 'reservations.myReservations' | translate }}</h1>
+        <p class="mt-1 text-text-secondary">{{ 'reservations.manageReservations' | translate }}</p>
       </div>
       <app-button
         variant="primary"
@@ -14,7 +14,7 @@
         <svg class="mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
         </svg>
-        New reservation
+        {{ 'reservations.newReservation' | translate }}
       </app-button>
     </div>
 
@@ -29,7 +29,7 @@
 
   <app-modal
     [isOpen]="isModalOpen()"
-    title="New reservation"
+    [title]="'reservations.newReservation' | translate"
     size="lg"
     (close)="closeModal()"
   >
