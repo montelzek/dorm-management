@@ -1,5 +1,6 @@
 import { Component, inject, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 import { MainLayoutComponent } from '../../../shared/components/layout/main-layout/main-layout';
 import { ButtonComponent } from '../../../shared/components/ui/button/button';
 import { PaymentService } from './services/payment.service';
@@ -12,7 +13,8 @@ import { ToastService } from '../../../core/services/toast.service';
   imports: [
     CommonModule,
     MainLayoutComponent,
-    ButtonComponent
+    ButtonComponent,
+    TranslateModule
   ],
   templateUrl: './finance-center.html'
 })
@@ -38,7 +40,7 @@ export class FinanceCenterComponent implements OnInit {
   onMarkAsPaid(paymentId: string): void {
     this.paymentService.markAsPaid(paymentId).subscribe({
       next: () => {
-        this.toastService.showSuccess('Payment marked as paid');
+        this.toastService.showSuccess('toast.success.paymentMarkedAsPaid');
       },
       error: (error) => this.handleError(error)
     });

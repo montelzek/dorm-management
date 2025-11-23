@@ -40,7 +40,7 @@ export class PaymentService {
         catchError(error => {
           console.error('Error loading payments:', error);
           this.isLoading.set(false);
-          this.toastService.showError('Failed to load payments');
+          this.toastService.showError('toast.error.loadingPayments');
           return of([]);
         })
       )
