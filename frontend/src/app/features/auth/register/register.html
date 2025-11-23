@@ -1,19 +1,20 @@
 <div class="flex min-h-screen items-center justify-center bg-background px-6 py-12 lg:px-8">
   <div class="relative w-full sm:mx-auto sm:max-w-sm rounded-lg bg-card p-8 shadow-lg ring-1 ring-card-border">
-    <div class="absolute top-4 right-4">
+    <div class="absolute top-4 right-4 flex gap-2">
+      <app-language-selector></app-language-selector>
       <app-theme-toggle></app-theme-toggle>
     </div>
 
     <div class="text-center">
       <img ngSrc="/logo-indigo.svg" alt="logo" class="mx-auto h-13 w-auto" height="53" width="53"/>
-      <h2 class="mt-6 text-center text-2xl/9 font-bold tracking-tight text-text-primary">Create account</h2>
+      <h2 class="mt-6 text-center text-2xl/9 font-bold tracking-tight text-text-primary">{{ 'auth.createAccount' | translate }}</h2>
     </div>
 
     <div class="mt-10">
       <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="space-y-6">
 
         <div>
-          <label for="firstName" class="block text-sm/6 font-medium text-text-primary">First Name</label>
+          <label for="firstName" class="block text-sm/6 font-medium text-text-primary">{{ 'auth.firstName' | translate }}</label>
           <div class="mt-2">
             <input
               id="firstName"
@@ -25,14 +26,14 @@
           @if (registerForm.get('firstName')?.invalid && (registerForm.get('firstName')?.dirty || registerForm.get('firstName')?.touched)) {
             <p class="mt-2 text-sm text-error-text">
               @if (registerForm.get('firstName')?.errors?.['required']) {
-                First name is required.
+                {{ 'auth.validation.firstNameRequired' | translate }}
               }
             </p>
           }
         </div>
 
         <div>
-          <label for="lastName" class="block text-sm/6 font-medium text-text-primary">Last Name</label>
+          <label for="lastName" class="block text-sm/6 font-medium text-text-primary">{{ 'auth.lastName' | translate }}</label>
           <div class="mt-2">
             <input
               id="lastName"
@@ -44,14 +45,14 @@
           @if (registerForm.get('lastName')?.invalid && (registerForm.get('lastName')?.dirty || registerForm.get('lastName')?.touched)) {
             <p class="mt-2 text-sm text-error-text">
               @if (registerForm.get('lastName')?.errors?.['required']) {
-                Last name is required.
+                {{ 'auth.validation.lastNameRequired' | translate }}
               }
             </p>
           }
         </div>
 
         <div>
-          <label for="email" class="block text-sm/6 font-medium text-text-primary">Email</label>
+          <label for="email" class="block text-sm/6 font-medium text-text-primary">{{ 'auth.email' | translate }}</label>
           <div class="mt-2">
             <input
               id="email"
@@ -63,17 +64,17 @@
           @if (registerForm.get('email')?.invalid && (registerForm.get('email')?.dirty || registerForm.get('email')?.touched)) {
             <p class="mt-2 text-sm text-error-text">
               @if (registerForm.get('email')?.errors?.['required']) {
-                Email is required.
+                {{ 'auth.validation.emailRequired' | translate }}
               }
               @if (registerForm.get('email')?.errors?.['email']) {
-                Please enter a valid email address.
+                {{ 'auth.validation.emailInvalid' | translate }}
               }
             </p>
           }
         </div>
 
         <div>
-          <label for="password" class="block text-sm/6 font-medium text-text-primary">Password</label>
+          <label for="password" class="block text-sm/6 font-medium text-text-primary">{{ 'auth.password' | translate }}</label>
           <div class="mt-2">
             <input
               id="password"
@@ -85,10 +86,10 @@
           @if (registerForm.get('password')?.invalid && (registerForm.get('password')?.dirty || registerForm.get('password')?.touched)) {
             <p class="mt-2 text-sm text-error-text">
               @if (registerForm.get('password')?.errors?.['required']) {
-                Password is required.
+                {{ 'auth.validation.passwordRequired' | translate }}
               }
               @if (registerForm.get('password')?.errors?.['minlength']) {
-                At least 6 characters.
+                {{ 'auth.validation.passwordMinLength' | translate }}
               }
             </p>
           }
@@ -99,14 +100,14 @@
             type="submit"
             class="flex w-full justify-center cursor-pointer rounded-md bg-button-bg px-3 py-1.5 text-sm/6 font-semibold text-button-text shadow-xs hover:bg-button-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-button-focus-outline"
           >
-            Register
+            {{ 'auth.register' | translate }}
           </button>
         </div>
       </form>
 
       <p class="mt-10 text-center text-sm/6 text-text-secondary">
-        Already have an account?
-        <a routerLink="/login" class="font-semibold text-link hover:text-link-hover">Login</a>
+        {{ 'auth.alreadyHaveAccount' | translate }}
+        <a routerLink="/login" class="font-semibold text-link hover:text-link-hover">{{ 'auth.login' | translate }}</a>
       </p>
     </div>
   </div>

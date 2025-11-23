@@ -46,7 +46,7 @@ export class AuthService {
           const errorMessage = error.graphQLErrors[0].message;
           this.toastService.showError(errorMessage);
         } else {
-          this.toastService.showError('An error occurred during registration');
+          this.toastService.showError('toast.error.duringRegistration');
         }
         throw error;
       })
@@ -82,7 +82,7 @@ export class AuthService {
           const errorMessage = error.graphQLErrors[0].message;
           this.toastService.showError(errorMessage);
         } else {
-          this.toastService.showError('An error occurred during login');
+          this.toastService.showError('toast.error.duringLogin');
         }
         throw error;
       })

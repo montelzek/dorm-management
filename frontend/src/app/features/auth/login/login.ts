@@ -2,10 +2,12 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { NgOptimizedImage } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { AuthService } from '../services/auth';
 import { LoginInput } from '../../../shared/models/graphql.types';
 import { ThemeToggleComponent } from '../../../shared/components/ui/theme-toggle/theme-toggle';
+import { LanguageSelectorComponent } from '../../../shared/components/ui/language-selector/language-selector';
 import { ToastService } from '../../../core/services/toast.service';
 
 @Component({
@@ -14,7 +16,9 @@ import { ToastService } from '../../../core/services/toast.service';
     ReactiveFormsModule,
     RouterLink,
     NgOptimizedImage,
-    ThemeToggleComponent
+    TranslateModule,
+    ThemeToggleComponent,
+    LanguageSelectorComponent
   ],
   templateUrl: './login.html',
   styleUrl: './login.css'
