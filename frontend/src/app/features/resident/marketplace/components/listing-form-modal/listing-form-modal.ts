@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { MarketplaceListing } from '../../services/marketplace.service';
@@ -14,7 +15,7 @@ interface ImagePreview {
 @Component({
   selector: 'app-listing-form-modal',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, TranslateModule],
   templateUrl: './listing-form-modal.html'
 })
 export class ListingFormModalComponent implements OnInit {

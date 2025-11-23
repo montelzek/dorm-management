@@ -1,5 +1,6 @@
 import { Component, EventEmitter, inject, Input, Output, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 import { MarketplaceListing, MarketplaceService } from '../../services/marketplace.service';
 import { User } from '../../../../../shared/models/graphql.types';
 import { ToastService } from '../../../../../core/services/toast.service';
@@ -7,7 +8,7 @@ import { ToastService } from '../../../../../core/services/toast.service';
 @Component({
   selector: 'app-listing-details-modal',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslateModule],
   templateUrl: './listing-details-modal.html'
 })
 export class ListingDetailsModalComponent {
@@ -36,10 +37,10 @@ export class ListingDetailsModalComponent {
     this.isDeleting.set(true);
     try {
       await this.marketplaceService.deleteListing(this.listing.id);
-      this.toastService.showSuccess('Listing deleted successfully');
+      this.toastService.showSuccess('toast.success.listingDeleted');
       this.delete.emit();
     } catch (error) {
-      this.toastService.showError('Failed to delete listing');
+      this.toastService.showError('toast.error.deletingListing');
       this.isDeleting.set(false);
     }
   }

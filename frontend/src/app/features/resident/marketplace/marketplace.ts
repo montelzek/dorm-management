@@ -1,5 +1,6 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 import { MainLayoutComponent } from '../../../shared/components/layout/main-layout/main-layout';
 import { UserService } from '../../../core/services/user.service';
 import { MarketplaceService, MarketplaceListing } from './services/marketplace.service';
@@ -16,7 +17,8 @@ import { MyListingsComponent } from './components/my-listings/my-listings';
     MainLayoutComponent,
     ListingFormModalComponent,
     ListingDetailsModalComponent,
-    MyListingsComponent
+    MyListingsComponent,
+    TranslateModule
   ],
   templateUrl: './marketplace.html'
 })
@@ -38,17 +40,17 @@ export class MarketplaceComponent implements OnInit {
   readonly showMyListings = signal<boolean>(false);
 
   readonly categories = [
-    { value: 'ALL', label: 'All Categories' },
-    { value: 'TEXTBOOKS', label: 'Textbooks' },
-    { value: 'FURNITURE', label: 'Furniture' },
-    { value: 'ELECTRONICS', label: 'Electronics' },
-    { value: 'OTHER', label: 'Other' }
+    { value: 'ALL', label: 'marketplace.categories.ALL' },
+    { value: 'TEXTBOOKS', label: 'marketplace.categories.TEXTBOOKS' },
+    { value: 'FURNITURE', label: 'marketplace.categories.FURNITURE' },
+    { value: 'ELECTRONICS', label: 'marketplace.categories.ELECTRONICS' },
+    { value: 'OTHER', label: 'marketplace.categories.OTHER' }
   ];
 
   readonly listingTypes = [
-    { value: 'ALL', label: 'All' },
-    { value: 'SELL', label: 'Selling' },
-    { value: 'BUY', label: 'Buying' }
+    { value: 'ALL', label: 'marketplace.types.ALL' },
+    { value: 'SELL', label: 'marketplace.types.SELL' },
+    { value: 'BUY', label: 'marketplace.types.BUY' }
   ];
 
   ngOnInit(): void {
@@ -105,13 +107,13 @@ export class MarketplaceComponent implements OnInit {
     try {
       if (this.selectedListing()) {
         await this.marketplaceService.updateListing(this.selectedListing()!.id, input);
-        this.toastService.showSuccess('Listing updated successfully');
+        this.toastService.showSuccess('toast.success.listingUpdated');
       } else {
         await this.marketplaceService.createListing(input);
-        this.toastService.showSuccess('Listing created successfully');
+        this.toastService.showSuccess('toast.success.listingCreated');
       }
     } catch (error) {
-      this.toastService.showError('Failed to save listing');
+      this.toastService.showError('toast.error.savingListing');
     } finally {
       this.closeFormModal();
       this.loadListings();
@@ -129,7 +131,20 @@ export class MarketplaceComponent implements OnInit {
   }
 
   getListingTypeBadgeColor(type: string): string {
-    return type === 'SELL' ? 'bg-indigo-600' : 'bg-orange-600';
+    const colors: Record<string, string> = {
+      'SELL': 'bg-green-600',
+      'BUY': 'bg-blue-600',
+      'EXCHANGE': 'bg-purple-600'
+    };
+    return colors[type] || 'bg-gray-600';
+  }
+
+  getCategoryKey(category: string): string {
+    return `marketplace.categories.${category}`;
+  }
+
+  getListingTypeKey(type: string): string {
+    return `marketplace.types.${type}`;
   }
 
   formatPrice(price: number): string {

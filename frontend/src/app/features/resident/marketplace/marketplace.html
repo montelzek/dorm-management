@@ -3,21 +3,21 @@
     <!-- Header -->
     <div class="flex items-center justify-between flex-wrap gap-4">
       <div class="flex-1">
-        <h1 class="text-3xl font-bold text-text-primary">Marketplace</h1>
-        <p class="mt-1 text-text-secondary">Buy, sell, or trade items with other residents</p>
+        <h1 class="text-3xl font-bold text-text-primary">{{ 'marketplace.title' | translate }}</h1>
+        <p class="mt-1 text-text-secondary">{{ 'marketplace.subtitle' | translate }}</p>
       </div>
       <div class="flex gap-3 flex-shrink-0">
         <button (click)="openMyListings()" class="flex items-center gap-2 px-5 py-2.5 bg-card border border-card-border text-text-primary rounded-lg hover:bg-background transition-colors cursor-pointer">
           <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
           </svg>
-          My Listings
+          {{ 'marketplace.myListings' | translate }}
         </button>
         <button (click)="openCreateModal()" class="flex items-center gap-2 px-5 py-2.5 bg-button-bg hover:bg-button-hover text-button-text rounded-lg transition-colors cursor-pointer">
           <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
           </svg>
-          Create Listing
+          {{ 'marketplace.createListing' | translate }}
         </button>
       </div>
     </div>
@@ -25,7 +25,7 @@
     <!-- Filters -->
     <div class="bg-card border border-card-border rounded-lg shadow-sm p-6">
       <div class="mb-6 last:mb-0">
-        <label class="block font-semibold text-text-primary mb-3">Listing Type</label>
+        <label class="block font-semibold text-text-primary mb-3">{{ 'marketplace.listingType' | translate }}</label>
         <div class="flex gap-2 flex-wrap">
           @for (type of listingTypes; track type.value) {
             <button
@@ -33,14 +33,14 @@
               [class]="selectedListingType() === type.value 
                 ? 'px-4 py-2 bg-button-bg text-button-text border border-button-bg rounded-lg text-sm font-medium transition-colors cursor-pointer'
                 : 'px-4 py-2 bg-card text-text-primary border border-card-border rounded-lg text-sm hover:bg-background transition-colors cursor-pointer'">
-              {{ type.label }}
+              {{ type.label | translate }}
             </button>
           }
         </div>
       </div>
 
       <div>
-        <label class="block font-semibold text-text-primary mb-3">Category</label>
+        <label class="block font-semibold text-text-primary mb-3">{{ 'marketplace.category' | translate }}</label>
         <div class="flex gap-2 flex-wrap">
           @for (category of categories; track category.value) {
             <button
@@ -48,7 +48,7 @@
               [class]="selectedCategory() === category.value 
                 ? 'px-4 py-2 bg-button-bg text-button-text border border-button-bg rounded-lg text-sm font-medium transition-colors cursor-pointer'
                 : 'px-4 py-2 bg-card text-text-primary border border-card-border rounded-lg text-sm hover:bg-background transition-colors cursor-pointer'">
-              {{ category.label }}
+              {{ category.label | translate }}
             </button>
           }
         </div>
@@ -59,7 +59,7 @@
     @if (loading()) {
       <div class="flex flex-col items-center justify-center py-16 text-text-secondary">
         <div class="w-12 h-12 border-4 border-card-border border-t-button-bg rounded-full animate-spin mb-4"></div>
-        <p>Loading listings...</p>
+        <p>{{ 'marketplace.loadingListings' | translate }}</p>
       </div>
     }
 
@@ -83,10 +83,10 @@
             <div class="p-5">
               <div class="flex gap-2 mb-3 flex-wrap">
                 <span [class]="'px-3 py-1 rounded-full text-xs font-medium text-white ' + getListingTypeBadgeColor(listing.listingType)">
-                  {{ listing.listingType }}
+                  {{ getListingTypeKey(listing.listingType) | translate }}
                 </span>
                 <span [class]="'px-3 py-1 rounded-full text-xs font-medium text-white ' + getCategoryBadgeColor(listing.category)">
-                  {{ listing.category }}
+                  {{ getCategoryKey(listing.category) | translate }}
                 </span>
               </div>
 
@@ -109,9 +109,9 @@
         <svg xmlns="http://www.w3.org/2000/svg" class="w-20 h-20 text-text-secondary mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
         </svg>
-        <h3 class="text-2xl font-semibold text-text-primary mb-2">No listings found</h3>
-        <p class="text-text-secondary mb-8">Try adjusting your filters or be the first to create a listing!</p>
-        <button (click)="openCreateModal()" class="px-6 py-3 bg-button-bg hover:bg-button-hover text-button-text rounded-lg transition-colors cursor-pointer">Create Listing</button>
+        <h3 class="text-2xl font-semibold text-text-primary mb-2">{{ 'marketplace.noListingsFound' | translate }}</h3>
+        <p class="text-text-secondary mb-8">{{ 'marketplace.adjustFiltersOrCreate' | translate }}</p>
+        <button (click)="openCreateModal()" class="px-6 py-3 bg-button-bg hover:bg-button-hover text-button-text rounded-lg transition-colors cursor-pointer">{{ 'marketplace.createListing' | translate }}</button>
       </div>
     }
   </div>
