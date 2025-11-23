@@ -2,10 +2,10 @@
 
 > A comprehensive full-stack web application for managing student dormitories. Built with modern technologies to streamline dormitory operations, resident management, facilities reservations, maintenance requests, events, announcements, and marketplace functionality.
 
-## ⚠️ Project Status
+## Project Status
 
-**🚧 Work in Progress** - This project is currently under active development. Many features are implemented and functional, but the application is not yet ready.
-### ✅ Implemented Features
+** Work in Progress**
+### Implemented Features
 - User authentication and authorization (JWT)
 - Resident dashboard and user management
 - Facility reservations (buildings, rooms, resources)
@@ -14,29 +14,14 @@
 - Announcements system
 - Marketplace listings
 - Admin dashboard with statistics
-- Database migrations (Flyway)
 
-### 🚧 In Progress / Planned Features
+### In Progress / Planned Features
 - Email notifications
-- Advanced reporting and analytics
-- Mobile app support
-- Payment integration
 - Package management system
 - Visitor management
-- Comprehensive test coverage
-- API documentation improvements
-- **Complete Receptionist role implementation** (reservation management interface, facility bookings, check-in/check-out functionality)
-- **Complete Technician role implementation** (dedicated issue management interface, status updates, priority management, resolution tracking)
+- **Complete Technician role implementation** (dedicated issue management interface, status updates)
 
-## 📋 Table of Contents
-
-- [Project Status](#-project-status)
-- [Overview](#-overview)
-- [Features](#-features)
-- [License](#-license)
-- [Author](#-author)
-
-## 🎯 Overview
+## Overview
 
 MyDorm is a dormitory management system designed to automate and simplify the operations of student housing facilities. The application provides role-based access control with dedicated interfaces for residents, administrators, technicians, and receptionists. It handles everything from room assignments and facility reservations to maintenance tracking, event management, and a built-in marketplace for students.
 
@@ -129,9 +114,3 @@ The system supports four distinct user roles, each with tailored functionality:
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 👤 Author
-
-**montelzek**
-
-**Made with ❤️ for better dormitory management**
