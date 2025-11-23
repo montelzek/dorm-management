@@ -1,12 +1,13 @@
 import { Component, input, output, signal, computed } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 import { ReservationPayload } from '../../../../../shared/models/graphql.types';
 
 type SortDirection = 'asc' | 'desc';
 
 @Component({
   selector: 'app-reservations-list',
-  imports: [CommonModule, DatePipe],
+  imports: [CommonModule, DatePipe, TranslateModule],
   templateUrl: './reservations-list.html',
   styles: []
 })
@@ -87,16 +88,7 @@ export class ReservationsListComponent {
     }
   }
 
-  getStatusDisplayText(status: string): string {
-    switch (status) {
-      case 'CONFIRMED':
-        return 'Confirmed';
-      case 'CANCELLED':
-        return 'Cancelled';
-      case 'COMPLETED':
-        return 'Completed';
-      default:
-        return status;
-    }
+  getStatusKey(status: string): string {
+    return `reservations.status.${status}`;
   }
 }

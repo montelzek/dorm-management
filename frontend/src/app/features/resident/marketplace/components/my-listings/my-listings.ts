@@ -1,5 +1,6 @@
 import { Component, EventEmitter, inject, OnInit, Output, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 import { MarketplaceListing, MarketplaceService } from '../../services/marketplace.service';
 import { ToastService } from '../../../../../core/services/toast.service';
 import { ListingFormModalComponent } from '../listing-form-modal/listing-form-modal';
@@ -7,7 +8,7 @@ import { ListingFormModalComponent } from '../listing-form-modal/listing-form-mo
 @Component({
   selector: 'app-my-listings',
   standalone: true,
-  imports: [CommonModule, ListingFormModalComponent],
+  imports: [CommonModule, ListingFormModalComponent, TranslateModule],
   templateUrl: './my-listings.html'
 })
 export class MyListingsComponent implements OnInit {
@@ -46,10 +47,10 @@ export class MyListingsComponent implements OnInit {
     try {
       if (this.selectedListing()) {
         await this.marketplaceService.updateListing(this.selectedListing()!.id, input);
-        this.toastService.showSuccess('Listing updated successfully');
+        this.toastService.showSuccess('toast.success.listingUpdated');
       }
     } catch (error) {
-      this.toastService.showError('Failed to update listing');
+      this.toastService.showError('toast.error.updatingListing');
     } finally {
       this.closeFormModal();
       this.marketplaceService.loadMyListings();
@@ -61,12 +62,12 @@ export class MyListingsComponent implements OnInit {
     this.isDeleting.set(true);
     try {
       await this.marketplaceService.deleteListing(id);
-      this.toastService.showSuccess('Listing deleted successfully');
+      this.toastService.showSuccess('toast.success.listingDeleted');
       this.showDeleteConfirm.set(null);
       this.marketplaceService.loadMyListings();
       this.refresh.emit();
     } catch (error) {
-      this.toastService.showError('Failed to delete listing');
+      this.toastService.showError('toast.error.deletingListing');
     } finally {
       this.isDeleting.set(false);
     }
@@ -84,6 +85,14 @@ export class MyListingsComponent implements OnInit {
 
   getListingTypeBadgeColor(type: string): string {
     return type === 'SELL' ? 'bg-indigo-600' : 'bg-orange-600';
+  }
+
+  getCategoryKey(category: string): string {
+    return `marketplace.categories.${category}`;
+  }
+
+  getListingTypeKey(type: string): string {
+    return `marketplace.types.${type}`;
   }
 
   formatPrice(price: number): string {

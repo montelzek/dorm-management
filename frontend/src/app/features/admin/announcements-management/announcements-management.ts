@@ -1,6 +1,7 @@
 import { Component, inject, OnInit, signal, computed } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { MainLayoutComponent } from '../../../shared/components/layout/main-layout/main-layout';
 import { UserService } from '../../../core/services/user.service';
 import { AnnouncementsService, Announcement, CreateAnnouncementInput, UpdateAnnouncementInput } from './services/announcements.service';
@@ -19,7 +20,8 @@ import { ModalComponent } from '../../../shared/components/ui/modal/modal';
     MainLayoutComponent,
     AnnouncementFormModalComponent,
     DeleteConfirmationModalComponent,
-    ModalComponent
+    ModalComponent,
+    TranslateModule
   ],
   templateUrl: './announcements-management.html',
   styleUrls: ['./announcements-management.css']
@@ -30,6 +32,7 @@ export class AnnouncementsManagementComponent implements OnInit {
   private readonly facilitiesService = inject(FacilitiesService);
   private readonly userService = inject(UserService);
   private readonly toastService = inject(ToastService);
+  private readonly translateService = inject(TranslateService);
 
   readonly currentUser = this.userService.currentUser;
   
@@ -66,12 +69,12 @@ export class AnnouncementsManagementComponent implements OnInit {
 
   // Categories
   readonly categories = [
-    { value: 'ALL', label: 'All', color: 'bg-gray-500' },
-    { value: 'WATER', label: 'Water', color: 'bg-blue-500' },
-    { value: 'INTERNET', label: 'Internet', color: 'bg-purple-500' },
-    { value: 'ELECTRICITY', label: 'Electricity', color: 'bg-yellow-500' },
-    { value: 'MAINTENANCE', label: 'Maintenance', color: 'bg-orange-500' },
-    { value: 'GENERAL', label: 'General', color: 'bg-gray-500' }
+    { value: 'ALL', label: 'announcements.category.ALL', color: 'bg-gray-500' },
+    { value: 'WATER', label: 'announcements.category.WATER', color: 'bg-blue-500' },
+    { value: 'INTERNET', label: 'announcements.category.INTERNET', color: 'bg-purple-500' },
+    { value: 'ELECTRICITY', label: 'announcements.category.ELECTRICITY', color: 'bg-yellow-500' },
+    { value: 'MAINTENANCE', label: 'announcements.category.MAINTENANCE', color: 'bg-orange-500' },
+    { value: 'GENERAL', label: 'announcements.category.GENERAL', color: 'bg-gray-500' }
   ];
 
   // Filtered announcements
@@ -93,7 +96,7 @@ export class AnnouncementsManagementComponent implements OnInit {
     this.announcementsService.loadAnnouncements(this.currentPage(), 10).subscribe({
       error: (error) => {
         console.error('Error loading announcements:', error);
-        this.toastService.showError('Failed to load announcements');
+        this.toastService.showError(this.translateService.instant('admin.errorLoadingAnnouncements'));
       }
     });
   }
@@ -138,7 +141,7 @@ export class AnnouncementsManagementComponent implements OnInit {
 
   onFormSubmit(): void {
     if (this.announcementForm.invalid) {
-      this.toastService.showError('Please fix the form errors before submitting');
+      this.toastService.showError(this.translateService.instant('admin.fixFormErrors'));
       return;
     }
 
@@ -156,13 +159,13 @@ export class AnnouncementsManagementComponent implements OnInit {
 
       this.announcementsService.updateAnnouncement(this.selectedAnnouncement()!.id, input).subscribe({
         next: () => {
-          this.toastService.showSuccess('Announcement updated successfully');
+          this.toastService.showSuccess(this.translateService.instant('admin.announcementUpdatedSuccess'));
           this.closeFormModal();
           this.loadAnnouncements();
         },
         error: (error) => {
           console.error('Update error:', error);
-          this.toastService.showError('Failed to update announcement');
+          this.toastService.showError(this.translateService.instant('admin.errorUpdatingAnnouncement'));
         }
       });
     } else {
@@ -177,13 +180,13 @@ export class AnnouncementsManagementComponent implements OnInit {
 
       this.announcementsService.createAnnouncement(input).subscribe({
         next: () => {
-          this.toastService.showSuccess('Announcement created successfully');
+          this.toastService.showSuccess(this.translateService.instant('admin.announcementCreatedSuccess'));
           this.closeFormModal();
           this.loadAnnouncements();
         },
         error: (error) => {
           console.error('Create error:', error);
-          this.toastService.showError('Failed to create announcement');
+          this.toastService.showError(this.translateService.instant('admin.errorCreatingAnnouncement'));
         }
       });
     }
@@ -212,14 +215,13 @@ export class AnnouncementsManagementComponent implements OnInit {
     return cat?.color || 'bg-gray-500';
   }
 
-  getCategoryLabel(category: string): string {
-    const cat = this.categories.find(c => c.value === category);
-    return cat?.label || category;
+  getCategoryKey(category: string): string {
+    return `announcements.category.${category}`;
   }
 
   readonly formatDate = (dateString: string): string => {
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+    return date.toLocaleDateString('pl-PL', { year: 'numeric', month: 'short', day: 'numeric' });
   }
 
   goToPage(page: number): void {
