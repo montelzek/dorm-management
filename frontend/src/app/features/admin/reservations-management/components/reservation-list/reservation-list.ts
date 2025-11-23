@@ -1,9 +1,10 @@
 import {Component, input, output} from '@angular/core';
+import { TranslateModule } from '@ngx-translate/core';
 import {AdminReservation} from '../../models/admin-reservation.models';
 
 @Component({
   selector: 'app-reservation-list',
-  imports: [],
+  imports: [TranslateModule],
   templateUrl: 'reservation-list.html'
 })
 export class ReservationListComponent {

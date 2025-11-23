@@ -9,7 +9,7 @@
         <!-- Header -->
         <div class="flex items-center justify-between border-b border-card-border px-6 py-4">
           <h3 class="text-lg font-semibold text-text-primary">
-            Reservation Details
+            {{ 'reservations.reservationDetails' | translate }}
           </h3>
           <button
             (click)="onClose()"
@@ -26,22 +26,22 @@
           <div class="px-6 py-4 space-y-6">
             <!-- User Information -->
             <div>
-              <h4 class="text-sm font-semibold text-text-primary mb-3 uppercase tracking-wide">User Information</h4>
+              <h4 class="text-sm font-semibold text-text-primary mb-3 uppercase tracking-wide">{{ 'admin.userInformation' | translate }}</h4>
               <div class="grid grid-cols-2 gap-4">
                 <div>
-                  <p class="text-xs text-text-secondary mb-1">First Name</p>
+                  <p class="text-xs text-text-secondary mb-1">{{ 'residents.firstName' | translate }}</p>
                   <p class="text-sm text-text-primary font-medium">{{ reservation()!.firstName }}</p>
                 </div>
                 <div>
-                  <p class="text-xs text-text-secondary mb-1">Last Name</p>
+                  <p class="text-xs text-text-secondary mb-1">{{ 'residents.lastName' | translate }}</p>
                   <p class="text-sm text-text-primary font-medium">{{ reservation()!.lastName }}</p>
                 </div>
                 <div>
-                  <p class="text-xs text-text-secondary mb-1">Building</p>
+                  <p class="text-xs text-text-secondary mb-1">{{ 'table.building' | translate }}</p>
                   <p class="text-sm text-text-primary font-medium">{{ reservation()!.userBuildingName }}</p>
                 </div>
                 <div>
-                  <p class="text-xs text-text-secondary mb-1">Room Number</p>
+                  <p class="text-xs text-text-secondary mb-1">{{ 'table.roomNumber' | translate }}</p>
                   <p class="text-sm text-text-primary font-medium">{{ reservation()!.userRoomNumber }}</p>
                 </div>
               </div>
@@ -49,14 +49,14 @@
 
             <!-- Resource Information -->
             <div class="border-t border-card-border pt-4">
-              <h4 class="text-sm font-semibold text-text-primary mb-3 uppercase tracking-wide">Resource Information</h4>
+              <h4 class="text-sm font-semibold text-text-primary mb-3 uppercase tracking-wide">{{ 'admin.resourceInformation' | translate }}</h4>
               <div class="grid grid-cols-2 gap-4">
                 <div>
-                  <p class="text-xs text-text-secondary mb-1">Resource Name</p>
+                  <p class="text-xs text-text-secondary mb-1">{{ 'admin.resourceName' | translate }}</p>
                   <p class="text-sm text-text-primary font-medium">{{ reservation()!.resourceName }}</p>
                 </div>
                 <div>
-                  <p class="text-xs text-text-secondary mb-1">Resource Location</p>
+                  <p class="text-xs text-text-secondary mb-1">{{ 'admin.resourceLocation' | translate }}</p>
                   <p class="text-sm text-text-primary font-medium">{{ reservation()!.resourceBuildingName }}</p>
                 </div>
               </div>
@@ -64,18 +64,18 @@
 
             <!-- Reservation Time -->
             <div class="border-t border-card-border pt-4">
-              <h4 class="text-sm font-semibold text-text-primary mb-3 uppercase tracking-wide">Reservation Time</h4>
+              <h4 class="text-sm font-semibold text-text-primary mb-3 uppercase tracking-wide">{{ 'admin.reservationTime' | translate }}</h4>
               <div class="grid grid-cols-3 gap-4">
                 <div>
-                  <p class="text-xs text-text-secondary mb-1">Date</p>
+                  <p class="text-xs text-text-secondary mb-1">{{ 'table.date' | translate }}</p>
                   <p class="text-sm text-text-primary font-medium">{{ reservation()!.date }}</p>
                 </div>
                 <div>
-                  <p class="text-xs text-text-secondary mb-1">Start Time</p>
+                  <p class="text-xs text-text-secondary mb-1">{{ 'reservations.startTime' | translate }}</p>
                   <p class="text-sm text-text-primary font-medium">{{ reservation()!.startTime }}</p>
                 </div>
                 <div>
-                  <p class="text-xs text-text-secondary mb-1">End Time</p>
+                  <p class="text-xs text-text-secondary mb-1">{{ 'reservations.endTime' | translate }}</p>
                   <p class="text-sm text-text-primary font-medium">{{ reservation()!.endTime }}</p>
                 </div>
               </div>
@@ -83,7 +83,7 @@
 
             <!-- Status -->
             <div class="border-t border-card-border pt-4">
-              <h4 class="text-sm font-semibold text-text-primary mb-3 uppercase tracking-wide">Status</h4>
+              <h4 class="text-sm font-semibold text-text-primary mb-3 uppercase tracking-wide">{{ 'table.status' | translate }}</h4>
               <div>
                 <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium"
                       [class.bg-green-100]="reservation()!.status === 'CONFIRMED'"
@@ -94,7 +94,7 @@
                       [class.text-red-800]="reservation()!.status === 'CANCELLED'"
                       [class.dark:bg-red-900]="reservation()!.status === 'CANCELLED'"
                       [class.dark:text-red-200]="reservation()!.status === 'CANCELLED'">
-                  {{ reservation()!.status }}
+                  {{ 'reservations.status.' + reservation()!.status | translate }}
                 </span>
               </div>
             </div>
@@ -107,7 +107,7 @@
             (click)="onClose()"
             class="px-4 py-2 rounded-lg bg-primary text-white hover:bg-primary-dark transition-colors font-medium"
           >
-            Close
+            {{ 'common.close' | translate }}
           </button>
         </div>
       </div>

@@ -1,4 +1,5 @@
 import {Component, computed, effect, inject, input, output, signal} from '@angular/core';
+import {TranslateModule} from '@ngx-translate/core';
 import {ResidentPayload} from '../../models/resident.models';
 import {RoomPayload} from '../../models/room.models';
 import {ResidentService} from '../../services/resident';
@@ -7,7 +8,7 @@ import {ToastService} from '../../../../../core/services/toast.service';
 
 @Component({
   selector: 'app-room-assignment-modal',
-  imports: [FormsModule],
+  imports: [FormsModule, TranslateModule],
   templateUrl: './room-assignment-modal.html',
   styles: []
 })
@@ -59,7 +60,7 @@ export class RoomAssignmentModalComponent {
       },
       error: (err) => {
         console.error('Error loading available rooms:', err);
-        this.toastService.showError('Failed to load available rooms');
+        this.toastService.showError('toast.error.loadingRooms');
       }
     });
   }
@@ -76,21 +77,21 @@ export class RoomAssignmentModalComponent {
     const roomId = this.selectedRoomId();
 
     if (!res || !roomId) {
-      this.toastService.showWarning('Please select a room');
+      this.toastService.showWarning('toast.warning.selectRoom');
       return;
     }
 
     this.isLoading.set(true);
     this.residentService.assignRoom(res.id, roomId).subscribe({
       next: () => {
-        this.toastService.showSuccess(`Room assigned to ${res.firstName} ${res.lastName}`);
+        this.toastService.showSuccess('toast.success.roomAssigned');
         this.isLoading.set(false);
         this.assigned.emit();
         this.onClose();
       },
       error: (err) => {
         console.error('Error assigning room:', err);
-        this.toastService.showError('Failed to assign room');
+        this.toastService.showError('toast.error.assigningRoom');
         this.isLoading.set(false);
       }
     });

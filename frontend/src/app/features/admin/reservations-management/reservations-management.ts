@@ -1,4 +1,6 @@
 import {Component, computed, inject, OnInit, signal} from '@angular/core';
+import {LowerCasePipe} from '@angular/common';
+import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {AdminReservationService} from './services/admin-reservation.service';
 import {ReservationListComponent} from './components/reservation-list/reservation-list';
 import {MainLayoutComponent} from '../../../shared/components/layout/main-layout/main-layout';
@@ -16,7 +18,9 @@ import {ToastService} from '../../../core/services/toast.service';
     MainLayoutComponent,
     FormsModule,
     ReservationDetailsModalComponent,
-    ConfirmationDialogComponent
+    ConfirmationDialogComponent,
+    TranslateModule,
+    LowerCasePipe
   ],
   templateUrl: './reservations-management.html'
 })
@@ -25,6 +29,7 @@ export class ReservationsManagementComponent implements OnInit {
   private readonly reservationService = inject(AdminReservationService);
   private readonly userService = inject(UserService);
   private readonly toastService = inject(ToastService);
+  private readonly translateService = inject(TranslateService);
 
   readonly allReservations = this.reservationService.allReservations;
   readonly buildings = this.reservationService.buildings;
@@ -155,14 +160,14 @@ export class ReservationsManagementComponent implements OnInit {
 
     this.reservationService.cancelReservation(reservation.id).subscribe({
       next: () => {
-        this.toastService.showSuccess(`Reservation for ${reservation.firstName} ${reservation.lastName} cancelled successfully`);
+        this.toastService.showSuccess(this.translateService.instant('admin.reservationCancelledSuccess', { name: `${reservation.firstName} ${reservation.lastName}` }));
         this.isCancelDialogOpen.set(false);
         this.reservationToCancel.set(null);
         this.loadReservations();
       },
       error: (err) => {
         console.error('Error cancelling reservation:', err);
-        this.toastService.showError('Failed to cancel reservation');
+        this.toastService.showError(this.translateService.instant('admin.reservationCancelledError'));
       }
     });
   }

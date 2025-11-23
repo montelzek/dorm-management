@@ -15,15 +15,15 @@
       <!-- Details Grid -->
       <div class="space-y-2 mb-3">
         <div class="flex justify-between text-sm">
-          <span class="text-text-secondary">Phone:</span>
+          <span class="text-text-secondary">{{ 'residents.phone' | translate }}:</span>
           <span class="text-text-primary">{{ resident.phone || 'N/A' }}</span>
         </div>
         <div class="flex justify-between text-sm">
-          <span class="text-text-secondary">Building:</span>
+          <span class="text-text-secondary">{{ 'table.building' | translate }}:</span>
           <span class="text-text-primary">{{ resident.buildingName }}</span>
         </div>
         <div class="flex justify-between text-sm">
-          <span class="text-text-secondary">Room:</span>
+          <span class="text-text-secondary">{{ 'residents.room' | translate }}:</span>
           <span class="text-text-primary">{{ resident.roomNumber }}</span>
         </div>
       </div>
@@ -34,13 +34,13 @@
           (click)="onAssignRoom(resident)"
           class="flex-1 px-3 py-2 text-sm font-medium text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950 rounded-md hover:bg-indigo-100 dark:hover:bg-indigo-900 transition-colors cursor-pointer"
         >
-          {{ hasRoom(resident) ? 'Change' : 'Assign' }} Room
+          {{ hasRoom(resident) ? ('residents.change' | translate) : ('residents.assign' | translate) }} {{ 'residents.room' | translate }}
         </button>
         <button
           (click)="onDeleteResident(resident)"
           class="flex-1 px-3 py-2 text-sm font-medium text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-950 rounded-md hover:bg-red-100 dark:hover:bg-red-900 transition-colors cursor-pointer"
         >
-          Delete
+          {{ 'common.delete' | translate }}
         </button>
       </div>
     </div>
@@ -55,7 +55,7 @@
       <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-text-secondary cursor-pointer hover:text-text-primary"
           (click)="onSort('firstName')">
         <div class="flex items-center gap-1">
-          First Name
+          {{ 'residents.firstName' | translate }}
           @if (sortBy() === 'firstName') {
             <span>{{ sortDirection() === 'asc' ? '↑' : '↓' }}</span>
           }
@@ -64,26 +64,26 @@
       <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-text-secondary cursor-pointer hover:text-text-primary"
           (click)="onSort('lastName')">
         <div class="flex items-center gap-1">
-          Last Name
+          {{ 'residents.lastName' | translate }}
           @if (sortBy() === 'lastName') {
             <span>{{ sortDirection() === 'asc' ? '↑' : '↓' }}</span>
           }
         </div>
       </th>
       <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-text-secondary">
-        Email
+        {{ 'residents.email' | translate }}
       </th>
       <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-text-secondary">
-        Phone
+        {{ 'residents.phone' | translate }}
       </th>
       <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-text-secondary">
-        Building Name
+        {{ 'residents.buildingName' | translate }}
       </th>
       <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-text-secondary">
-        Room Number
+        {{ 'residents.roomNumber' | translate }}
       </th>
       <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-text-secondary">
-        Actions
+        {{ 'residents.actions' | translate }}
       </th>
     </tr>
     </thead>
@@ -113,16 +113,16 @@
               <button
                 (click)="onAssignRoom(resident)"
                 class="text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300 font-medium transition-colors cursor-pointer"
-                [title]="hasRoom(resident) ? 'Change Room' : 'Assign Room'"
+                [title]="hasRoom(resident) ? ('residents.changeRoom' | translate) : ('residents.assignRoom' | translate)"
               >
-                {{ hasRoom(resident) ? 'Change' : 'Assign' }} Room
+                {{ hasRoom(resident) ? ('residents.change' | translate) : ('residents.assign' | translate) }} {{ 'residents.room' | translate }}
               </button>
               <button
                 (click)="onDeleteResident(resident)"
                 class="text-red-600 hover:text-red-500 dark:text-red-400 dark:hover:text-red-300 font-medium transition-colors cursor-pointer"
-                title="Delete Resident"
+                [title]="'residents.deleteResident' | translate"
               >
-                Delete
+                {{ 'common.delete' | translate }}
               </button>
             </div>
           </td>

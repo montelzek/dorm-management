@@ -15,23 +15,23 @@
       <!-- Details Grid -->
       <div class="space-y-2 mb-3">
         <div class="flex justify-between text-sm">
-          <span class="text-text-secondary">Building:</span>
+          <span class="text-text-secondary">{{ 'table.building' | translate }}:</span>
           <span class="text-text-primary">{{ reservation.userBuildingName }}</span>
         </div>
         <div class="flex justify-between text-sm">
-          <span class="text-text-secondary">Room:</span>
+          <span class="text-text-secondary">{{ 'table.room' | translate }}:</span>
           <span class="text-text-primary">{{ reservation.userRoomNumber }}</span>
         </div>
         <div class="flex justify-between text-sm">
-          <span class="text-text-secondary">Resource Location:</span>
+          <span class="text-text-secondary">{{ 'admin.resourceLocation' | translate }}:</span>
           <span class="text-text-primary">{{ reservation.resourceBuildingName }}</span>
         </div>
         <div class="flex justify-between text-sm">
-          <span class="text-text-secondary">Date:</span>
+          <span class="text-text-secondary">{{ 'table.date' | translate }}:</span>
           <span class="text-text-primary">{{ reservation.date }}</span>
         </div>
         <div class="flex justify-between text-sm">
-          <span class="text-text-secondary">Time:</span>
+          <span class="text-text-secondary">{{ 'table.time' | translate }}:</span>
           <span class="text-text-primary">{{ reservation.startTime }} - {{ reservation.endTime }}</span>
         </div>
       </div>
@@ -42,13 +42,13 @@
           (click)="onViewDetails(reservation)"
           class="flex-1 px-3 py-2 text-sm font-medium text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950 rounded-md hover:bg-indigo-100 dark:hover:bg-indigo-900 transition-colors"
         >
-          View Details
+          {{ 'common.view' | translate }}
         </button>
         <button
           (click)="onCancelReservation(reservation)"
           class="flex-1 px-3 py-2 text-sm font-medium text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-950 rounded-md hover:bg-red-100 dark:hover:bg-red-900 transition-colors"
         >
-          Cancel
+          {{ 'common.cancel' | translate }}
         </button>
       </div>
     </div>
@@ -61,31 +61,31 @@
     <thead class="bg-background">
     <tr>
       <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-text-secondary">
-        First Name
+        {{ 'residents.firstName' | translate }}
       </th>
       <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-text-secondary">
-        Last Name
+        {{ 'residents.lastName' | translate }}
       </th>
       <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-text-secondary">
-        Building
+        {{ 'table.building' | translate }}
       </th>
       <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-text-secondary">
-        Room
+        {{ 'table.room' | translate }}
       </th>
       <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-text-secondary">
-        Resource
+        {{ 'reservations.selectResource' | translate }}
       </th>
       <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-text-secondary">
-        Resource Building
+        {{ 'admin.resourceBuilding' | translate }}
       </th>
       <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-text-secondary">
-        Date
+        {{ 'table.date' | translate }}
       </th>
       <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-text-secondary">
-        Time
+        {{ 'table.time' | translate }}
       </th>
       <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-text-secondary">
-        Actions
+        {{ 'table.actions' | translate }}
       </th>
     </tr>
     </thead>
@@ -123,14 +123,14 @@
                 class="text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300 font-medium transition-colors"
                 title="View Details"
               >
-                View
+                {{ 'common.view' | translate }}
               </button>
               <button
                 (click)="onCancelReservation(reservation)"
                 class="text-red-600 hover:text-red-500 dark:text-red-400 dark:hover:text-red-300 font-medium transition-colors"
                 title="Cancel Reservation"
               >
-                Cancel
+                {{ 'common.cancel' | translate }}
               </button>
             </div>
           </td>

@@ -1,9 +1,10 @@
 import {Component, input, output} from '@angular/core';
+import {TranslateModule} from '@ngx-translate/core';
 import {ResidentPayload} from '../../models/resident.models';
 
 @Component({
   selector: 'app-resident-list',
-  imports: [],
+  imports: [TranslateModule],
   templateUrl: 'resident-list.html'
 })
 export class ResidentListComponent {

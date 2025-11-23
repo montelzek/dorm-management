@@ -1,4 +1,6 @@
 import {Component, computed, inject, OnInit, signal} from '@angular/core';
+import {LowerCasePipe} from '@angular/common';
+import {TranslateModule} from '@ngx-translate/core';
 import {ResidentService} from './services/resident';
 import {ResidentListComponent} from './components/resident-list/resident-list';
 import {MainLayoutComponent} from '../../../shared/components/layout/main-layout/main-layout';
@@ -16,7 +18,9 @@ import {ToastService} from '../../../core/services/toast.service';
     MainLayoutComponent,
     FormsModule,
     RoomAssignmentModalComponent,
-    ConfirmationDialogComponent
+    ConfirmationDialogComponent,
+    TranslateModule,
+    LowerCasePipe
   ],
   templateUrl: './residents-management.html'
 })
@@ -138,14 +142,14 @@ export class ResidentsManagementComponent implements OnInit {
 
     this.residentService.deleteResident(resident.id).subscribe({
       next: () => {
-        this.toastService.showSuccess(`Resident ${resident.firstName} ${resident.lastName} deleted successfully`);
+        this.toastService.showSuccess('toast.success.residentDeleted');
         this.isDeleteDialogOpen.set(false);
         this.residentToDelete.set(null);
         this.loadResidents();
       },
       error: (err) => {
         console.error('Error deleting resident:', err);
-        this.toastService.showError('Failed to delete resident');
+        this.toastService.showError('toast.error.deletingResident');
       }
     });
   }
