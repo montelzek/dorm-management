@@ -3,6 +3,7 @@ import { Apollo } from 'apollo-angular';
 import { Observable, of } from 'rxjs';
 import { map, catchError, tap, take } from 'rxjs/operators';
 import { ToastService } from '../../../../core/services/toast.service';
+import { TranslateService } from '@ngx-translate/core';
 import {
   GET_ADMIN_EVENTS,
   GET_RESIDENT_EVENTS,
@@ -50,6 +51,7 @@ export interface CreateEventInput {
 export class EventsService {
   private readonly apollo = inject(Apollo);
   private readonly toastService = inject(ToastService);
+  private readonly translateService = inject(TranslateService);
 
   // Events state
   private readonly _events = signal<Event[]>([]);
@@ -87,7 +89,7 @@ export class EventsService {
       tap(() => this._eventsLoading.set(false)),
       catchError(error => {
         this._eventsLoading.set(false);
-        this.toastService.showError('Error loading events: ' + error.message);
+        this.toastService.showError(this.translateService.instant('admin.errorLoadingEvents') + ': ' + error.message);
         throw error;
       })
     ).subscribe(response => {
@@ -107,7 +109,7 @@ export class EventsService {
     }).pipe(
       map(result => result.data.residentEvents),
       catchError(error => {
-        this.toastService.showError('Error loading events: ' + error.message);
+        this.toastService.showError(this.translateService.instant('admin.errorLoadingEvents') + ': ' + error.message);
         return of([]);
       })
     );
@@ -122,11 +124,11 @@ export class EventsService {
         if (!result.data) {
           throw new Error('Failed to create event');
         }
-        this.toastService.showSuccess('Event created successfully!');
+        this.toastService.showSuccess(this.translateService.instant('admin.eventCreatedSuccess'));
         return result.data.createEvent;
       }),
       catchError(error => {
-        this.toastService.showError('Error creating event: ' + error.message);
+        this.toastService.showError(this.translateService.instant('admin.errorCreatingEvent') + ': ' + error.message);
         throw error;
       })
     );
@@ -141,11 +143,11 @@ export class EventsService {
         if (!result.data) {
           throw new Error('Failed to update event');
         }
-        this.toastService.showSuccess('Event updated successfully!');
+        this.toastService.showSuccess(this.translateService.instant('admin.eventUpdatedSuccess'));
         return result.data.updateEvent;
       }),
       catchError(error => {
-        this.toastService.showError('Error updating event: ' + error.message);
+        this.toastService.showError(this.translateService.instant('admin.errorUpdatingEvent') + ': ' + error.message);
         throw error;
       })
     );
@@ -162,13 +164,13 @@ export class EventsService {
       map(result => {
         const success = result.data?.deleteEvent ?? false;
         if (success) {
-          this.toastService.showSuccess('Event deleted successfully!');
+          this.toastService.showSuccess(this.translateService.instant('admin.eventDeletedSuccess'));
         }
         return success;
       }),
       catchError(error => {
         const errorMsg = error?.graphQLErrors?.[0]?.message || error?.message || 'Unknown error';
-        this.toastService.showError('Error deleting event: ' + errorMsg);
+        this.toastService.showError(this.translateService.instant('admin.errorDeletingEvent') + ': ' + errorMsg);
         return of(false);
       })
     );

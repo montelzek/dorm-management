@@ -2,38 +2,38 @@
   <!-- Title -->
   <div>
     <label for="title" class="block text-sm font-medium text-text-primary mb-1">
-      Event Title *
+      {{ 'events.eventTitle' | translate }} *
     </label>
     <input
       type="text"
       id="title"
       formControlName="title"
       class="w-full px-3 py-2 bg-card border border-card-border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-text-primary"
-      placeholder="e.g., Informational Meeting for New Residents"
+      [placeholder]="'admin.eventTitlePlaceholder' | translate"
     />
     @if (form().get('title')?.invalid && form().get('title')?.touched) {
-      <p class="mt-1 text-sm text-red-500">Title is required</p>
+      <p class="mt-1 text-sm text-red-500">{{ 'validation.titleRequired' | translate }}</p>
     }
   </div>
 
   <!-- Description -->
   <div>
     <label for="description" class="block text-sm font-medium text-text-primary mb-1">
-      Description
+      {{ 'table.description' | translate }}
     </label>
     <textarea
       id="description"
       formControlName="description"
       rows="3"
       class="w-full px-3 py-2 bg-card border border-card-border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-text-primary"
-      placeholder="Event details..."
+      [placeholder]="'admin.eventDetailsPlaceholder' | translate"
     ></textarea>
   </div>
 
   <!-- Date -->
   <div>
     <label for="eventDate" class="block text-sm font-medium text-text-primary mb-1">
-      Event Date *
+      {{ 'events.eventDate' | translate }} *
     </label>
     <input
       type="date"
@@ -44,10 +44,10 @@
     />
     @if (form().get('eventDate')?.invalid && form().get('eventDate')?.touched) {
       @if (form().get('eventDate')?.hasError('required')) {
-        <p class="mt-1 text-sm text-red-500">Event date is required</p>
+        <p class="mt-1 text-sm text-red-500">{{ 'admin.eventDateRequired' | translate }}</p>
       }
       @if (form().get('eventDate')?.hasError('pastDate')) {
-        <p class="mt-1 text-sm text-red-500">Event date cannot be in the past</p>
+        <p class="mt-1 text-sm text-red-500">{{ 'admin.eventDatePastError' | translate }}</p>
       }
     }
   </div>
@@ -56,7 +56,7 @@
   <div class="grid grid-cols-2 gap-4">
     <div>
       <label for="startTime" class="block text-sm font-medium text-text-primary mb-1">
-        Start Time *
+        {{ 'reservations.startTime' | translate }} *
       </label>
       <input
         type="time"
@@ -65,12 +65,12 @@
         class="w-full px-3 py-2 bg-card border border-card-border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-text-primary"
       />
       @if (form().get('startTime')?.invalid && form().get('startTime')?.touched) {
-        <p class="mt-1 text-sm text-red-500">Start time is required</p>
+        <p class="mt-1 text-sm text-red-500">{{ 'validation.startTimeRequired' | translate }}</p>
       }
     </div>
     <div>
       <label for="endTime" class="block text-sm font-medium text-text-primary mb-1">
-        End Time *
+        {{ 'reservations.endTime' | translate }} *
       </label>
       <input
         type="time"
@@ -79,7 +79,7 @@
         class="w-full px-3 py-2 bg-card border border-card-border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-text-primary"
       />
       @if (form().get('endTime')?.invalid && form().get('endTime')?.touched) {
-        <p class="mt-1 text-sm text-red-500">End time is required</p>
+        <p class="mt-1 text-sm text-red-500">{{ 'validation.endTimeRequired' | translate }}</p>
       }
     </div>
   </div>
@@ -87,14 +87,14 @@
   <!-- Building -->
   <div>
     <label for="buildingId" class="block text-sm font-medium text-text-primary mb-1">
-      Building
+      {{ 'table.building' | translate }}
     </label>
     <select
       id="buildingId"
       formControlName="buildingId"
       class="w-full px-3 py-2 bg-card border border-card-border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-text-primary"
     >
-      <option [value]="''">Select a building (optional)</option>
+      <option [value]="''">{{ 'admin.selectBuildingOptional' | translate }}</option>
       @for (building of buildings(); track building.id) {
         <option [value]="building.id">{{ building.name }}</option>
       }
@@ -105,14 +105,14 @@
   @if (form().get('buildingId')?.value) {
     <div>
       <label for="resourceId" class="block text-sm font-medium text-text-primary mb-1">
-        Location (Common Space)
+        {{ 'admin.locationCommonSpace' | translate }}
       </label>
       <select
         id="resourceId"
         formControlName="resourceId"
         class="w-full px-3 py-2 bg-card border border-card-border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-text-primary"
       >
-        <option [value]="''">Select a location (optional)</option>
+        <option [value]="''">{{ 'admin.selectLocationOptional' | translate }}</option>
         @for (room of filteredRooms; track room.id) {
           <option [value]="room.id">{{ room.roomNumber }}</option>
         }
@@ -128,7 +128,7 @@
       [disabled]="isLoading()"
       class="px-4 py-2 text-sm font-medium text-text-primary bg-card border border-card-border rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
     >
-      Cancel
+      {{ 'common.cancel' | translate }}
     </button>
     <button
       type="submit"
@@ -136,9 +136,9 @@
       class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
     >
       @if (isLoading()) {
-        <span>Saving...</span>
+        <span>{{ 'common.saving' | translate }}...</span>
       } @else {
-        <span>{{ isEdit() ? 'Update Event' : 'Create Event' }}</span>
+        <span>{{ (isEdit() ? 'admin.updateEvent' : 'admin.createEvent') | translate }}</span>
       }
     </button>
   </div>

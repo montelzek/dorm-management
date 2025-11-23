@@ -1,6 +1,7 @@
 import { Component, input, output, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { TranslateModule } from '@ngx-translate/core';
 
 interface Building {
   id: string;
@@ -16,7 +17,7 @@ interface Room {
 @Component({
   selector: 'app-event-form-modal',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, TranslateModule],
   templateUrl: './event-form-modal.html'
 })
 export class EventFormModalComponent {
