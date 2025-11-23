@@ -59,4 +59,11 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 
     @Query("SELECT r FROM Reservation r WHERE r.user.id = :userId AND r.startTime > :now AND r.status = 'CONFIRMED' ORDER BY r.startTime ASC")
     List<Reservation> findByUserIdAndStartTimeAfter(@Param("userId") Long userId, @Param("now") LocalDateTime now);
+
+    // Weekly limit queries
+    @Query("SELECT COUNT(r) FROM Reservation r WHERE r.user.id = :userId AND r.reservationResource.resourceType = 'LAUNDRY' AND r.status IN ('CONFIRMED', 'COMPLETED') AND r.startTime >= :weekStart AND r.startTime < :weekEnd")
+    long countUserLaundryReservationsInWeek(@Param("userId") Long userId, @Param("weekStart") LocalDateTime weekStart, @Param("weekEnd") LocalDateTime weekEnd);
+
+    @Query("SELECT COUNT(r) FROM Reservation r WHERE r.user.id = :userId AND r.reservationResource.id = :resourceId AND r.status IN ('CONFIRMED', 'COMPLETED') AND r.startTime >= :weekStart AND r.startTime < :weekEnd")
+    long countUserResourceReservationsInWeek(@Param("userId") Long userId, @Param("resourceId") Long resourceId, @Param("weekStart") LocalDateTime weekStart, @Param("weekEnd") LocalDateTime weekEnd);
 }

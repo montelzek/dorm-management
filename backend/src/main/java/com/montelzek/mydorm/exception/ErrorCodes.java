@@ -16,7 +16,9 @@ public enum ErrorCodes {
     INVALID_CREDENTIALS("INVALID_CREDENTIALS", "Invalid login credentials"),
     EMAIL_TAKEN("EMAIL_TAKEN", "Email is already taken"),
     STANDARD_IN_USE("STANDARD_IN_USE", "Room standard is assigned to one or more rooms"),
-    INTERNAL_ERROR("INTERNAL_ERROR", "Server error occurred");
+    INTERNAL_ERROR("INTERNAL_ERROR", "Server error occurred"),
+    LAUNDRY_WEEKLY_LIMIT("LAUNDRY_WEEKLY_LIMIT", "You have reached the weekly limit of 2 laundry reservations"),
+    RESOURCE_WEEKLY_LIMIT("RESOURCE_WEEKLY_LIMIT", "You have already reserved this resource once this week");
     
     private final String code;
     private final String defaultMessage;

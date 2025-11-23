@@ -56,10 +56,29 @@ public class ReservationService {
             throw new BusinessException(ErrorCodes.PAST_RESERVATION, ApplicationConstants.PAST_RESERVATION_MESSAGE, "startTime");
         }
 
+        // Check weekly limits
+        LocalDateTime localStartDateTime = startTime.withZoneSameInstant(dormitoryZone).toLocalDateTime();
+        LocalDate reservationDate = localStartDateTime.toLocalDate();
+        
+        // Get week boundaries (Monday to Sunday)
+        LocalDate weekStart = reservationDate.with(java.time.DayOfWeek.MONDAY);
+        LocalDate weekEnd = weekStart.plusDays(7);
+        LocalDateTime weekStartDateTime = weekStart.atStartOfDay();
+        LocalDateTime weekEndDateTime = weekEnd.atStartOfDay();
+
         if (resource.getResourceType() == EResourceType.LAUNDRY) {
 
             if (currentUser.getRoom() == null || !currentUser.getRoom().getBuilding().getId().equals(resource.getBuilding().getId())) {
                 throw new IllegalStateException("You can only reserve laundry in your own building.");
+            }
+
+            // Check weekly limit for laundry (max 2 per week)
+            long laundryReservationsThisWeek = reservationRepository.countUserLaundryReservationsInWeek(
+                    currentUser.getId(), weekStartDateTime, weekEndDateTime);
+            
+            if (laundryReservationsThisWeek >= 2) {
+                throw new BusinessException(ErrorCodes.LAUNDRY_WEEKLY_LIMIT, 
+                    "You have reached the weekly limit of 2 laundry reservations for this week.", "weeklyLimit");
             }
 
             LocalTime localStartTime = startTime.withZoneSameInstant(dormitoryZone).toLocalTime();
@@ -75,6 +94,14 @@ public class ReservationService {
             }
 
         } else {
+            // Check weekly limit for standard resources (max 1 per resource per week)
+            long resourceReservationsThisWeek = reservationRepository.countUserResourceReservationsInWeek(
+                    currentUser.getId(), resourceId, weekStartDateTime, weekEndDateTime);
+            
+            if (resourceReservationsThisWeek >= 1) {
+                throw new BusinessException(ErrorCodes.RESOURCE_WEEKLY_LIMIT, 
+                    "You have already reserved this resource once this week.", "weeklyLimit");
+            }
 
             LocalTime localStartTime = startTime.withZoneSameInstant(dormitoryZone).toLocalTime();
             LocalTime localEndTime = endTime.withZoneSameInstant(dormitoryZone).toLocalTime();
