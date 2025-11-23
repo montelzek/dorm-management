@@ -1,5 +1,6 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 import { CalendarEvent, CalendarView, CalendarModule, CalendarUtils, DateAdapter, CalendarA11y, CalendarDateFormatter, CalendarEventTitleFormatter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { startOfMonth, endOfMonth, format, addMonths, subMonths } from 'date-fns';
@@ -13,7 +14,8 @@ import { EventsService, Event as DormEvent } from '../../admin/events-management
   imports: [
     CommonModule,
     CalendarModule,
-    MainLayoutComponent
+    MainLayoutComponent,
+    TranslateModule
   ],
   providers: [
     CalendarUtils,
@@ -34,6 +36,9 @@ export class ResidentEventsComponent implements OnInit {
 
   readonly currentUser = this.userService.currentUser;
   readonly CalendarView = CalendarView;
+  
+  // Locale for calendar (string code for Angular pipes)
+  readonly locale: string = 'pl';
   
   // State
   readonly viewDate = signal<Date>(new Date());

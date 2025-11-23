@@ -2,8 +2,8 @@
   <div class="mx-auto max-w-7xl space-y-6">
     <!-- Header -->
     <div>
-      <h1 class="text-3xl font-bold text-text-primary">Events Calendar</h1>
-      <p class="mt-1 text-text-secondary">View upcoming dormitory events and announcements</p>
+      <h1 class="text-3xl font-bold text-text-primary">{{ 'events.calendar' | translate }}</h1>
+      <p class="mt-1 text-text-secondary">{{ 'events.viewUpcoming' | translate }}</p>
     </div>
 
     <!-- Calendar Card -->
@@ -17,18 +17,18 @@
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
           </svg>
-          Previous
+          {{ 'common.previous' | translate }}
         </button>
 
-        <h2 class="text-2xl font-bold text-text-primary">
-          {{ viewDate() | date: 'MMMM yyyy' }}
+        <h2 class="text-2xl font-bold text-text-primary uppercase">
+          {{ viewDate() | date: 'LLLL yyyy' : '' : locale }}
         </h2>
 
         <button
           (click)="nextMonth()"
           class="px-4 py-2 text-sm cursor-pointer font-medium text-text-primary bg-background rounded-lg hover:bg-card-border transition-colors flex items-center gap-2"
         >
-          Next
+          {{ 'common.next' | translate }}
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
           </svg>
@@ -46,6 +46,7 @@
             [events]="calendarEvents()"
             [cellTemplate]="customCellTemplate"
             [weekStartsOn]="1"
+            [locale]="locale"
             (dayClicked)="onDayClicked($event)"
             (viewDateChange)="onViewDateChange($event)"
           >
@@ -79,7 +80,7 @@
           <!-- Modal -->
           <div class="relative bg-card rounded-lg shadow-xl max-w-2xl w-full p-6 border border-card-border">
             <div class="flex justify-between items-start mb-4">
-              <h2 class="text-2xl font-bold text-text-primary">Events on {{ selectedDate() }}</h2>
+              <h2 class="text-2xl font-bold text-text-primary">{{ 'events.eventsOnDay' | translate }} {{ selectedDate() }}</h2>
               <button
                 (click)="closeEventDetails()"
                 class="text-text-secondary hover:text-text-primary transition-colors"
@@ -97,13 +98,13 @@
                   
                   <div class="space-y-2">
                     <div>
-                      <span class="text-sm font-medium text-text-secondary">Time: </span>
+                      <span class="text-sm font-medium text-text-secondary">{{ 'table.time' | translate }}: </span>
                       <span class="text-sm text-text-primary">{{ event.startTime }} - {{ event.endTime }}</span>
                     </div>
 
                     @if (event.building) {
                       <div>
-                        <span class="text-sm font-medium text-text-secondary">Location: </span>
+                        <span class="text-sm font-medium text-text-secondary">{{ 'events.eventLocation' | translate }}: </span>
                         <span class="text-sm text-text-primary">
                           {{ event.building.name }}
                           @if (event.resource) {
@@ -115,7 +116,7 @@
 
                     @if (event.description) {
                       <div>
-                        <span class="text-sm font-medium text-text-secondary">Description: </span>
+                        <span class="text-sm font-medium text-text-secondary">{{ 'table.description' | translate }}: </span>
                         <p class="text-sm text-text-primary mt-1 whitespace-pre-wrap">{{ event.description }}</p>
                       </div>
                     }
@@ -129,7 +130,7 @@
                 (click)="closeEventDetails()"
                 class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors"
               >
-                Close
+                {{ 'common.close' | translate }}
               </button>
             </div>
           </div>

@@ -2,8 +2,8 @@
   <div class="container mx-auto px-4 py-8">
     <!-- Header -->
     <div class="mb-8">
-      <h1 class="text-3xl font-bold text-text-primary mb-2">Announcements</h1>
-      <p class="text-text-secondary">Current dormitory announcements and updates</p>
+      <h1 class="text-3xl font-bold text-text-primary mb-2">{{ 'announcements.title' | translate }}</h1>
+      <p class="text-text-secondary">{{ 'announcements.currentAnnouncements' | translate }}</p>
     </div>
 
     <!-- Category Filters -->
@@ -16,7 +16,7 @@
           class="px-4 py-2 rounded-lg text-sm cursor-pointer font-medium text-white transition-all"
           [ngClass]="category.color"
         >
-          {{ category.label }}
+          {{ category.label | translate }}
         </button>
       }
     </div>
@@ -36,7 +36,7 @@
             <svg class="w-16 h-16 mx-auto text-text-secondary mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
             </svg>
-            <p class="text-text-secondary text-lg">No announcements at this time</p>
+            <p class="text-text-secondary text-lg">{{ 'announcements.noAnnouncementsTime' | translate }}</p>
           </div>
         }
         @for (announcement of filteredAnnouncements(); track announcement.id) {
@@ -50,7 +50,7 @@
                     class="px-3 py-1 text-xs font-semibold text-white rounded-full"
                     [ngClass]="getCategoryColor(announcement.category)"
                   >
-                    {{ getCategoryLabel(announcement.category) }}
+                    {{ getCategoryKey(announcement.category) | translate }}
                   </span>
                 </div>
                 <div class="flex items-center gap-4 text-sm text-text-secondary">

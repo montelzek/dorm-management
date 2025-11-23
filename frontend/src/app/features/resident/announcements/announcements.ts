@@ -1,5 +1,6 @@
 import { Component, inject, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 import { Apollo } from 'apollo-angular';
 import { MainLayoutComponent } from '../../../shared/components/layout/main-layout/main-layout';
 import { UserService } from '../../../core/services/user.service';
@@ -26,7 +27,7 @@ interface Announcement {
 @Component({
   selector: 'app-resident-announcements',
   standalone: true,
-  imports: [CommonModule, MainLayoutComponent],
+  imports: [CommonModule, MainLayoutComponent, TranslateModule],
   templateUrl: './announcements.html',
   styleUrls: ['./announcements.css']
 })
@@ -41,12 +42,12 @@ export class ResidentAnnouncementsComponent implements OnInit {
   readonly selectedCategory = signal<string>('ALL');
 
   readonly categories = [
-    { value: 'ALL', label: 'All', color: 'bg-gray-500' },
-    { value: 'WATER', label: 'Water', color: 'bg-blue-500' },
-    { value: 'INTERNET', label: 'Internet', color: 'bg-purple-500' },
-    { value: 'ELECTRICITY', label: 'Electricity', color: 'bg-yellow-500' },
-    { value: 'MAINTENANCE', label: 'Maintenance', color: 'bg-orange-500' },
-    { value: 'GENERAL', label: 'General', color: 'bg-gray-500' }
+    { value: 'ALL', label: 'announcements.category.ALL', color: 'bg-gray-500' },
+    { value: 'WATER', label: 'announcements.category.WATER', color: 'bg-blue-500' },
+    { value: 'INTERNET', label: 'announcements.category.INTERNET', color: 'bg-purple-500' },
+    { value: 'ELECTRICITY', label: 'announcements.category.ELECTRICITY', color: 'bg-yellow-500' },
+    { value: 'MAINTENANCE', label: 'announcements.category.MAINTENANCE', color: 'bg-orange-500' },
+    { value: 'GENERAL', label: 'announcements.category.GENERAL', color: 'bg-gray-500' }
   ];
 
   readonly filteredAnnouncements = computed(() => {
@@ -77,7 +78,7 @@ export class ResidentAnnouncementsComponent implements OnInit {
         },
         error: (error) => {
           console.error('Error loading announcements:', error);
-          this.toastService.showError('Failed to load announcements');
+          this.toastService.showError('toast.error.loadingAnnouncements');
           this.loading.set(false);
         }
       });
@@ -92,14 +93,13 @@ export class ResidentAnnouncementsComponent implements OnInit {
     return cat?.color || 'bg-gray-500';
   }
 
-  getCategoryLabel(category: string): string {
-    const cat = this.categories.find(c => c.value === category);
-    return cat?.label || category;
+  getCategoryKey(category: string): string {
+    return `announcements.category.${category}`;
   }
 
   formatDate(dateString: string): string {
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+    return date.toLocaleDateString('pl-PL', { year: 'numeric', month: 'long', day: 'numeric' });
   }
 }
 
