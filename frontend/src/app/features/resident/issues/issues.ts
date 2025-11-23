@@ -1,5 +1,6 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { MainLayoutComponent } from '../../../shared/components/layout/main-layout/main-layout';
 import { ButtonComponent } from '../../../shared/components/ui/button/button';
 import { ModalComponent } from '../../../shared/components/ui/modal/modal';
@@ -18,7 +19,8 @@ import { UserService } from '../../../core/services/user.service';
     ModalComponent,
     IssueListComponent,
     IssueFormComponent,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    TranslateModule
   ],
   templateUrl: './issues.html'
 })
@@ -27,6 +29,7 @@ export class IssuesComponent implements OnInit {
   private readonly issueService = inject(IssueService);
   private readonly toastService = inject(ToastService);
   private readonly userService = inject(UserService);
+  private readonly translate = inject(TranslateService);
 
   readonly isModalOpen = signal<boolean>(false);
   readonly statusFilter = signal<string>('');
@@ -89,7 +92,7 @@ export class IssuesComponent implements OnInit {
   private handleError(error: any): void {
     console.error('Issue operation error:', error);
     
-    let errorMessage = 'An error occurred. Please try again.';
+    let errorMessage = this.translate.instant('common.error');
     
     if (error.graphQLErrors && error.graphQLErrors.length > 0) {
       errorMessage = error.graphQLErrors[0].message;

@@ -1,12 +1,13 @@
 import { Component, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 import { Issue } from '../../services/issue.service';
 import { ButtonComponent } from '../../../../../shared/components/ui/button/button';
 
 @Component({
   selector: 'app-issue-list',
   standalone: true,
-  imports: [CommonModule, ButtonComponent],
+  imports: [CommonModule, ButtonComponent, TranslateModule],
   templateUrl: './issue-list.html'
 })
 export class IssueListComponent {
@@ -63,6 +64,14 @@ export class IssueListComponent {
   truncateText(text: string, maxLength: number): string {
     if (text.length <= maxLength) return text;
     return text.substring(0, maxLength) + '...';
+  }
+
+  getStatusKey(status: string): string {
+    return `issues.status.${status}`;
+  }
+
+  getPriorityKey(priority: string): string {
+    return `issues.priority.${priority}`;
   }
 }
 

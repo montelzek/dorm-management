@@ -2,23 +2,23 @@
   <!-- Title -->
   <div>
     <label for="title" class="block text-sm font-medium text-text-primary mb-1">
-      Title <span class="text-red-500">*</span>
+      {{ 'issues.form.title' | translate }} <span class="text-red-500">*</span>
     </label>
     <input
       id="title"
       type="text"
       formControlName="title"
       class="w-full rounded-lg border-2 border-input-border bg-input-bg px-4 py-3 text-input-text placeholder:text-input-placeholder focus:border-input-focus-border focus:outline-none focus:ring-2 focus:ring-input-focus-border focus:ring-opacity-50 transition-all duration-200 hover:border-input-focus-border/50"
-      placeholder="Brief description of the issue"
+      [placeholder]="'issues.form.titlePlaceholder' | translate"
       maxlength="200"
     />
     @if (form().get('title')?.invalid && form().get('title')?.touched) {
       <p class="mt-1 text-sm text-red-500">
         @if (form().get('title')?.errors?.['required']) {
-          Title is required
+          {{ 'issues.form.titleRequired' | translate }}
         }
         @if (form().get('title')?.errors?.['maxlength']) {
-          Title cannot exceed 200 characters
+          {{ 'issues.form.titleMaxLength' | translate }}
         }
       </p>
     }
@@ -27,23 +27,23 @@
   <!-- Description -->
   <div>
     <label for="description" class="block text-sm font-medium text-text-primary mb-1">
-      Description <span class="text-red-500">*</span>
+      {{ 'issues.form.description' | translate }} <span class="text-red-500">*</span>
     </label>
     <textarea
       id="description"
       formControlName="description"
       rows="5"
       class="w-full rounded-lg border-2 border-input-border bg-input-bg px-4 py-3 text-input-text placeholder:text-input-placeholder focus:border-input-focus-border focus:outline-none focus:ring-2 focus:ring-input-focus-border focus:ring-opacity-50 transition-all duration-200 hover:border-input-focus-border/50"
-      placeholder="Detailed description of the issue..."
+      [placeholder]="'issues.form.descriptionPlaceholder' | translate"
       maxlength="2000"
     ></textarea>
     @if (form().get('description')?.invalid && form().get('description')?.touched) {
       <p class="mt-1 text-sm text-red-500">
         @if (form().get('description')?.errors?.['required']) {
-          Description is required
+          {{ 'issues.form.descriptionRequired' | translate }}
         }
         @if (form().get('description')?.errors?.['maxlength']) {
-          Description cannot exceed 2000 characters
+          {{ 'issues.form.descriptionMaxLength' | translate }}
         }
       </p>
     }
@@ -55,22 +55,22 @@
   <!-- Priority -->
   <div>
     <label for="priority" class="block text-sm font-medium text-text-primary mb-1">
-      Priority <span class="text-red-500">*</span>
+      {{ 'issues.form.priority' | translate }} <span class="text-red-500">*</span>
     </label>
     <select
       id="priority"
       formControlName="priority"
       class="w-full rounded-lg border-2 border-input-border bg-input-bg px-4 py-3 text-input-text placeholder:text-input-placeholder focus:border-input-focus-border focus:outline-none focus:ring-2 focus:ring-input-focus-border focus:ring-opacity-50 transition-all duration-200 hover:border-input-focus-border/50"
     >
-      <option value="">Select priority</option>
-      <option value="LOW">Low</option>
-      <option value="MEDIUM">Medium</option>
-      <option value="HIGH">High</option>
-      <option value="URGENT">Urgent</option>
+      <option value="">{{ 'issues.selectPriority' | translate }}</option>
+      <option value="LOW">{{ 'issues.priority.low' | translate }}</option>
+      <option value="MEDIUM">{{ 'issues.priority.medium' | translate }}</option>
+      <option value="HIGH">{{ 'issues.priority.high' | translate }}</option>
+      <option value="URGENT">{{ 'issues.priority.urgent' | translate }}</option>
     </select>
     @if (form().get('priority')?.invalid && form().get('priority')?.touched) {
       <p class="mt-1 text-sm text-red-500">
-        Priority is required
+        {{ 'issues.form.priorityRequired' | translate }}
       </p>
     }
   </div>
@@ -83,14 +83,14 @@
       (click)="onCancel()"
       [disabled]="isLoading()"
     >
-      Cancel
+      {{ 'common.cancel' | translate }}
     </app-button>
     <app-button
       type="submit"
       variant="primary"
       [disabled]="isLoading()"
     >
-      {{ isLoading() ? 'Reporting...' : 'Report Issue' }}
+      {{ isLoading() ? ('issues.form.reporting' | translate) : ('issues.reportIssue' | translate) }}
     </app-button>
   </div>
 </form>

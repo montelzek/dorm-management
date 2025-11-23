@@ -89,7 +89,7 @@ export class IssueService {
           throw new Error(result.errors[0]?.message || 'Failed to create issue');
         }
         this._isLoading.set(false);
-        this.toastService.showSuccess('Issue reported successfully!');
+        this.toastService.showSuccess('toast.success.issueReported');
         this.loadMyIssues();
         return result.data!.createIssue;
       }),
@@ -110,7 +110,7 @@ export class IssueService {
     }).pipe(
       map(result => {
         this._isLoading.set(false);
-        this.toastService.showSuccess('Issue cancelled successfully!');
+        this.toastService.showSuccess('toast.success.issueCancelled');
         this.loadMyIssues();
         return result.data!.cancelIssue;
       }),

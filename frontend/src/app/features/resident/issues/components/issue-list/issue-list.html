@@ -3,7 +3,7 @@
   <div class="flex justify-between items-center">
     <div class="flex items-center gap-2">
       <label for="statusFilter" class="text-sm font-medium text-text-primary">
-        Filter by status:
+        {{ 'issues.filterByStatus' | translate }}:
       </label>
       <select
         id="statusFilter"
@@ -11,11 +11,11 @@
         (change)="onFilterChange($event)"
         class="rounded-md border-input-border bg-input-bg px-3 py-1.5 text-input-text text-sm placeholder:text-input-placeholder focus:border-input-focus-border focus:outline-none focus:ring-2 focus:ring-input-focus-border"
       >
-        <option value="">All</option>
-        <option value="REPORTED">Reported</option>
-        <option value="IN_PROGRESS">In Progress</option>
-        <option value="RESOLVED">Resolved</option>
-        <option value="CANCELLED">Cancelled</option>
+        <option value="">{{ 'issues.allStatuses' | translate }}</option>
+        <option value="REPORTED">{{ 'issues.status.reported' | translate }}</option>
+        <option value="IN_PROGRESS">{{ 'issues.status.inProgress' | translate }}</option>
+        <option value="RESOLVED">{{ 'issues.status.resolved' | translate }}</option>
+        <option value="CANCELLED">{{ 'issues.status.cancelled' | translate }}</option>
       </select>
     </div>
   </div>
@@ -33,12 +33,12 @@
       <svg class="mx-auto h-12 w-12 text-text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
       </svg>
-      <h3 class="mt-2 text-sm font-medium text-text-primary">No issues found</h3>
+      <h3 class="mt-2 text-sm font-medium text-text-primary">{{ 'issues.noIssues' | translate }}</h3>
       <p class="mt-1 text-sm text-text-secondary">
         @if (statusFilter()) {
-          Try changing the filter or report a new issue.
+          {{ 'issues.tryChangingFilter' | translate }}
         } @else {
-          Get started by reporting your first issue.
+          {{ 'issues.reportFirstIssue' | translate }}
         }
       </p>
     </div>
@@ -55,11 +55,11 @@
                 <h3 class="text-lg font-semibold text-text-primary truncate">
                   {{ issue.title }}
                 </h3>
-                <span [class]="getStatusClass(issue.status)">
-                  {{ issue.status }}
+                <span [ngClass]="getStatusClass(issue.status)">
+                  {{ getStatusKey(issue.status) | translate }}
                 </span>
-                <span [class]="getPriorityClass(issue.priority)">
-                  {{ issue.priority }}
+                <span [ngClass]="getPriorityClass(issue.priority)">
+                  {{ getPriorityKey(issue.priority) | translate }}
                 </span>
               </div>
               
@@ -68,12 +68,12 @@
               </p>
               
               <div class="flex items-center gap-4 text-xs text-text-secondary">
-                <span>Created: {{ issue.createdAt }}</span>
+                <span>{{ 'table.created' | translate }}: {{ issue.createdAt }}</span>
                 @if (issue.room) {
-                  <span>Room: {{ issue.room.roomNumber }}</span>
+                  <span>{{ 'header.room' | translate }}: {{ issue.room.roomNumber }}</span>
                 }
                 @if (issue.building) {
-                  <span>Building: {{ issue.building.name }}</span>
+                  <span>{{ 'table.building' | translate }}: {{ issue.building.name }}</span>
                 }
               </div>
             </div>
@@ -84,7 +84,7 @@
                 size="sm"
                 (click)="onCancelIssue(issue.id)"
               >
-                Cancel
+                {{ 'issues.cancelIssue' | translate }}
               </app-button>
             }
           </div>
