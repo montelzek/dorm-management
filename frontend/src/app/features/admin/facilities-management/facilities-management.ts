@@ -1,6 +1,7 @@
 import { Component, inject, OnInit, signal, computed } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { MainLayoutComponent } from '../../../shared/components/layout/main-layout/main-layout';
 import { UserService } from '../../../core/services/user.service';
 import { FacilitiesService, Building, Room, Resource, RoomStandard } from './services/facilities.service';
@@ -34,7 +35,8 @@ type TabType = 'buildings' | 'rooms' | 'resources' | 'standards';
     ResourceFormModalComponent,
     DeleteConfirmationModalComponent,
     RoomStandardsListComponent,
-    RoomStandardFormModalComponent
+    RoomStandardFormModalComponent,
+    TranslateModule
   ],
   templateUrl: './facilities-management.html'
 })
@@ -43,6 +45,7 @@ export class FacilitiesManagementComponent implements OnInit {
   private readonly facilitiesService = inject(FacilitiesService);
   private readonly userService = inject(UserService);
   private readonly toastService = inject(ToastService);
+  private readonly translateService = inject(TranslateService);
 
   readonly Math = Math;
   readonly currentUser = this.userService.currentUser;
@@ -453,12 +456,12 @@ export class FacilitiesManagementComponent implements OnInit {
           this.loadStandards();
         } else {
           // show a user friendly message
-          this.toastService.showError('Nie można usunąć standardu. Sprawdź czy nie jest przypisany do pokoju.');
+          this.toastService.showError(this.translateService.instant('facilities.cannotDeleteStandard'));
         }
       },
       error: (error) => {
         const msg = error?.graphQLErrors?.[0]?.message || error?.message || 'Unknown error';
-        this.toastService.showError('Error deleting standard: ' + msg);
+        this.toastService.showError(this.translateService.instant('facilities.errorDeletingStandard') + ': ' + msg);
         this.handleError(error);
       }
     });
@@ -506,6 +509,15 @@ export class FacilitiesManagementComponent implements OnInit {
   getAvailableStandardsForCapacity(capacity?: number | null) {
     if (capacity == null) return this.roomStandards();
     return this.roomStandards().filter((s: any) => s.capacity === capacity);
+  }
+
+  getTranslatedItemType(): string {
+    const type = this.deleteItemType();
+    if (type === 'building') return this.translateService.instant('table.building');
+    if (type === 'room') return this.translateService.instant('table.room');
+    if (type === 'resource') return this.translateService.instant('facilities.space');
+    if (type === 'standard') return this.translateService.instant('facilities.standard');
+    return type;
   }
 
   private handleError(error: any): void {

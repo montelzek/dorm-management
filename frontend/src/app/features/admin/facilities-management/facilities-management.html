@@ -2,8 +2,8 @@
   <div class="mx-auto max-w-7xl space-y-6">
     <!-- Header -->
     <div>
-      <h1 class="text-3xl font-bold text-text-primary">Buildings & Facilities Management</h1>
-      <p class="mt-1 text-text-secondary">Manage buildings, rooms, and common spaces</p>
+      <h1 class="text-3xl font-bold text-text-primary">{{ 'facilities.management' | translate }}</h1>
+      <p class="mt-1 text-text-secondary">{{ 'facilities.manageDescription' | translate }}</p>
     </div>
 
     <!-- Tabs -->
@@ -16,7 +16,7 @@
             : 'border-transparent text-text-secondary hover:text-text-primary hover:border-gray-300'"
           class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors cursor-pointer"
         >
-          Buildings
+          {{ 'buildings.title' | translate }}
         </button>
         <button
           (click)="switchTab('rooms')"
@@ -25,7 +25,7 @@
             : 'border-transparent text-text-secondary hover:text-text-primary hover:border-gray-300'"
           class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors cursor-pointer"
         >
-          Rooms
+          {{ 'rooms.title' | translate }}
         </button>
         <button
           (click)="switchTab('resources')"
@@ -34,7 +34,7 @@
             : 'border-transparent text-text-secondary hover:text-text-primary hover:border-gray-300'"
           class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors cursor-pointer"
         >
-          Common Spaces
+          {{ 'facilities.commonSpaces' | translate }}
         </button>
         <button
           (click)="switchTab('standards')"
@@ -43,7 +43,7 @@
             : 'border-transparent text-text-secondary hover:text-text-primary hover:border-gray-300'"
           class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors cursor-pointer"
         >
-          Room Standards
+          {{ 'facilities.roomStandards' | translate }}
         </button>
       </nav>
     </div>
@@ -65,9 +65,9 @@
         @if (roomsTotalElements() > 0) {
           <div class="mb-6 flex flex-col sm:flex-row items-center justify-between gap-4 pb-4 border-b border-card-border">
             <div class="text-sm text-text-secondary">
-              Showing {{ roomsCurrentPage() * roomsPageSize() + 1 }} to
-              {{ Math.min((roomsCurrentPage() + 1) * roomsPageSize(), roomsTotalElements()) }} of
-              {{ roomsTotalElements() }} rooms
+              {{ 'common.showing' | translate }} {{ roomsCurrentPage() * roomsPageSize() + 1 }} {{ 'common.to' | translate }}
+              {{ Math.min((roomsCurrentPage() + 1) * roomsPageSize(), roomsTotalElements()) }} {{ 'common.of' | translate }}
+              {{ roomsTotalElements() }} {{ 'facilities.rooms' | translate | lowercase }}
             </div>
           </div>
         }
@@ -97,7 +97,7 @@
                   [disabled]="roomsCurrentPage() === 0"
                   class="px-3 py-1 rounded-md bg-card text-text-primary border border-card-border hover:bg-indigo-600 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                 >
-                  Previous
+                  {{ 'common.previous' | translate }}
                 </button>
 
                 @for (pageNum of [].constructor(roomsTotalPages()); track $index) {
@@ -118,7 +118,7 @@
                   [disabled]="roomsCurrentPage() === roomsTotalPages() - 1"
                   class="px-3 py-1 rounded-md bg-card text-text-primary border border-card-border hover:bg-indigo-600 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                 >
-                  Next
+                  {{ 'common.next' | translate }}
                 </button>
               </div>
             </div>
@@ -131,9 +131,9 @@
         @if (resourcesTotalElements() > 0) {
           <div class="mb-6 flex flex-col sm:flex-row items-center justify-between gap-4 pb-4 border-b border-card-border">
             <div class="text-sm text-text-secondary">
-              Showing {{ resourcesCurrentPage() * resourcesPageSize() + 1 }} to
-              {{ Math.min((resourcesCurrentPage() + 1) * resourcesPageSize(), resourcesTotalElements()) }} of
-              {{ resourcesTotalElements() }} spaces
+              {{ 'common.showing' | translate }} {{ resourcesCurrentPage() * resourcesPageSize() + 1 }} {{ 'common.to' | translate }}
+              {{ Math.min((resourcesCurrentPage() + 1) * resourcesPageSize(), resourcesTotalElements()) }} {{ 'common.of' | translate }}
+              {{ resourcesTotalElements() }} {{ 'facilities.spaces' | translate | lowercase }}
             </div>
           </div>
         }
@@ -161,7 +161,7 @@
                   [disabled]="resourcesCurrentPage() === 0"
                   class="px-3 py-1 rounded-md bg-card text-text-primary border border-card-border hover:bg-indigo-600 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                 >
-                  Previous
+                  {{ 'common.previous' | translate }}
                 </button>
 
                 @for (pageNum of [].constructor(resourcesTotalPages()); track $index) {
@@ -182,7 +182,7 @@
                   [disabled]="resourcesCurrentPage() === resourcesTotalPages() - 1"
                   class="px-3 py-1 rounded-md bg-card text-text-primary border border-card-border hover:bg-indigo-600 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                 >
-                  Next
+                  {{ 'common.next' | translate }}
                 </button>
               </div>
             </div>
@@ -205,7 +205,7 @@
   <!-- Building Modal -->
   <app-modal
     [isOpen]="isBuildingModalOpen()"
-    [title]="isEditMode() ? 'Edit Building' : 'Add Building'"
+    [title]="(isEditMode() ? 'facilities.editBuilding' : 'facilities.addBuilding') | translate"
     size="md"
     (close)="closeBuildingModal()"
   >
@@ -223,7 +223,7 @@
   <!-- Room Modal -->
   <app-modal
     [isOpen]="isRoomModalOpen()"
-    [title]="isEditMode() ? 'Edit Room' : 'Add Room'"
+    [title]="(isEditMode() ? 'facilities.editRoom' : 'facilities.addRoom') | translate"
     size="md"
     (close)="closeRoomModal()"
   >
@@ -243,7 +243,7 @@
   <!-- Resource Modal -->
   <app-modal
     [isOpen]="isResourceModalOpen()"
-    [title]="isEditMode() ? 'Edit Common Space' : 'Add Common Space'"
+    [title]="(isEditMode() ? 'facilities.editCommonSpace' : 'facilities.addCommonSpace') | translate"
     size="md"
     (close)="closeResourceModal()"
   >
@@ -262,7 +262,7 @@
   <!-- Standard Modal -->
   <app-modal
     [isOpen]="isStandardModalOpen()"
-    [title]="isEditMode() ? 'Edit Standard' : 'Add Standard'"
+    [title]="(isEditMode() ? 'facilities.editStandard' : 'facilities.addStandard') | translate"
     size="md"
     (close)="closeStandardModal()"
   >
@@ -280,15 +280,15 @@
   <!-- Delete Confirmation Modal -->
   <app-modal
     [isOpen]="isDeleteModalOpen()"
-    title="Confirm Deletion"
+    [title]="'facilities.confirmDeletion' | translate"
     size="md"
     (close)="closeDeleteModal()"
   >
     <div slot="body">
       @if (itemToDelete()) {
         <app-delete-confirmation-modal
-          [itemName]="deleteItemType() === 'building' ? itemToDelete().name : deleteItemType() === 'room' ? 'Room ' + itemToDelete().roomNumber : ''"
-          [itemType]="deleteItemType()"
+          [itemName]="deleteItemType() === 'building' ? itemToDelete().name : deleteItemType() === 'room' ? (('table.room' | translate) + ' ' + itemToDelete().roomNumber) : itemToDelete().name"
+          [itemType]="getTranslatedItemType()"
           [cascadeWarning]="cascadeWarning()"
           [isLoading]="buildingsLoading() || roomsLoading()"
           (confirm)="onConfirmDelete()"

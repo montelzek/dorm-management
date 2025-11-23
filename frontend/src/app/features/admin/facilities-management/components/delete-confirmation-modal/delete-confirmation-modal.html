@@ -7,11 +7,11 @@
     </div>
     <div class="flex-1">
       <h3 class="text-lg font-medium text-text-primary">
-        Delete {{ itemType() | titlecase }}
+        {{ 'facilities.deleteItem' | translate }} {{ itemType() | titlecase }}
       </h3>
       <p class="mt-2 text-sm text-text-secondary">
-        Are you sure you want to delete <strong class="text-text-primary">{{ itemName() }}</strong>?
-        This action cannot be undone.
+        {{ 'facilities.confirmDeleteMessage' | translate }} <strong class="text-text-primary">{{ itemName() }}</strong>?
+        {{ 'facilities.cannotBeUndone' | translate }}
       </p>
       
       @if (cascadeWarning()) {
@@ -26,7 +26,7 @@
 
   <div class="flex justify-end gap-3 pt-4 border-t border-card-border">
     <app-button variant="secondary" size="md" type="button" (click)="onCancel()" [disabled]="isLoading()">
-      Cancel
+      {{ 'common.cancel' | translate }}
     </app-button>
     <app-button 
       variant="danger" 
@@ -36,9 +36,9 @@
       [disabled]="isLoading()"
     >
       @if (isLoading()) {
-        <span>Deleting...</span>
+        <span>{{ 'facilities.deleting' | translate }}</span>
       } @else {
-        <span>Delete {{ itemType() | titlecase }}</span>
+        <span>{{ 'facilities.deleteItem' | translate }} {{ itemType() | titlecase }}</span>
       }
     </app-button>
   </div>

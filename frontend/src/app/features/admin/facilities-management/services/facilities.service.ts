@@ -3,6 +3,7 @@ import { Apollo } from 'apollo-angular';
 import { Observable, of } from 'rxjs';
 import { map, catchError, tap, take } from 'rxjs/operators';
 import { ToastService } from '../../../../core/services/toast.service';
+import { TranslateService } from '@ngx-translate/core';
 import {
   GET_ADMIN_BUILDINGS,
   GET_BUILDING_DETAILS,
@@ -108,6 +109,7 @@ export interface CreateRoomStandardInput {
 export class FacilitiesService {
   private readonly apollo = inject(Apollo);
   private readonly toastService = inject(ToastService);
+  private readonly translateService = inject(TranslateService);
 
   // Buildings state
   private readonly _buildings = signal<Building[]>([]);
@@ -190,7 +192,7 @@ export class FacilitiesService {
       tap(() => this._buildingsLoading.set(false)),
       catchError(error => {
         this._buildingsLoading.set(false);
-        this.toastService.showError('Error loading buildings: ' + error.message);
+        this.toastService.showError(this.translateService.instant('facilities.errorLoadingBuildings') + ': ' + error.message);
         throw error;
       })
     ).subscribe(response => {
@@ -211,11 +213,11 @@ export class FacilitiesService {
         if (!result.data) {
           throw new Error('Failed to create building');
         }
-        this.toastService.showSuccess('Building created successfully!');
+        this.toastService.showSuccess(this.translateService.instant('facilities.buildingCreatedSuccess'));
         return result.data.createBuilding;
       }),
       catchError(error => {
-        this.toastService.showError('Error creating building: ' + error.message);
+        this.toastService.showError(this.translateService.instant('facilities.errorCreatingBuilding') + ': ' + error.message);
         throw error;
       })
     );
@@ -230,11 +232,11 @@ export class FacilitiesService {
         if (!result.data) {
           throw new Error('Failed to update building');
         }
-        this.toastService.showSuccess('Building updated successfully!');
+        this.toastService.showSuccess(this.translateService.instant('facilities.buildingUpdatedSuccess'));
         return result.data.updateBuilding;
       }),
       catchError(error => {
-        this.toastService.showError('Error updating building: ' + error.message);
+        this.toastService.showError(this.translateService.instant('facilities.errorUpdatingBuilding') + ': ' + error.message);
         throw error;
       })
     );
@@ -251,14 +253,14 @@ export class FacilitiesService {
       map(result => {
         const success = result.data?.deleteBuilding ?? false;
         if (success) {
-          this.toastService.showSuccess('Building deleted successfully!');
+          this.toastService.showSuccess(this.translateService.instant('facilities.buildingDeletedSuccess'));
         }
         return success;
       }),
       catchError(error => {
         console.error('Delete building error:', error);
         const errorMsg = error?.graphQLErrors?.[0]?.message || error?.message || 'Unknown error';
-        this.toastService.showError('Error deleting building: ' + errorMsg);
+        this.toastService.showError(this.translateService.instant('facilities.errorDeletingBuilding') + ': ' + errorMsg);
         return of(false);
       })
     );
@@ -282,7 +284,7 @@ export class FacilitiesService {
       tap(() => this._roomsLoading.set(false)),
       catchError(error => {
         this._roomsLoading.set(false);
-        this.toastService.showError('Error loading rooms: ' + error.message);
+        this.toastService.showError(this.translateService.instant('facilities.errorLoadingRooms') + ': ' + error.message);
         throw error;
       })
     ).subscribe(response => {
@@ -303,11 +305,11 @@ export class FacilitiesService {
         if (!result.data) {
           throw new Error('Failed to create room');
         }
-        this.toastService.showSuccess('Room created successfully!');
+        this.toastService.showSuccess(this.translateService.instant('facilities.roomCreatedSuccess'));
         return result.data.createRoom;
       }),
       catchError(error => {
-        this.toastService.showError('Error creating room: ' + error.message);
+        this.toastService.showError(this.translateService.instant('facilities.errorCreatingRoom') + ': ' + error.message);
         throw error;
       })
     );
@@ -322,11 +324,11 @@ export class FacilitiesService {
         if (!result.data) {
           throw new Error('Failed to update room');
         }
-        this.toastService.showSuccess('Room updated successfully!');
+        this.toastService.showSuccess(this.translateService.instant('facilities.roomUpdatedSuccess'));
         return result.data.updateRoom;
       }),
       catchError(error => {
-        this.toastService.showError('Error updating room: ' + error.message);
+        this.toastService.showError(this.translateService.instant('facilities.errorUpdatingRoom') + ': ' + error.message);
         throw error;
       })
     );
@@ -343,14 +345,14 @@ export class FacilitiesService {
       map(result => {
         const success = result.data?.deleteRoom ?? false;
         if (success) {
-          this.toastService.showSuccess('Room deleted successfully!');
+          this.toastService.showSuccess(this.translateService.instant('facilities.roomDeletedSuccess'));
         }
         return success;
       }),
       catchError(error => {
         console.error('Delete room error:', error);
         const errorMsg = error?.graphQLErrors?.[0]?.message || error?.message || 'Unknown error';
-        this.toastService.showError('Error deleting room: ' + errorMsg);
+        this.toastService.showError(this.translateService.instant('facilities.errorDeletingRoom') + ': ' + errorMsg);
         return of(false);
       })
     );
@@ -373,7 +375,7 @@ export class FacilitiesService {
       tap(() => this._resourcesLoading.set(false)),
       catchError(error => {
         this._resourcesLoading.set(false);
-        this.toastService.showError('Error loading common spaces: ' + error.message);
+        this.toastService.showError(this.translateService.instant('facilities.errorLoadingSpaces') + ': ' + error.message);
         throw error;
       })
     ).subscribe(response => {
@@ -394,11 +396,11 @@ export class FacilitiesService {
         if (!result.data) {
           throw new Error('Failed to create common space');
         }
-        this.toastService.showSuccess('Common space created successfully!');
+        this.toastService.showSuccess(this.translateService.instant('facilities.spaceCreatedSuccess'));
         return result.data.createReservationResource;
       }),
       catchError(error => {
-        this.toastService.showError('Error creating common space: ' + error.message);
+        this.toastService.showError(this.translateService.instant('facilities.errorCreatingSpace') + ': ' + error.message);
         throw error;
       })
     );
@@ -413,11 +415,11 @@ export class FacilitiesService {
         if (!result.data) {
           throw new Error('Failed to update common space');
         }
-        this.toastService.showSuccess('Common space updated successfully!');
+        this.toastService.showSuccess(this.translateService.instant('facilities.spaceUpdatedSuccess'));
         return result.data.updateReservationResource;
       }),
       catchError(error => {
-        this.toastService.showError('Error updating common space: ' + error.message);
+        this.toastService.showError(this.translateService.instant('facilities.errorUpdatingSpace') + ': ' + error.message);
         throw error;
       })
     );
@@ -433,11 +435,11 @@ export class FacilitiesService {
           throw new Error('Failed to toggle status');
         }
         const newStatus = result.data.toggleResourceStatus.isActive ? 'activated' : 'deactivated';
-        this.toastService.showSuccess(`Common space ${newStatus} successfully!`);
+        this.toastService.showSuccess(this.translateService.instant(newStatus === 'activated' ? 'facilities.spaceActivatedSuccess' : 'facilities.spaceDeactivatedSuccess'));
         return result.data.toggleResourceStatus;
       }),
       catchError(error => {
-        this.toastService.showError('Error toggling status: ' + error.message);
+        this.toastService.showError(this.translateService.instant('facilities.errorTogglingStatus') + ': ' + error.message);
         throw error;
       })
     );
@@ -454,7 +456,7 @@ export class FacilitiesService {
       tap(() => this._roomStandardsLoading.set(false)),
       catchError(error => {
         this._roomStandardsLoading.set(false);
-        this.toastService.showError('Error loading room standards: ' + error.message);
+        this.toastService.showError(this.translateService.instant('facilities.errorLoadingStandards') + ': ' + error.message);
         throw error;
       })
     ).subscribe(response => {
@@ -471,11 +473,11 @@ export class FacilitiesService {
         if (!result.data) {
           throw new Error('Failed to create room standard');
         }
-        this.toastService.showSuccess('Room standard created successfully!');
+        this.toastService.showSuccess(this.translateService.instant('facilities.standardCreatedSuccess'));
         return result.data.createRoomStandard;
       }),
       catchError(error => {
-        this.toastService.showError('Error creating room standard: ' + error.message);
+        this.toastService.showError(this.translateService.instant('facilities.errorCreatingStandard') + ': ' + error.message);
         throw error;
       })
     );
@@ -490,11 +492,11 @@ export class FacilitiesService {
         if (!result.data) {
           throw new Error('Failed to update room standard');
         }
-        this.toastService.showSuccess('Room standard updated successfully!');
+        this.toastService.showSuccess(this.translateService.instant('facilities.standardUpdatedSuccess'));
         return result.data.updateRoomStandard;
       }),
       catchError(error => {
-        this.toastService.showError('Error updating room standard: ' + error.message);
+        this.toastService.showError(this.translateService.instant('facilities.errorUpdatingStandard') + ': ' + error.message);
         throw error;
       })
     );
@@ -511,14 +513,14 @@ export class FacilitiesService {
       map(result => {
         const success = result.data?.deleteRoomStandard ?? false;
         if (success) {
-          this.toastService.showSuccess('Room standard deleted successfully!');
+          this.toastService.showSuccess(this.translateService.instant('facilities.standardDeletedSuccess'));
         }
         return success;
       }),
       catchError(error => {
         console.error('Delete room standard error:', error);
         const errorMsg = error?.graphQLErrors?.[0]?.message || error?.message || 'Unknown error';
-        this.toastService.showError('Error deleting room standard: ' + errorMsg);
+        this.toastService.showError(this.translateService.instant('facilities.errorDeletingStandard') + ': ' + errorMsg);
         return of(false);
       })
     );
@@ -532,7 +534,7 @@ export class FacilitiesService {
     }).valueChanges.pipe(
       map(result => result.data.allBuildings),
       catchError(error => {
-        this.toastService.showError('Error loading buildings list: ' + error.message);
+        this.toastService.showError(this.translateService.instant('facilities.errorLoadingBuildingsList') + ': ' + error.message);
         throw error;
       })
     ).subscribe(buildings => {

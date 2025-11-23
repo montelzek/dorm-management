@@ -1,13 +1,14 @@
 import { Component, input, output } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 import { ButtonComponent } from '../../../../../shared/components/ui/button/button';
 import { SimpleBuild } from '../../services/facilities.service';
 
 @Component({
   selector: 'app-resource-form-modal',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, ButtonComponent],
+  imports: [CommonModule, ReactiveFormsModule, ButtonComponent, TranslateModule],
   templateUrl: './resource-form-modal.html'
 })
 export class ResourceFormModalComponent {
