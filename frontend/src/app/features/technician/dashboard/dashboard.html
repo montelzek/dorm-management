@@ -2,14 +2,14 @@
   <div class="mx-auto max-w-7xl space-y-6">
     <!-- Header -->
     <div>
-      <h1 class="text-3xl font-bold text-text-primary">Technician Dashboard</h1>
-      <p class="mt-1 text-text-secondary">Overview of your maintenance tasks</p>
+      <h1 class="text-3xl font-bold text-text-primary">{{ 'technician.dashboard' | translate }}</h1>
+      <p class="mt-1 text-text-secondary">{{ 'technician.overviewTasks' | translate }}</p>
     </div>
 
     @if (isLoading()) {
       <div class="flex justify-center items-center py-12">
         <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-        <span class="ml-3 text-text-secondary">Loading statistics...</span>
+        <span class="ml-3 text-text-secondary">{{ 'technician.loadingStats' | translate }}</span>
       </div>
     } @else if (stats()) {
       <!-- Statistics Cards -->
@@ -18,7 +18,7 @@
         <div class="bg-card rounded-lg shadow-sm border border-card-border p-6">
           <div class="flex items-center justify-between">
             <div>
-              <p class="text-sm font-medium text-text-secondary">Reported Tasks</p>
+              <p class="text-sm font-medium text-text-secondary">{{ 'technician.reportedTasks' | translate }}</p>
               <p class="mt-2 text-3xl font-bold text-text-primary">{{ stats()!.reportedTasks }}</p>
             </div>
             <div class="p-3 bg-indigo-100 dark:bg-indigo-900 rounded-full">
@@ -27,14 +27,14 @@
               </svg>
             </div>
           </div>
-          <p class="mt-4 text-xs text-text-secondary">Awaiting action</p>
+          <p class="mt-4 text-xs text-text-secondary">{{ 'technician.awaitingAction' | translate }}</p>
         </div>
 
         <!-- Resolved Tasks -->
         <div class="bg-card rounded-lg shadow-sm border border-card-border p-6">
           <div class="flex items-center justify-between">
             <div>
-              <p class="text-sm font-medium text-text-secondary">Resolved Tasks</p>
+              <p class="text-sm font-medium text-text-secondary">{{ 'technician.resolvedTasks' | translate }}</p>
               <p class="mt-2 text-3xl font-bold text-text-primary">{{ stats()!.resolvedTasks }}</p>
             </div>
             <div class="p-3 bg-green-100 dark:bg-green-900 rounded-full">
@@ -43,14 +43,14 @@
               </svg>
             </div>
           </div>
-          <p class="mt-4 text-xs text-text-secondary">Total completed tasks</p>
+          <p class="mt-4 text-xs text-text-secondary">{{ 'technician.totalCompleted' | translate }}</p>
         </div>
 
         <!-- In Progress Tasks -->
         <div class="bg-card rounded-lg shadow-sm border border-card-border p-6">
           <div class="flex items-center justify-between">
             <div>
-              <p class="text-sm font-medium text-text-secondary">In Progress Tasks</p>
+              <p class="text-sm font-medium text-text-secondary">{{ 'technician.inProgressTasks' | translate }}</p>
               <p class="mt-2 text-3xl font-bold text-text-primary">{{ stats()!.inProgressTasks }}</p>
             </div>
             <div class="p-3 bg-yellow-100 dark:bg-yellow-900 rounded-full">
@@ -59,13 +59,13 @@
               </svg>
             </div>
           </div>
-          <p class="mt-4 text-xs text-text-secondary">Currently working on</p>
+          <p class="mt-4 text-xs text-text-secondary">{{ 'technician.currentlyWorking' | translate }}</p>
         </div>
       </div>
 
       <!-- Quick Actions -->
       <div class="bg-card rounded-lg shadow-sm border border-card-border p-6">
-        <h2 class="text-xl font-semibold text-text-primary mb-4">Quick Actions</h2>
+        <h2 class="text-xl font-semibold text-text-primary mb-4">{{ 'technician.quickActions' | translate }}</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <a 
             routerLink="/technician/new-tasks"
@@ -77,8 +77,8 @@
               </svg>
             </div>
             <div class="ml-4">
-              <p class="font-medium text-text-primary">View New Tasks</p>
-              <p class="text-sm text-text-secondary">Check assigned tasks</p>
+              <p class="font-medium text-text-primary">{{ 'technician.viewNewTasks' | translate }}</p>
+              <p class="text-sm text-text-secondary">{{ 'technician.checkAssigned' | translate }}</p>
             </div>
           </a>
 
@@ -92,8 +92,8 @@
               </svg>
             </div>
             <div class="ml-4">
-              <p class="font-medium text-text-primary">Tasks History</p>
-              <p class="text-sm text-text-secondary">View completed tasks</p>
+              <p class="font-medium text-text-primary">{{ 'technician.tasksHistory' | translate }}</p>
+              <p class="text-sm text-text-secondary">{{ 'technician.viewCompleted' | translate }}</p>
             </div>
           </a>
         </div>

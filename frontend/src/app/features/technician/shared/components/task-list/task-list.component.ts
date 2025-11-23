@@ -1,12 +1,13 @@
 import { Component, input, output } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 import { TechnicianTask } from '../../technician.service';
 import { ButtonComponent } from '../../../../../shared/components/ui/button/button';
 
 @Component({
   selector: 'app-task-list',
   standalone: true,
-  imports: [CommonModule, ButtonComponent, DatePipe],
+  imports: [CommonModule, ButtonComponent, DatePipe, TranslateModule],
   templateUrl: './task-list.component.html'
 })
 export class TaskListComponent {
@@ -25,8 +26,12 @@ export class TaskListComponent {
     this.changeStatus.emit(task);
   }
   
-  formatStatus(status: string): string {
-    return status.replace('_', ' ');
+  getStatusKey(status: string): string {
+    return `issues.status.${status}`;
+  }
+
+  getPriorityKey(priority: string): string {
+    return `issues.priority.${priority}`;
   }
 
   getStatusClasses(status: string): string {

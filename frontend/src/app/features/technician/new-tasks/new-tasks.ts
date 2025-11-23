@@ -1,5 +1,6 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 import { MainLayoutComponent } from '../../../shared/components/layout/main-layout/main-layout';
 import { UserService } from '../../../core/services/user.service';
 import { TechnicianService, TechnicianTask } from '../shared/technician.service';
@@ -18,7 +19,8 @@ import { ToastService } from '../../../core/services/toast.service';
     TaskListComponent,
     TaskDetailModalComponent,
     ModalComponent,
-    ButtonComponent
+    ButtonComponent,
+    TranslateModule
   ],
   templateUrl: './new-tasks.html'
 })
@@ -87,7 +89,7 @@ export class NewTasksComponent implements OnInit {
       next: () => {
         this.onCloseStatusModal();
         this.loadTasks();
-        this.toastService.showSuccess('Task status updated successfully!');
+        this.toastService.showSuccess('toast.success.taskStatusUpdated');
       },
       error: (error) => {
         console.error('Error updating task status:', error);

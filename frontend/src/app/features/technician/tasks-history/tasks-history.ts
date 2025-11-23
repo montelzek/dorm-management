@@ -1,6 +1,7 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { TranslateModule } from '@ngx-translate/core';
 import { MainLayoutComponent } from '../../../shared/components/layout/main-layout/main-layout';
 import { UserService } from '../../../core/services/user.service';
 import { TechnicianService, TechnicianTask } from '../shared/technician.service';
@@ -15,7 +16,8 @@ import { ModalComponent } from '../../../shared/components/ui/modal/modal';
     FormsModule,
     MainLayoutComponent,
     TaskListComponent,
-    ModalComponent
+    ModalComponent,
+    TranslateModule
   ],
   templateUrl: './tasks-history.html'
 })

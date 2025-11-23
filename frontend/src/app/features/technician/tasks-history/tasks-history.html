@@ -2,8 +2,8 @@
   <div class="mx-auto max-w-7xl space-y-6">
     <!-- Header -->
     <div>
-      <h1 class="text-3xl font-bold text-text-primary">Tasks History</h1>
-      <p class="mt-1 text-text-secondary">View your completed and cancelled tasks</p>
+      <h1 class="text-3xl font-bold text-text-primary">{{ 'technician.tasksHistory' | translate }}</h1>
+      <p class="mt-1 text-text-secondary">{{ 'technician.viewCompleted' | translate }}</p>
     </div>
 
     <!-- Tasks List -->
@@ -13,13 +13,13 @@
         <div class="bg-surface px-6 py-3 border-b border-card-border">
           <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
             <div class="text-sm text-text-secondary">
-              Showing {{ currentPage() * pageSize() + 1 }} to 
-              {{ Math.min((currentPage() + 1) * pageSize(), totalElements()) }} of 
-              {{ totalElements() }} tasks
+              {{ 'common.showing' | translate }} {{ currentPage() * pageSize() + 1 }} {{ 'common.to' | translate }} 
+              {{ Math.min((currentPage() + 1) * pageSize(), totalElements()) }} {{ 'common.of' | translate }} 
+              {{ totalElements() }} {{ 'technician.tasks' | translate }}
             </div>
 
             <div class="flex items-center gap-2">
-              <label for="pageSize" class="text-sm text-text-secondary">Items per page:</label>
+              <label for="pageSize" class="text-sm text-text-secondary">{{ 'issues.itemsPerPage' | translate }}:</label>
               <select
                 id="pageSize"
                 [value]="pageSize()"
@@ -54,7 +54,7 @@
                 [disabled]="currentPage() === 0"
                 class="px-3 py-1 rounded-md bg-card text-text-primary border border-card-border hover:bg-indigo-600 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
-                Previous
+                {{ 'common.previous' | translate }}
               </button>
 
               @for (pageNum of [].constructor(totalPages()); track $index) {
@@ -75,7 +75,7 @@
                 [disabled]="currentPage() === totalPages() - 1"
                 class="px-3 py-1 rounded-md bg-card text-text-primary border border-card-border hover:bg-indigo-600 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
-                Next
+                {{ 'common.next' | translate }}
               </button>
             </div>
           </div>
@@ -87,7 +87,7 @@
   <!-- Task Detail Modal (Read-only for history) -->
   <app-modal
     [isOpen]="isDetailModalOpen()"
-    title="Task Details"
+    [title]="'technician.taskDetails' | translate"
     size="lg"
     (close)="onCloseDetailModal()"
   >
@@ -103,14 +103,14 @@
 
             <div class="grid grid-cols-2 gap-4">
               <div>
-                <label class="block text-xs font-medium text-text-secondary mb-1">Status</label>
+                <label class="block text-xs font-medium text-text-secondary mb-1">{{ 'table.status' | translate }}</label>
                 <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium" 
                   [ngClass]="selectedTask()!.status === 'RESOLVED' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'">
                   {{ selectedTask()!.status | titlecase }}
                 </span>
               </div>
               <div>
-                <label class="block text-xs font-medium text-text-secondary mb-1">Priority</label>
+                <label class="block text-xs font-medium text-text-secondary mb-1">{{ 'table.priority' | translate }}</label>
                 <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium"
                   [ngClass]="selectedTask()!.priority === 'URGENT' ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200' : selectedTask()!.priority === 'HIGH' ? 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200' : 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200'">
                   {{ selectedTask()!.priority | titlecase }}
@@ -119,21 +119,21 @@
             </div>
 
             <div class="border-t border-card-border pt-4">
-              <h4 class="text-sm font-semibold text-text-primary mb-3">Reporter Information</h4>
+              <h4 class="text-sm font-semibold text-text-primary mb-3">{{ 'table.reporter' | translate }}</h4>
               <div class="space-y-2 text-sm">
                 <div class="flex justify-between">
-                  <span class="text-text-secondary">Name:</span>
+                  <span class="text-text-secondary">{{ 'table.name' | translate }}:</span>
                   <span class="text-text-primary font-medium">{{ selectedTask()!.user.firstName }} {{ selectedTask()!.user.lastName }}</span>
                 </div>
                 @if (selectedTask()!.room) {
                   <div class="flex justify-between">
-                    <span class="text-text-secondary">Room:</span>
+                    <span class="text-text-secondary">{{ 'table.room' | translate }}:</span>
                     <span class="text-text-primary font-medium">{{ selectedTask()!.room!.roomNumber }}</span>
                   </div>
                 }
                 @if (selectedTask()!.building) {
                   <div class="flex justify-between">
-                    <span class="text-text-secondary">Building:</span>
+                    <span class="text-text-secondary">{{ 'table.building' | translate }}:</span>
                     <span class="text-text-primary font-medium">{{ selectedTask()!.building!.name }}</span>
                   </div>
                 }
@@ -141,14 +141,14 @@
             </div>
 
             <div class="border-t border-card-border pt-4">
-              <h4 class="text-sm font-semibold text-text-primary mb-3">Timestamps</h4>
+              <h4 class="text-sm font-semibold text-text-primary mb-3">{{ 'common.timestamps' | translate }}</h4>
               <div class="space-y-2 text-sm">
                 <div class="flex justify-between">
-                  <span class="text-text-secondary">Created:</span>
+                  <span class="text-text-secondary">{{ 'table.created' | translate }}:</span>
                   <span class="text-text-primary">{{ selectedTask()!.createdAt | date:'dd.MM.yyyy HH:mm' }}</span>
                 </div>
                 <div class="flex justify-between">
-                  <span class="text-text-secondary">Completed:</span>
+                  <span class="text-text-secondary">{{ 'technician.completedAt' | translate }}:</span>
                   <span class="text-text-primary">{{ selectedTask()!.updatedAt | date:'dd.MM.yyyy HH:mm' }}</span>
                 </div>
               </div>
@@ -161,7 +161,7 @@
               (click)="onCloseDetailModal()"
               class="px-4 py-2 bg-surface text-text-primary border border-card-border rounded-lg hover:bg-indigo-600 hover:text-white transition-colors"
             >
-              Close
+              {{ 'common.close' | translate }}
             </button>
           </div>
         </div>

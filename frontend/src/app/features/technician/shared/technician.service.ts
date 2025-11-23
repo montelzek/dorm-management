@@ -110,7 +110,7 @@ export class TechnicianService {
       tap(() => this._isLoading.set(false)),
       catchError(error => {
         this._isLoading.set(false);
-        this.toastService.showError('Error loading tasks: ' + error.message);
+        this.toastService.showError('toast.error.loadingTasks');
         throw error;
       })
     ).subscribe(response => {
@@ -137,7 +137,7 @@ export class TechnicianService {
       tap(() => this._isLoading.set(false)),
       catchError(error => {
         this._isLoading.set(false);
-        this.toastService.showError('Error loading history: ' + error.message);
+        this.toastService.showError('toast.error.loadingHistory');
         throw error;
       })
     ).subscribe(response => {
@@ -159,7 +159,7 @@ export class TechnicianService {
       tap(() => this._isLoading.set(false)),
       catchError(error => {
         this._isLoading.set(false);
-        this.toastService.showError('Error loading stats: ' + error.message);
+        this.toastService.showError('toast.error.loadingStats');
         throw error;
       })
     ).subscribe(stats => {
@@ -174,7 +174,7 @@ export class TechnicianService {
     }).valueChanges.pipe(
       map(result => result.data.allBuildings),
       catchError(error => {
-        this.toastService.showError('Error loading buildings: ' + error.message);
+        this.toastService.showError('toast.error.loadingBuildings');
         throw error;
       })
     ).subscribe(buildings => {
@@ -197,7 +197,7 @@ export class TechnicianService {
       }),
       catchError(error => {
         this._isLoading.set(false);
-        this.toastService.showError('Error updating status: ' + error.message);
+        this.toastService.showError('toast.error.updatingStatus');
         throw error;
       })
     );

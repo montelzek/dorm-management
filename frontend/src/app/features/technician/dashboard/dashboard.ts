@@ -1,6 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 import { MainLayoutComponent } from '../../../shared/components/layout/main-layout/main-layout';
 import { UserService } from '../../../core/services/user.service';
 import { TechnicianService } from '../shared/technician.service';
@@ -8,7 +9,7 @@ import { TechnicianService } from '../shared/technician.service';
 @Component({
   selector: 'app-technician-dashboard',
   standalone: true,
-  imports: [CommonModule, MainLayoutComponent, RouterLink],
+  imports: [CommonModule, MainLayoutComponent, RouterLink, TranslateModule],
   templateUrl: './dashboard.html'
 })
 export class TechnicianDashboardComponent implements OnInit {
