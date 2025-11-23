@@ -1,0 +1,29 @@
+<button 
+  (click)="toggleLanguage()"
+  class="flex items-center justify-center h-6 rounded-md hover:opacity-80 transition-opacity duration-200 cursor-pointer"
+  [attr.aria-label]="'Switch to ' + (isPolish() ? 'English' : 'Polish')"
+>
+  <!-- Pokazuje flagę języka, na który można przełączyć -->
+  @if (isPolish()) {
+    <!-- Aktualnie PL, pokazuje flagę GB (UK) -->
+    <svg class="w-7 h-5 rounded-sm flex-shrink-0" viewBox="0 0 60 30" xmlns="http://www.w3.org/2000/svg">
+      <clipPath id="s"><path d="M0,0 v30 h60 v-30 z"/></clipPath>
+      <clipPath id="t"><path d="M30,15 h30 v15 z v-30 h-30 z h-30 v15 z v-15 h30 z"/></clipPath>
+      <g clip-path="url(#s)">
+        <path d="M0,0 v30 h60 v-30 z" fill="#012169"/>
+        <path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/>
+        <path d="M0,0 L60,30 M60,0 L0,30" clip-path="url(#t)" stroke="#C8102E" stroke-width="4"/>
+        <path d="M30,0 v30 M0,15 h60" stroke="#fff" stroke-width="10"/>
+        <path d="M30,0 v30 M0,15 h60" stroke="#C8102E" stroke-width="6"/>
+      </g>
+    </svg>
+  } @else {
+    <!-- Aktualnie EN, pokazuje flagę PL -->
+    <svg class="w-7 h-5 rounded-sm flex-shrink-0" viewBox="0 0 640 480" xmlns="http://www.w3.org/2000/svg">
+      <g fill-rule="evenodd">
+        <path fill="#fff" d="M640 480H0V0h640z"/>
+        <path fill="#dc143c" d="M640 480H0V240h640z"/>
+      </g>
+    </svg>
+  }
+</button>
