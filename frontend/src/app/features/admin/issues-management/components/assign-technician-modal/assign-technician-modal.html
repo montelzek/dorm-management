@@ -1,7 +1,7 @@
 <div class="space-y-4">
   <div>
     <label for="technician" class="block text-sm font-medium text-text-primary mb-2">
-      Select Technician
+      {{ 'admin.selectTechnician' | translate }}
     </label>
     <select
       id="technician"
@@ -9,7 +9,7 @@
       class="w-full rounded-lg border-2 border-input-border bg-input-bg px-3 py-2 text-input-text focus:border-input-focus-border focus:outline-none focus:ring-2 focus:ring-input-focus-border transition-all"
       [disabled]="isLoading()"
     >
-      <option value="">-- Select a technician --</option>
+      <option value="">{{ 'admin.selectTechnicianPlaceholder' | translate }}</option>
       @for (technician of technicians(); track technician.id) {
         <option [value]="technician.id">
           {{ technician.firstName }} {{ technician.lastName }} ({{ technician.email }})
@@ -24,7 +24,7 @@
       (click)="onCancel()"
       [disabled]="isLoading()"
     >
-      Cancel
+      {{ 'common.cancel' | translate }}
     </app-button>
     <app-button
       variant="primary"
@@ -32,7 +32,7 @@
       [disabled]="!selectedTechnicianId || isLoading()"
       [loading]="isLoading()"
     >
-      Assign Technician
+      {{ 'admin.assignTechnician' | translate }}
     </app-button>
   </div>
 </div>

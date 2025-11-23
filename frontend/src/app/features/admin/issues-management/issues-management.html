@@ -2,8 +2,8 @@
   <div class="mx-auto max-w-7xl space-y-6">
     <!-- Header -->
     <div>
-      <h1 class="text-3xl font-bold text-text-primary">Issues Management</h1>
-      <p class="mt-1 text-text-secondary">Monitor and manage all reported issues</p>
+      <h1 class="text-3xl font-bold text-text-primary">{{ 'admin.issuesManagement' | translate }}</h1>
+      <p class="mt-1 text-text-secondary">{{ 'issues.monitorAndManage' | translate }}</p>
     </div>
 
     <!-- Filters -->
@@ -12,7 +12,7 @@
         <!-- Status Filter -->
         <div>
           <label for="statusFilter" class="block text-sm font-medium text-text-primary mb-1">
-            Status
+            {{ 'table.status' | translate }}
           </label>
           <select
             id="statusFilter"
@@ -20,18 +20,18 @@
             (change)="onStatusFilterChange($any($event.target).value)"
             class="w-full rounded-lg border-2 border-input-border bg-input-bg px-3 py-2 text-input-text text-sm focus:border-input-focus-border focus:outline-none focus:ring-2 focus:ring-input-focus-border transition-all"
           >
-            <option value="">All Statuses</option>
-            <option value="REPORTED">Reported</option>
-            <option value="IN_PROGRESS">In Progress</option>
-            <option value="RESOLVED">Resolved</option>
-            <option value="CANCELLED">Cancelled</option>
+            <option value="">{{ 'issues.allStatuses' | translate }}</option>
+            <option value="REPORTED">{{ 'issues.status.reported' | translate }}</option>
+            <option value="IN_PROGRESS">{{ 'issues.status.inProgress' | translate }}</option>
+            <option value="RESOLVED">{{ 'issues.status.resolved' | translate }}</option>
+            <option value="CANCELLED">{{ 'issues.status.cancelled' | translate }}</option>
           </select>
         </div>
 
         <!-- Priority Filter -->
         <div>
           <label for="priorityFilter" class="block text-sm font-medium text-text-primary mb-1">
-            Priority
+            {{ 'table.priority' | translate }}
           </label>
           <select
             id="priorityFilter"
@@ -39,18 +39,18 @@
             (change)="onPriorityFilterChange($any($event.target).value)"
             class="w-full rounded-lg border-2 border-input-border bg-input-bg px-3 py-2 text-input-text text-sm focus:border-input-focus-border focus:outline-none focus:ring-2 focus:ring-input-focus-border transition-all"
           >
-            <option value="">All Priorities</option>
-            <option value="LOW">Low</option>
-            <option value="MEDIUM">Medium</option>
-            <option value="HIGH">High</option>
-            <option value="URGENT">Urgent</option>
+            <option value="">{{ 'issues.allPriorities' | translate }}</option>
+            <option value="LOW">{{ 'issues.priority.low' | translate }}</option>
+            <option value="MEDIUM">{{ 'issues.priority.medium' | translate }}</option>
+            <option value="HIGH">{{ 'issues.priority.high' | translate }}</option>
+            <option value="URGENT">{{ 'issues.priority.urgent' | translate }}</option>
           </select>
         </div>
 
         <!-- Building Filter -->
         <div>
           <label for="buildingFilter" class="block text-sm font-medium text-text-primary mb-1">
-            Building
+            {{ 'table.building' | translate }}
           </label>
           <select
             id="buildingFilter"
@@ -58,7 +58,7 @@
             (change)="onBuildingFilterChange($any($event.target).value)"
             class="w-full rounded-lg border-2 border-input-border bg-input-bg px-3 py-2 text-input-text text-sm focus:border-input-focus-border focus:outline-none focus:ring-2 focus:ring-input-focus-border transition-all"
           >
-            <option value="">All Buildings</option>
+            <option value="">{{ 'dashboard.allBuildings' | translate }}</option>
             @for (building of buildings(); track building.id) {
               <option [value]="building.id">{{ building.name }}</option>
             }
@@ -74,13 +74,13 @@
         <div class="bg-surface px-6 py-3 border-b border-card-border">
           <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
             <div class="text-sm text-text-secondary">
-              Showing {{ currentPage() * pageSize() + 1 }} to 
-              {{ Math.min((currentPage() + 1) * pageSize(), totalElements()) }} of 
-              {{ totalElements() }} results
+              {{ 'common.showing' | translate }} {{ currentPage() * pageSize() + 1 }} {{ 'common.to' | translate }} 
+              {{ Math.min((currentPage() + 1) * pageSize(), totalElements()) }} {{ 'common.of' | translate }} 
+              {{ totalElements() }} {{ 'common.results' | translate }}
             </div>
 
             <div class="flex items-center gap-2">
-              <label for="pageSize" class="text-sm text-text-secondary">Items per page:</label>
+              <label for="pageSize" class="text-sm text-text-secondary">{{ 'issues.itemsPerPage' | translate }}:</label>
               <select
                 id="pageSize"
                 [value]="pageSize()"
@@ -115,7 +115,7 @@
                 [disabled]="currentPage() === 0"
                 class="px-3 py-1 rounded-md bg-card text-text-primary border border-card-border hover:bg-indigo-600 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
-                Previous
+                {{ 'common.previous' | translate }}
               </button>
 
               @for (pageNum of [].constructor(totalPages()); track $index) {
@@ -136,7 +136,7 @@
                 [disabled]="currentPage() === totalPages() - 1"
                 class="px-3 py-1 rounded-md bg-card text-text-primary border border-card-border hover:bg-indigo-600 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
-                Next
+                {{ 'common.next' | translate }}
               </button>
             </div>
           </div>
@@ -148,7 +148,7 @@
   <!-- Assign Technician Modal -->
   <app-modal
     [isOpen]="isAssignModalOpen()"
-    title="Assign Technician"
+    [title]="'admin.assignTechnician' | translate"
     size="md"
     (close)="onCloseAssignModal()"
   >

@@ -1,15 +1,15 @@
 @if (isLoading()) {
   <div class="flex justify-center items-center py-12">
     <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-    <span class="ml-3 text-text-secondary">Loading issues...</span>
+    <span class="ml-3 text-text-secondary">{{ 'common.loading' | translate }}</span>
   </div>
 } @else if (issues().length === 0) {
   <div class="text-center py-12">
     <svg class="mx-auto h-12 w-12 text-text-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2-10H7a4 4 0 00-4 4v10a2 2 0 002 2h14a2 2 0 002-2V7a4 4 0 00-4-4z" />
     </svg>
-    <h3 class="mt-2 text-sm font-medium text-text-primary">No issues found</h3>
-    <p class="mt-1 text-sm text-text-secondary">No issues match the current filters.</p>
+    <h3 class="mt-2 text-sm font-medium text-text-primary">{{ 'issues.noIssues' | translate }}</h3>
+    <p class="mt-1 text-sm text-text-secondary">{{ 'admin.noIssuesMatchFilters' | translate }}</p>
   </div>
 } @else {
   <!-- Desktop Table View -->
@@ -18,28 +18,28 @@
       <thead class="bg-surface">
         <tr>
           <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider">
-            Title
+            {{ 'table.title' | translate }}
           </th>
           <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider">
-            Status
+            {{ 'table.status' | translate }}
           </th>
           <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider">
-            Priority
+            {{ 'table.priority' | translate }}
           </th>
           <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider">
-            Reporter
+            {{ 'table.reporter' | translate }}
           </th>
           <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider">
-            Location
+            {{ 'admin.location' | translate }}
           </th>
           <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider">
-            Assigned To
+            {{ 'technician.assignedTo' | translate }}
           </th>
           <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider">
-            Created
+            {{ 'table.created' | translate }}
           </th>
           <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider">
-            Actions
+            {{ 'table.actions' | translate }}
           </th>
         </tr>
       </thead>
@@ -52,12 +52,12 @@
             </td>
             <td class="px-6 py-4 whitespace-nowrap">
               <span class="px-2.5 py-0.5 rounded-full text-xs font-medium" [ngClass]="getStatusClasses(issue.status)">
-                {{ formatStatus(issue.status) | titlecase }}
+                {{ getStatusKey(issue.status) | translate }}
               </span>
             </td>
             <td class="px-6 py-4 whitespace-nowrap">
               <span class="px-2.5 py-0.5 rounded-full text-xs font-medium" [ngClass]="getPriorityClasses(issue.priority)">
-                {{ issue.priority | titlecase }}
+                {{ getPriorityKey(issue.priority) | translate }}
               </span>
             </td>
             <td class="px-6 py-4 whitespace-nowrap">
@@ -66,7 +66,7 @@
             <td class="px-6 py-4 whitespace-nowrap">
               <div class="text-sm text-text-primary">
                 @if (issue.room) {
-                  Room {{ issue.room.roomNumber }}
+                  {{ 'table.room' | translate }} {{ issue.room.roomNumber }}
                 } @else if (issue.building) {
                   {{ issue.building.name }}
                 } @else {
@@ -83,7 +83,7 @@
                   {{ issue.assignedTechnician.firstName }} {{ issue.assignedTechnician.lastName }}
                 </div>
               } @else {
-                <span class="text-sm text-text-secondary italic">Not assigned</span>
+                <span class="text-sm text-text-secondary italic">{{ 'admin.notAssigned' | translate }}</span>
               }
             </td>
             <td class="px-6 py-4 whitespace-nowrap text-sm text-text-secondary">
@@ -95,14 +95,14 @@
                   (click)="onAssignTechnician(issue)"
                   class="text-blue-600 dark:text-blue-400 hover:text-blue-900 dark:hover:text-blue-300"
                 >
-                  Assign
+                  {{ 'admin.assign' | translate }}
                 </button>
                 <button
                   (click)="onCancelIssue(issue)"
                   [disabled]="issue.status === 'CANCELLED' || issue.status === 'RESOLVED'"
                   class="text-red-600 dark:text-red-400 hover:text-red-900 dark:hover:text-red-300 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Cancel
+                  {{ 'common.cancel' | translate }}
                 </button>
               </div>
             </td>
@@ -125,21 +125,21 @@
 
         <div class="flex flex-wrap gap-2 mb-3">
           <span class="px-2.5 py-0.5 rounded-full text-xs font-medium" [ngClass]="getStatusClasses(issue.status)">
-            {{ formatStatus(issue.status) | titlecase }}
+            {{ getStatusKey(issue.status) | translate }}
           </span>
           <span class="px-2.5 py-0.5 rounded-full text-xs font-medium" [ngClass]="getPriorityClasses(issue.priority)">
-            {{ issue.priority | titlecase }}
+            {{ getPriorityKey(issue.priority) | translate }}
           </span>
         </div>
 
         <div class="text-sm space-y-1 mb-3">
           <div class="text-text-secondary">
-            <span class="font-medium">Reporter:</span> {{ issue.user.firstName }} {{ issue.user.lastName }}
+            <span class="font-medium">{{ 'table.reporter' | translate }}:</span> {{ issue.user.firstName }} {{ issue.user.lastName }}
           </div>
           <div class="text-text-secondary">
-            <span class="font-medium">Location:</span>
+            <span class="font-medium">{{ 'admin.location' | translate }}:</span>
             @if (issue.room) {
-              Room {{ issue.room.roomNumber }}
+              {{ 'table.room' | translate }} {{ issue.room.roomNumber }}
             } @else if (issue.building) {
               {{ issue.building.name }}
             } @else {
@@ -150,21 +150,21 @@
             }
           </div>
           <div class="text-text-secondary">
-            <span class="font-medium">Assigned To:</span>
+            <span class="font-medium">{{ 'technician.assignedTo' | translate }}:</span>
             @if (issue.assignedTechnician) {
               {{ issue.assignedTechnician.firstName }} {{ issue.assignedTechnician.lastName }}
             } @else {
-              <span class="italic">Not assigned</span>
+              <span class="italic">{{ 'admin.notAssigned' | translate }}</span>
             }
           </div>
           <div class="text-text-secondary">
-            <span class="font-medium">Created:</span> {{ issue.createdAt | date:'dd.MM.yyyy HH:mm' }}
+            <span class="font-medium">{{ 'table.created' | translate }}:</span> {{ issue.createdAt | date:'dd.MM.yyyy HH:mm' }}
           </div>
         </div>
 
         <div class="flex gap-2">
           <app-button variant="secondary" size="sm" (click)="onAssignTechnician(issue)" class="flex-1">
-            Assign Tech
+            {{ 'admin.assignTech' | translate }}
           </app-button>
           <app-button 
             variant="danger" 
@@ -173,7 +173,7 @@
             [disabled]="issue.status === 'CANCELLED' || issue.status === 'RESOLVED'"
             class="flex-1"
           >
-            Cancel Issue
+            {{ 'admin.cancelIssue' | translate }}
           </app-button>
         </div>
       </div>

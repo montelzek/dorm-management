@@ -1,13 +1,14 @@
 import { Component, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { TranslateModule } from '@ngx-translate/core';
 import { Technician } from '../../services/admin-issue.service';
 import { ButtonComponent } from '../../../../../shared/components/ui/button/button';
 
 @Component({
   selector: 'app-assign-technician-modal',
   standalone: true,
-  imports: [CommonModule, FormsModule, ButtonComponent],
+  imports: [CommonModule, FormsModule, ButtonComponent, TranslateModule],
   templateUrl: './assign-technician-modal.html'
 })
 export class AssignTechnicianModalComponent {

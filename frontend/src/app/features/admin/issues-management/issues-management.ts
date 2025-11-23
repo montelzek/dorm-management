@@ -1,4 +1,5 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
+import { TranslateModule } from '@ngx-translate/core';
 import { MainLayoutComponent } from '../../../shared/components/layout/main-layout/main-layout';
 import { UserService } from '../../../core/services/user.service';
 import { AdminIssueService, AdminIssue } from './services/admin-issue.service';
@@ -16,7 +17,8 @@ import { FormsModule } from '@angular/forms';
     IssueListComponent,
     ModalComponent,
     AssignTechnicianModalComponent,
-    FormsModule
+    FormsModule,
+    TranslateModule
   ],
   templateUrl: './issues-management.html'
 })

@@ -1,7 +1,7 @@
 <form [formGroup]="form()" (ngSubmit)="onSubmit()" class="space-y-4">
   <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3 mb-4">
     <p class="text-sm text-blue-800 dark:text-blue-200">
-      <span class="font-medium">Current status:</span>
+      <span class="font-medium">{{ 'admin.currentStatus' | translate }}:</span>
       <span class="ml-2 px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
         {{ currentStatus() | titlecase }}
       </span>
@@ -10,23 +10,23 @@
 
   <div>
     <label for="status" class="block text-sm font-medium text-text-primary mb-1">
-      New Status <span class="text-red-500">*</span>
+      {{ 'admin.newStatus' | translate }} <span class="text-red-500">*</span>
     </label>
     <select
       id="status"
       formControlName="status"
       class="w-full rounded-lg border-2 border-input-border bg-input-bg px-4 py-3 text-input-text placeholder:text-input-placeholder focus:border-input-focus-border focus:outline-none focus:ring-2 focus:ring-input-focus-border focus:ring-opacity-50 transition-all duration-200 hover:border-input-focus-border/50"
     >
-      <option value="">Select new status</option>
-      <option value="REPORTED">Reported</option>
-      <option value="IN_PROGRESS">In Progress</option>
-      <option value="RESOLVED">Resolved</option>
-      <option value="CANCELLED">Cancelled</option>
+      <option value="">{{ 'admin.selectNewStatus' | translate }}</option>
+      <option value="REPORTED">{{ 'issues.status.reported' | translate }}</option>
+      <option value="IN_PROGRESS">{{ 'issues.status.inProgress' | translate }}</option>
+      <option value="RESOLVED">{{ 'issues.status.resolved' | translate }}</option>
+      <option value="CANCELLED">{{ 'issues.status.cancelled' | translate }}</option>
     </select>
     @if (form().get('status')?.invalid && form().get('status')?.touched) {
       <p class="mt-1 text-sm text-red-500">
         @if (form().get('status')?.errors?.['required']) {
-          Status is required
+          {{ 'admin.statusRequired' | translate }}
         }
       </p>
     }
@@ -34,13 +34,13 @@
 
   <div class="flex justify-end gap-3 pt-4">
     <app-button variant="secondary" size="md" type="button" (click)="onCancel()">
-      Cancel
+      {{ 'common.cancel' | translate }}
     </app-button>
     <app-button variant="primary" size="md" type="submit" [disabled]="isLoading()">
       @if (isLoading()) {
-        <span>Updating...</span>
+        <span>{{ 'admin.updating' | translate }}...</span>
       } @else {
-        <span>Update Status</span>
+        <span>{{ 'admin.updateStatus' | translate }}</span>
       }
     </app-button>
   </div>

@@ -95,7 +95,7 @@ export class AdminIssueService {
       tap(() => this._isLoading.set(false)),
       catchError(error => {
         this._isLoading.set(false);
-        this.toastService.showError('Error loading issues: ' + error.message);
+        this.toastService.showError('toast.error.loadingIssues');
         throw error;
       })
     ).subscribe(response => {
@@ -114,7 +114,7 @@ export class AdminIssueService {
     }).valueChanges.pipe(
       map(result => result.data.allBuildings),
       catchError(error => {
-        this.toastService.showError('Error loading buildings: ' + error.message);
+        this.toastService.showError('toast.error.loadingBuildings');
         throw error;
       })
     ).subscribe(buildings => {
@@ -133,12 +133,12 @@ export class AdminIssueService {
         if (!result.data) {
           throw new Error('Failed to update issue status');
         }
-        this.toastService.showSuccess('Issue status updated successfully!');
+        this.toastService.showSuccess('toast.success.issueStatusUpdated');
         return result.data.updateIssueStatus;
       }),
       catchError(error => {
         this._isLoading.set(false);
-        this.toastService.showError('Error updating status: ' + error.message);
+        this.toastService.showError('toast.error.updatingStatus');
         throw error;
       })
     );
@@ -151,7 +151,7 @@ export class AdminIssueService {
     }).valueChanges.pipe(
       map(result => result.data.availableTechnicians),
       catchError(error => {
-        this.toastService.showError('Error loading technicians: ' + error.message);
+        this.toastService.showError('toast.error.loadingTechnicians');
         throw error;
       })
     ).subscribe(technicians => {
@@ -170,12 +170,12 @@ export class AdminIssueService {
         if (!result.data) {
           throw new Error('Failed to assign technician');
         }
-        this.toastService.showSuccess('Technician assigned successfully!');
+        this.toastService.showSuccess('toast.success.technicianAssigned');
         return result.data.assignTechnician;
       }),
       catchError(error => {
         this._isLoading.set(false);
-        this.toastService.showError('Error assigning technician: ' + error.message);
+        this.toastService.showError('toast.error.assigningTechnician');
         throw error;
       })
     );
@@ -192,12 +192,12 @@ export class AdminIssueService {
         if (!result.data) {
           throw new Error('Failed to cancel issue');
         }
-        this.toastService.showSuccess('Issue cancelled successfully!');
+        this.toastService.showSuccess('toast.success.issueCancelled');
         return result.data.cancelIssue;
       }),
       catchError(error => {
         this._isLoading.set(false);
-        this.toastService.showError('Error cancelling issue: ' + error.message);
+        this.toastService.showError('toast.error.cancellingIssue');
         throw error;
       })
     );

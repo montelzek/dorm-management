@@ -1,6 +1,7 @@
 import { Component, inject, OnInit, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 import { MainLayoutComponent } from '../../../shared/components/layout/main-layout/main-layout';
 import { UserService } from '../../../core/services/user.service';
 import { AdminDashboardService, AnnouncementBuilding } from './services/dashboard.service';
@@ -9,6 +10,7 @@ import { AdminDashboardService, AnnouncementBuilding } from './services/dashboar
   selector: 'app-admin-dashboard',
   imports: [
     CommonModule,
+    TranslateModule,
     MainLayoutComponent
   ],
   providers: [AdminDashboardService],
@@ -44,27 +46,49 @@ export class AdminDashboardComponent implements OnInit {
   getStatusBadgeColor(status: string): string {
     switch (status.toUpperCase()) {
       case 'REPORTED':
-        return 'bg-status-error text-white';
+        return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300';
       case 'IN_PROGRESS':
-        return 'bg-status-warning text-white';
+        return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300';
       case 'RESOLVED':
-        return 'bg-status-success text-white';
+        return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300';
+      case 'CANCELLED':
+        return 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300';
+      case 'CONFIRMED':
+        return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200';
       default:
-        return 'bg-gray-500 text-white';
+        return 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300';
     }
   }
 
   getPriorityBadgeColor(priority: string): string {
     switch (priority.toUpperCase()) {
       case 'LOW':
-        return 'bg-green-100 text-green-800 border border-green-300';
+        return 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300';
       case 'MEDIUM':
-        return 'bg-yellow-100 text-yellow-800 border border-yellow-300';
+        return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300';
       case 'HIGH':
-        return 'bg-red-100 text-red-800 border border-red-300';
+        return 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-300';
+      case 'URGENT':
+        return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300';
       default:
-        return 'bg-gray-100 text-gray-800 border border-gray-300';
+        return 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300';
     }
+  }
+
+  getStatusKey(status: string): string {
+    return `issues.status.${status}`;
+  }
+
+  getPriorityKey(priority: string): string {
+    return `issues.priority.${priority}`;
+  }
+
+  getReservationStatusKey(status: string): string {
+    return `reservations.status.${status}`;
+  }
+
+  getCategoryKey(category: string): string {
+    return `announcements.category.${category}`;
   }
 
   getCategoryBadgeColor(category: string): string {

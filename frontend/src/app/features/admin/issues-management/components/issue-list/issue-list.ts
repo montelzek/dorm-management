@@ -1,12 +1,13 @@
 import { Component, input, output } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 import { AdminIssue } from '../../services/admin-issue.service';
 import { ButtonComponent } from '../../../../../shared/components/ui/button/button';
 
 @Component({
   selector: 'app-admin-issue-list',
   standalone: true,
-  imports: [CommonModule, ButtonComponent, DatePipe],
+  imports: [CommonModule, ButtonComponent, DatePipe, TranslateModule],
   templateUrl: './issue-list.html'
 })
 export class IssueListComponent {
@@ -24,8 +25,12 @@ export class IssueListComponent {
     this.assignTechnician.emit(issue);
   }
   
-  formatStatus(status: string): string {
-    return status.replace('_', ' ');
+  getStatusKey(status: string): string {
+    return `issues.status.${status}`;
+  }
+
+  getPriorityKey(priority: string): string {
+    return `issues.priority.${priority}`;
   }
 
   getStatusClasses(status: string): string {

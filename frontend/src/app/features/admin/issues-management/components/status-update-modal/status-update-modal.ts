@@ -1,12 +1,13 @@
 import { Component, input, output } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 import { ButtonComponent } from '../../../../../shared/components/ui/button/button';
 
 @Component({
   selector: 'app-status-update-modal',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, ButtonComponent],
+  imports: [CommonModule, ReactiveFormsModule, ButtonComponent, TranslateModule],
   templateUrl: './status-update-modal.html'
 })
 export class StatusUpdateModalComponent {

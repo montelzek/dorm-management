@@ -1,6 +1,7 @@
 import { Component, inject, OnInit, signal, computed } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { CalendarEvent, CalendarView, CalendarModule, CalendarUtils, DateAdapter, CalendarA11y, CalendarDateFormatter, CalendarEventTitleFormatter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { startOfMonth, endOfMonth, format, addMonths, subMonths } from 'date-fns';
@@ -40,7 +41,8 @@ function futureDateValidator(control: AbstractControl): ValidationErrors | null 
     MainLayoutComponent,
     ModalComponent,
     EventFormModalComponent,
-    DeleteConfirmationModalComponent
+    DeleteConfirmationModalComponent,
+    TranslateModule
   ],
   providers: [
     CalendarUtils,
@@ -61,9 +63,13 @@ export class EventsManagementComponent implements OnInit {
   private readonly facilitiesService = inject(FacilitiesService);
   private readonly userService = inject(UserService);
   private readonly toastService = inject(ToastService);
+  private readonly translateService = inject(TranslateService);
 
   readonly currentUser = this.userService.currentUser;
   readonly CalendarView = CalendarView;
+  
+  // Locale for calendar (string code for Angular pipes)
+  readonly locale: string = 'pl';
   
   // State
   readonly viewDate = signal<Date>(new Date());
@@ -233,7 +239,7 @@ export class EventsManagementComponent implements OnInit {
 
   onEventFormSubmit(): void {
     if (this.eventForm.invalid) {
-      this.toastService.showError('Please fix the form errors before submitting');
+      this.toastService.showError(this.translateService.instant('admin.fixFormErrors'));
       return;
     }
 
@@ -245,7 +251,7 @@ export class EventsManagementComponent implements OnInit {
     today.setHours(0, 0, 0, 0);
     
     if (eventDate < today) {
-      this.toastService.showError('Cannot create events in the past');
+      this.toastService.showError(this.translateService.instant('admin.cannotCreatePastEvents'));
       return;
     }
     const input: CreateEventInput = {

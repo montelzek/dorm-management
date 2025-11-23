@@ -1,12 +1,13 @@
 import { Component, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 import { Room, SimpleBuild } from '../../services/facilities.service';
 import { ButtonComponent } from '../../../../../shared/components/ui/button/button';
 
 @Component({
   selector: 'app-rooms-list',
   standalone: true,
-  imports: [CommonModule, ButtonComponent],
+  imports: [CommonModule, ButtonComponent, TranslateModule],
   templateUrl: './rooms-list.html'
 })
 export class RoomsListComponent {
@@ -30,9 +31,9 @@ export class RoomsListComponent {
     return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200';
   }
 
-  getOccupancyLabel(occupancy: number, capacity: number): string {
-    if (occupancy === 0) return 'Free';
-    if (occupancy < capacity) return 'Partial';
-    return 'Full';
+  getOccupancyKey(occupancy: number, capacity: number): string {
+    if (occupancy === 0) return 'facilities.statusFree';
+    if (occupancy < capacity) return 'facilities.statusPartial';
+    return 'facilities.statusFull';
   }
 }

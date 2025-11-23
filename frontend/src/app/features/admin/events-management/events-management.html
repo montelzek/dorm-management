@@ -2,8 +2,8 @@
   <div class="mx-auto max-w-7xl space-y-6">
     <!-- Header -->
     <div>
-      <h1 class="text-3xl font-bold text-text-primary">Events Calendar</h1>
-      <p class="mt-1 text-text-secondary">Manage dormitory events and announcements</p>
+      <h1 class="text-3xl font-bold text-text-primary">{{ 'events.calendar' | translate }}</h1>
+      <p class="mt-1 text-text-secondary">{{ 'admin.manageEvents' | translate }}</p>
     </div>
 
     <!-- Calendar Card -->
@@ -17,18 +17,18 @@
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
           </svg>
-          Previous
+          {{ 'common.previous' | translate }}
         </button>
 
-        <h2 class="text-2xl font-bold text-text-primary">
-          {{ viewDate() | date: 'MMMM yyyy' }}
+        <h2 class="text-2xl font-bold text-text-primary uppercase">
+          {{ viewDate() | date: 'LLLL yyyy' : '' : locale }}
         </h2>
 
         <button
           (click)="nextMonth()"
           class="px-4 py-2 text-sm font-medium text-text-primary bg-background rounded-lg hover:bg-card-border transition-colors flex items-center gap-2 cursor-pointer"
         >
-          Next
+          {{ 'common.next' | translate }}
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
           </svg>
@@ -47,6 +47,7 @@
             [events]="calendarEvents()"
             [cellTemplate]="customCellTemplate"
             [weekStartsOn]="1"
+            [locale]="locale"
             (dayClicked)="onDayClicked($event)"
             (viewDateChange)="onViewDateChange($event)"
           >
@@ -71,7 +72,7 @@
   <!-- Day Events Modal -->
   <app-modal
     [isOpen]="isDayEventsModalOpen()"
-    [title]="'Events on ' + selectedDate()"
+    [title]="('events.eventsOn' | translate) + ' ' + selectedDate()"
     size="lg"
     (close)="closeDayEventsModal()"
   >
@@ -85,12 +86,12 @@
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
           </svg>
-          Add New Event
+          {{ 'events.addEvent' | translate }}
         </button>
 
         @if (selectedDayEvents().length > 0) {
           <div class="border-t border-card-border pt-4">
-            <h3 class="text-sm font-medium text-text-secondary mb-3">Existing Events:</h3>
+            <h3 class="text-sm font-medium text-text-secondary mb-3">{{ 'admin.existingEvents' | translate }}:</h3>
             <div class="space-y-3">
               @for (event of selectedDayEvents(); track event.id) {
                 <div class="p-4 bg-background rounded-lg border border-card-border">
@@ -115,13 +116,13 @@
                         (click)="openEventModal(event)"
                         class="px-3 py-1 text-sm text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300 cursor-pointer"
                       >
-                        Edit
+                        {{ 'common.edit' | translate }}
                       </button>
                       <button
                         (click)="confirmDeleteEvent(event)"
                         class="px-3 py-1 text-sm text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 cursor-pointer"
                       >
-                        Delete
+                        {{ 'common.delete' | translate }}
                       </button>
                     </div>
                   </div>
@@ -130,7 +131,7 @@
             </div>
           </div>
         } @else {
-          <p class="text-center text-text-secondary py-4">No events on this day</p>
+          <p class="text-center text-text-secondary py-4">{{ 'events.noEventsOnDay' | translate }}</p>
         }
       </div>
     </div>
@@ -139,7 +140,7 @@
   <!-- Event Form Modal -->
   <app-modal
     [isOpen]="isEventModalOpen()"
-    [title]="isEditMode() ? 'Edit Event' : 'Create Event'"
+    [title]="(isEditMode() ? 'admin.editEvent' : 'admin.createEvent') | translate"
     size="md"
     (close)="closeEventModal()"
   >
@@ -159,7 +160,7 @@
   <!-- Delete Confirmation Modal -->
   <app-modal
     [isOpen]="isDeleteModalOpen()"
-    title="Confirm Deletion"
+    [title]="'admin.confirmDeletion' | translate"
     size="md"
     (close)="closeDeleteModal()"
   >
@@ -167,7 +168,7 @@
       @if (eventToDelete()) {
         <app-delete-confirmation-modal
           [itemName]="eventToDelete()!.title"
-          [itemType]="'event'"
+          [itemType]="'events.event' | translate"
           [cascadeWarning]="''"
           [isLoading]="eventsLoading()"
           (confirm)="onConfirmDelete()"
