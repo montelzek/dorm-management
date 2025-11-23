@@ -3,6 +3,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Observable, of, shareReplay, startWith, switchMap, tap, withLatestFrom, EMPTY } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AsyncPipe } from '@angular/common';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import { MainLayoutComponent } from '../../../shared/components/layout/main-layout/main-layout';
 import { ReservationsListComponent } from './components/reservations-list/reservations-list';
@@ -28,6 +29,7 @@ import {
     ButtonComponent,
     ReactiveFormsModule,
     AsyncPipe,
+    TranslateModule
   ],
   templateUrl: './reservations.html',
   styles: []
@@ -36,6 +38,7 @@ export class ReservationsComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly reservationService = inject(ReservationService);
   private readonly toastService = inject(ToastService);
+  private readonly translate = inject(TranslateService);
 
   readonly selectedResource = signal<ReservationResource | null>(null);
   readonly isModalOpen = signal<boolean>(false);
@@ -151,9 +154,6 @@ export class ReservationsComponent implements OnInit {
   }
 
   private filterResourcesForUser(resources: ReservationResource[], user: User | null, buildingId: string): ReservationResource[] {
-    // Filter out laundry resources if:
-    // 1. User has no building assigned (can't use any laundry)
-    // 2. User is viewing a different building than their own (can only use laundry in their building)
     if (!user || !user.building || buildingId !== user.building.id) {
       return resources.filter(r => r.resourceType !== 'LAUNDRY');
     }
@@ -239,6 +239,15 @@ export class ReservationsComponent implements OnInit {
 
     const { startTime, endTime } = this.calculateTimeSlot(formData, resource);
 
+    // Check weekly limits before creating reservation
+    const reservationDate = new Date(startTime);
+    const validationError = this.validateWeeklyLimits(resource, reservationDate);
+    
+    if (validationError) {
+      this.toastService.showError(validationError);
+      return;
+    }
+
     const input: CreateReservationInput = {
       resourceId: formData.resourceId,
       startTime,
@@ -250,6 +259,67 @@ export class ReservationsComponent implements OnInit {
       next: () => this.handleReservationSuccess(),
       error: (error) => this.handleReservationError(error)
     });
+  }
+
+  private validateWeeklyLimits(resource: ReservationResource, reservationDate: Date): string | null {
+    const weekBounds = this.getWeekBounds(reservationDate);
+    const reservations = this.myReservations();
+    const weekDatesText = this.formatWeekDates(weekBounds.start, weekBounds.end);
+
+    if (resource.resourceType === 'LAUNDRY') {
+      const laundryReservationsThisWeek = reservations.filter(r => {
+        if (r.status === 'CANCELLED') return false;
+        const resDate = new Date(r.startTime);
+        const isInWeek = resDate >= weekBounds.start && resDate < weekBounds.end;
+        const isLaundry = r.resource.name?.toLowerCase().includes('pralnia') || 
+                         r.resource.name?.toLowerCase().includes('laundry');
+        return isInWeek && isLaundry;
+      }).length;
+
+      if (laundryReservationsThisWeek >= 2) {
+        return this.translate.instant('reservations.errors.laundryWeeklyLimit', { dates: weekDatesText });
+      }
+    } else if (resource.resourceType === 'STANDARD') {
+      const resourceReservationsThisWeek = reservations.filter(r => {
+        if (r.status === 'CANCELLED') return false;
+        const resDate = new Date(r.startTime);
+        return r.resource.id === resource.id && 
+               resDate >= weekBounds.start && 
+               resDate < weekBounds.end;
+      }).length;
+
+      if (resourceReservationsThisWeek >= 1) {
+        return this.translate.instant('reservations.errors.resourceWeeklyLimit', { dates: weekDatesText });
+      }
+    }
+
+    return null;
+  }
+
+  private formatWeekDates(start: Date, end: Date): string {
+    const locale = this.translate.currentLang || 'pl';
+    const options: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'long', year: 'numeric' };
+    
+    const startFormatted = start.toLocaleDateString(locale, options);
+    const actualEnd = new Date(end);
+    actualEnd.setDate(actualEnd.getDate() - 1);
+    const endFormatted = actualEnd.toLocaleDateString(locale, options);
+    
+    return `${startFormatted}-${endFormatted}`;
+  }
+
+  private getWeekBounds(date: Date): { start: Date; end: Date } {
+    const d = new Date(date);
+    const day = d.getDay();
+    const diff = d.getDate() - day + (day === 0 ? -6 : 1);
+    
+    const monday = new Date(d.setDate(diff));
+    monday.setHours(0, 0, 0, 0);
+    
+    const sunday = new Date(monday);
+    sunday.setDate(monday.getDate() + 7);
+    
+    return { start: monday, end: sunday };
   }
 
   private calculateTimeSlot(formValue: any, resource: ReservationResource): { startTime: string; endTime: string } {
@@ -300,9 +370,8 @@ export class ReservationsComponent implements OnInit {
   private handleReservationError(error: any): void {
     console.error('Reservation creation error:', error);
     
-    let errorMessage = 'Failed to create reservation. Please try again.';
+    let errorMessage = this.translate.instant('common.error');
     
-    // Extract error message from GraphQL error
     if (error.graphQLErrors && error.graphQLErrors.length > 0) {
       errorMessage = error.graphQLErrors[0].message;
     } else if (error.message) {
