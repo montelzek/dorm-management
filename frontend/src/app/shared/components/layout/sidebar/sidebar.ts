@@ -1,6 +1,7 @@
 import {Component, inject, signal, input, computed} from '@angular/core';
 import {NgOptimizedImage} from "@angular/common";
 import {RouterLink, RouterLinkActive} from '@angular/router';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import {AuthService} from '../../../../features/auth/services/auth';
 import {UserInfo} from '../main-layout/main-layout';
 
@@ -16,145 +17,146 @@ interface NavLink {
   imports: [
     NgOptimizedImage,
     RouterLink,
-    RouterLinkActive
+    RouterLinkActive,
+    TranslateModule
   ],
   templateUrl: './sidebar.html',
   styles: []
 })
 export class SidebarComponent {
-
   private readonly authService = inject(AuthService);
+  private readonly translate = inject(TranslateService);
   readonly user = input<UserInfo | null>(null);
 
   private readonly _isMobileMenuOpen = signal(false);
   readonly isMobileMenuOpen = this._isMobileMenuOpen.asReadonly();
 
   // Resident links
-  private readonly residentLinks: NavLink[] = [
+  private getResidentLinks = (): NavLink[] => [
     {
-      label: 'Dashboard',
+      label: 'nav.dashboard',
       route: '/dashboard',
       iconPath: 'M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z'
     },
     {
-      label: 'Reservations',
+      label: 'nav.reservations',
       route: '/reservation',
       iconPath: 'M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0h18M8.25 9.75h7.5m-7.5 3h7.5m-7.5 3h7.5'
     },
     {
-      label: 'Issues',
+      label: 'nav.issues',
       route: '/issues',
       iconPath: 'M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z'
     },
     {
-      label: 'Events Calendar',
+      label: 'nav.events',
       route: '/events',
       iconPath: 'M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0h18'
     },
     {
-      label: 'Announcements',
+      label: 'nav.announcements',
       route: '/announcements',
       iconPath: 'M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z'
     },
     {
-      label: 'Marketplace',
+      label: 'nav.marketplace',
       route: '/marketplace',
       iconPath: 'M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z'
     },
     {
-      label: 'Finance Center',
+      label: 'nav.financeCenter',
       route: '/finance-center',
       iconPath: 'M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z'
     },
     {
-      label: 'Profile',
+      label: 'nav.profile',
       route: '/profile',
       iconPath: 'M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z'
     }
   ];
 
   // Admin links
-  private readonly adminLinks: NavLink[] = [
+  private getAdminLinks = (): NavLink[] => [
     {
-      label: 'Dashboard',
+      label: 'nav.dashboard',
       route: '/admin/dashboard',
       iconPath: 'M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z'
     },
     {
-      label: 'Residents Management',
+      label: 'nav.residentsManagement',
       route: '/admin/residents',
       iconPath: 'M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z'
     },
     {
-      label: 'Reservations Management',
+      label: 'nav.reservationsManagement',
       route: '/admin/reservations',
       iconPath: 'M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0h18M8.25 9.75h7.5m-7.5 3h7.5m-7.5 3h7.5'
     },
     {
-      label: 'Issues Management',
+      label: 'nav.issuesManagement',
       route: '/admin/issues',
       iconPath: 'M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z'
     },
     {
-      label: 'Buildings & Facilities',
+      label: 'nav.buildingsFacilities',
       route: '/admin/facilities',
       iconPath: 'M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4'
     },
     {
-      label: 'Events Management',
+      label: 'nav.eventsManagement',
       route: '/admin/events',
       iconPath: 'M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0h18'
     },
     {
-      label: 'Announcements',
+      label: 'nav.announcements',
       route: '/admin/announcements',
       iconPath: 'M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z'
     }
   ];
 
   // Technician links
-  private readonly technicianLinks: NavLink[] = [
+  private getTechnicianLinks = (): NavLink[] => [
     {
-      label: 'Dashboard',
+      label: 'nav.dashboard',
       route: '/technician/dashboard',
       iconPath: 'M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z'
     },
     {
-      label: 'Tasks History',
+      label: 'nav.tasksHistory',
       route: '/technician/tasks-history',
       iconPath: 'M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25zM6.75 12h.008v.008H6.75V12zm0 3h.008v.008H6.75V15zm0 3h.008v.008H6.75V18z'
     },
     {
-      label: 'New Tasks',
+      label: 'nav.newTasks',
       route: '/technician/new-tasks',
       iconPath: 'M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z'
     }
   ];
 
   // Receptionist links
-  private readonly receptionistLinks: NavLink[] = [
+  private getReceptionistLinks = (): NavLink[] => [
     {
-      label: 'Dashboard',
+      label: 'nav.dashboard',
       route: '/dashboard',
       iconPath: 'M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z'
     },
     {
-      label: 'Packages Management',
+      label: 'nav.packagesManagement',
       route: '/receptionist/packages',
       iconPath: 'M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z'
     },
     {
-      label: 'Guest Registration',
+      label: 'nav.guestRegistration',
       route: '/receptionist/guests',
       iconPath: 'M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z'
     },
     {
-      label: 'Check-in/Check-out',
+      label: 'nav.checkInOut',
       route: '/receptionist/checkin',
       iconPath: 'M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z'
     },
     {
-      label: 'Visitors Log',
+      label: 'nav.visitorsLog',
       route: '/receptionist/visitors',
       iconPath: 'M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25'
     }
@@ -164,27 +166,29 @@ export class SidebarComponent {
   readonly navigationLinks = computed(() => {
     const user = this.user();
     if (!user?.role) {
-      return this.residentLinks; // Default to resident links
+      return this.getResidentLinks(); // Default to resident links
     }
 
     switch (user.role) {
       case 'ROLE_ADMIN':
-        return this.adminLinks;
+        return this.getAdminLinks();
       case 'ROLE_TECHNICIAN':
-        return this.technicianLinks;
+        return this.getTechnicianLinks();
       case 'ROLE_RECEPTIONIST':
-        return this.receptionistLinks;
+        return this.getReceptionistLinks();
       case 'ROLE_RESIDENT':
       default:
-        return this.residentLinks;
+        return this.getResidentLinks();
     }
   });
 
-  public logoutAction = {
-    label: 'Logout',
-    route: '/login',
-    iconPath: 'M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m-3 0l3-3m0 0l-3-3m3 3H9'
-  };
+  public get logoutAction() {
+    return {
+      label: 'nav.logout',
+      route: '/login',
+      iconPath: 'M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m-3 0l3-3m0 0l-3-3m3 3H9'
+    };
+  }
 
   logout(): void {
     this.authService.logout();
