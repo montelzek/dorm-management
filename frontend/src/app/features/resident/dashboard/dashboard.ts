@@ -103,12 +103,6 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  getListingTypeBadgeColor(type: string): string {
-    return type.toUpperCase() === 'SELL'
-      ? 'bg-green-100 text-green-800 border border-green-300'
-      : 'bg-blue-100 text-blue-800 border border-blue-300';
-  }
-
   formatDate(dateString: string): string {
     const date = new Date(dateString);
     return date.toLocaleDateString('pl-PL', {
@@ -129,10 +123,6 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  formatPrice(price: number): string {
-    return `${price.toFixed(2)} PLN`;
-  }
-
   navigateToReservations(): void {
     this.router.navigate(['/reservation']);
   }
@@ -147,9 +137,5 @@ export class DashboardComponent implements OnInit {
 
   navigateToAnnouncements(): void {
     this.router.navigate(['/announcements']);
-  }
-
-  navigateToMarketplace(): void {
-    this.router.navigate(['/marketplace']);
   }
 }

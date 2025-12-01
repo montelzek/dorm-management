@@ -49,7 +49,6 @@ type AdminDashboardData {
 type ResidentStats {
     totalReservations: Int!
     totalIssues: Int!
-    activeListings: Int!
 }
 
 type ResidentUserInfo {
@@ -69,7 +68,6 @@ type ResidentDashboardData {
     myIssues: [IssuePayload!]!
     upcomingEvents: [EventPayload!]!
     activeAnnouncements: [AnnouncementPayload!]!
-    myActiveListings: [MarketplaceListingPayload!]!
 }
 
 extend type Query {

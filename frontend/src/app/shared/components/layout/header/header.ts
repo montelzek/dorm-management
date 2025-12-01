@@ -37,14 +37,12 @@ export class HeaderComponent {
   readonly userRole = computed(() => {
     const user = this.user();
     if (!user?.role) return 'header.role.resident';
-    
+
     switch (user.role) {
       case 'ROLE_ADMIN':
         return 'header.role.admin';
       case 'ROLE_TECHNICIAN':
         return 'header.role.technician';
-      case 'ROLE_RECEPTIONIST':
-        return 'header.role.receptionist';
       case 'ROLE_RESIDENT':
       default:
         return 'header.role.resident';
@@ -61,7 +59,7 @@ export class HeaderComponent {
         subtitleIsKey: !user?.building?.name
       };
     }
-    
+
     switch (user.role) {
       case 'ROLE_ADMIN':
         return {
@@ -74,13 +72,6 @@ export class HeaderComponent {
         return {
           title: 'header.maintenanceTechnician',
           subtitle: 'header.equipmentMaintenance',
-          showBuildingInfo: false,
-          subtitleIsKey: true
-        };
-      case 'ROLE_RECEPTIONIST':
-        return {
-          title: 'header.receptionStaff',
-          subtitle: 'header.guestServices',
           showBuildingInfo: false,
           subtitleIsKey: true
         };

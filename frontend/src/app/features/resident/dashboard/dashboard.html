@@ -33,7 +33,7 @@
       </div>
 
       <!-- Statistics Cards -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div class="bg-card border border-card-border rounded-lg shadow-sm p-6">
           <div class="flex items-center justify-between">
             <div>
@@ -57,20 +57,6 @@
             <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
               <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
-              </svg>
-            </div>
-          </div>
-        </div>
-
-        <div class="bg-card border border-card-border rounded-lg shadow-sm p-6">
-          <div class="flex items-center justify-between">
-            <div>
-              <p class="text-sm text-text-secondary">{{ 'dashboard.activeListings' | translate }}</p>
-              <p class="text-3xl font-bold text-text-primary">{{ dashboardData()!.stats.activeListings }}</p>
-            </div>
-            <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-              <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
               </svg>
             </div>
           </div>
@@ -213,50 +199,6 @@
           }
         </div>
       </div>
-
-      <!-- My Marketplace Listings -->
-      @if (dashboardData()!.myActiveListings.length > 0) {
-        <div class="bg-card border border-card-border rounded-lg shadow-sm p-6">
-          <div class="flex justify-between items-center mb-4">
-            <h2 class="text-xl font-semibold text-text-primary">{{ 'dashboard.myMarketplaceListings' | translate }}</h2>
-            <button (click)="navigateToMarketplace()" class="text-sm text-text-primary cursor-pointer hover:text-primary-color-hover font-medium">
-              {{ 'dashboard.viewAll' | translate }} →
-            </button>
-          </div>
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            @for (listing of dashboardData()!.myActiveListings.slice(0, 3); track listing.id) {
-              <div class="border border-card-border rounded-lg overflow-hidden hover:shadow-md transition-shadow cursor-pointer" (click)="navigateToMarketplace()">
-                @if (listing.imageFilenames.length > 0) {
-                  <div class="h-48 overflow-hidden bg-gray-100">
-                    <img [src]="'http://localhost:8080/api/files/' + listing.imageFilenames[0]" [alt]="listing.title" class="w-full h-full object-cover" />
-                  </div>
-                } @else {
-                  <div class="h-48 bg-gray-100 flex items-center justify-center">
-                    <svg class="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                    </svg>
-                  </div>
-                }
-                <div class="p-4">
-                  <div class="flex items-start justify-between gap-2 mb-2">
-                    <h3 class="font-semibold text-text-primary truncate flex-1">{{ listing.title }}</h3>
-                    <span [class]="getListingTypeBadgeColor(listing.listingType) + ' px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap'">
-                      {{ 'marketplace.types.' + listing.listingType | translate }}
-                    </span>
-                  </div>
-                  <p class="text-sm text-text-secondary line-clamp-2 mb-2">{{ listing.description }}</p>
-                  <div class="flex items-center justify-between">
-                    <span class="text-lg font-bold text-primary-color">{{ formatPrice(listing.price) }}</span>
-                    <span [class]="getCategoryBadgeColor(listing.category) + ' px-2 py-1 rounded-full text-xs font-medium'">
-                      {{ 'marketplace.categories.' + listing.category | translate }}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            }
-          </div>
-        </div>
-      }
     }
   </div>
 </app-main-layout>

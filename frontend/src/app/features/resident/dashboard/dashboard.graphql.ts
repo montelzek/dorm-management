@@ -15,7 +15,6 @@ export const GET_RESIDENT_DASHBOARD = gql`
       stats {
         totalReservations
         totalIssues
-        activeListings
       }
       myActiveReservations {
         id
@@ -82,24 +81,6 @@ export const GET_RESIDENT_DASHBOARD = gql`
           id
           name
         }
-      }
-      myActiveListings {
-        id
-        title
-        description
-        listingType
-        category
-        price
-        imageFilenames
-        contactInfo {
-          email
-          phone
-          firstName
-          lastName
-        }
-        createdAt
-        updatedAt
-        isOwnListing
       }
     }
   }

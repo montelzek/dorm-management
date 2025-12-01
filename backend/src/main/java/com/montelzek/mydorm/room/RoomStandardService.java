@@ -2,14 +2,11 @@ package com.montelzek.mydorm.room;
 
 import com.montelzek.mydorm.exception.BusinessException;
 import com.montelzek.mydorm.exception.ErrorCodes;
-import com.montelzek.mydorm.payment.PaymentService;
-import com.montelzek.mydorm.user.User;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -19,7 +16,6 @@ public class RoomStandardService {
 
     private final RoomStandardRepository repository;
     private final RoomRepository roomRepository;
-    private final PaymentService paymentService;
 
     public List<RoomStandard> getAll() {
         return repository.findAll();
@@ -38,31 +34,12 @@ public class RoomStandardService {
     public RoomStandard update(Long id, RoomStandard input) {
         RoomStandard existing = repository.findById(id).orElseThrow(() -> new IllegalArgumentException("RoomStandard not found with id: " + id));
         
-        BigDecimal oldPrice = existing.getPrice();
-        BigDecimal newPrice = input.getPrice();
-        
         existing.setCode(input.getCode());
         existing.setName(input.getName());
         existing.setCapacity(input.getCapacity());
-        existing.setPrice(newPrice);
-        
-        RoomStandard updated = repository.save(existing);
-        
-        // Jeśli cena się zmieniła, zaktualizuj płatności dla wszystkich użytkowników z tym standardem
-        if (oldPrice.compareTo(newPrice) != 0) {
-            List<Room> rooms = roomRepository.findByRoomStandardId(id);
-            for (Room room : rooms) {
-                for (User user : room.getUsers()) {
-                    try {
-                        paymentService.updatePaymentAmountsForUser(user, newPrice);
-                    } catch (Exception e) {
-                        log.error("Failed to update payments for user {}: {}", user.getId(), e.getMessage());
-                    }
-                }
-            }
-        }
-        
-        return updated;
+        existing.setPrice(input.getPrice());
+
+        return repository.save(existing);
     }
 
     @Transactional
