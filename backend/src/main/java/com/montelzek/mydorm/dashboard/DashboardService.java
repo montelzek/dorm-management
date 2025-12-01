@@ -14,10 +14,6 @@ import com.montelzek.mydorm.issue.Issue;
 import com.montelzek.mydorm.issue.IssueRepository;
 import com.montelzek.mydorm.issue.payload.IssuePayload;
 import com.montelzek.mydorm.issue.IssueService;
-import com.montelzek.mydorm.marketplace.MarketplaceListing;
-import com.montelzek.mydorm.marketplace.MarketplaceListingRepository;
-import com.montelzek.mydorm.marketplace.MarketplaceListingService;
-import com.montelzek.mydorm.marketplace.payload.MarketplaceListingPayload;
 import com.montelzek.mydorm.reservation.Reservation;
 import com.montelzek.mydorm.reservation.ReservationRepository;
 import com.montelzek.mydorm.reservation.ReservationService;
@@ -32,7 +28,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -46,13 +41,11 @@ public class DashboardService {
     private final IssueRepository issueRepository;
     private final ReservationRepository reservationRepository;
     private final EventRepository eventRepository;
-    private final MarketplaceListingRepository marketplaceListingRepository;
-    
+
     private final AnnouncementService announcementService;
     private final EventService eventService;
     private final IssueService issueService;
     private final ReservationService reservationService;
-    private final MarketplaceListingService marketplaceListingService;
 
     @Transactional(readOnly = true)
     public AdminDashboardData getAdminDashboard() {
@@ -81,7 +74,6 @@ public class DashboardService {
         List<IssuePayload> myIssues = getMyIssues(userId);
         List<EventPayload> upcomingEvents = getUpcomingEventsForResident(userId);
         List<AnnouncementPayload> activeAnnouncements = announcementService.getActiveAnnouncementsForResident(userId);
-        List<MarketplaceListingPayload> myActiveListings = getMyActiveListings(userId);
 
         return new ResidentDashboardData(
                 userInfo,
@@ -89,8 +81,7 @@ public class DashboardService {
                 myActiveReservations,
                 myIssues,
                 upcomingEvents,
-                activeAnnouncements,
-                myActiveListings
+                activeAnnouncements
         );
     }
 
@@ -186,12 +177,10 @@ public class DashboardService {
     private ResidentStats getResidentStats(Long userId) {
         Long totalReservations = (long) reservationRepository.findByUserId(userId).size();
         Long totalIssues = (long) issueRepository.findByUserId(userId).size();
-        Long activeListings = marketplaceListingRepository.countByUserId(userId);
 
         return new ResidentStats(
                 totalReservations.intValue(),
-                totalIssues.intValue(),
-                activeListings.intValue()
+                totalIssues.intValue()
         );
     }
 
@@ -224,14 +213,6 @@ public class DashboardService {
         return events.stream()
                 .limit(5)
                 .map(eventService::toPayload)
-                .collect(Collectors.toList());
-    }
-
-    private List<MarketplaceListingPayload> getMyActiveListings(Long userId) {
-        List<MarketplaceListing> listings = marketplaceListingRepository.findByUserIdOrderByCreatedAtDesc(userId);
-        return listings.stream()
-                .limit(5)
-                .map(listing -> marketplaceListingService.toPayload(listing, userId))
                 .collect(Collectors.toList());
     }
 

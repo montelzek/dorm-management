@@ -97,23 +97,6 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
 
-  {
-    path: 'marketplace',
-    loadComponent: () => import('./features/resident/marketplace/marketplace').then(m => m.MarketplaceComponent),
-    canActivate: [authGuard]
-  },
-
-  {
-    path: 'finance-center',
-    loadComponent: () => import('./features/resident/finance-center/finance-center').then(m => m.FinanceCenterComponent),
-    canActivate: [authGuard]
-  },
-
-  {
-    path: 'profile',
-    loadComponent: () => import('./features/resident/profile/profile').then(m => m.ProfileComponent),
-    canActivate: [authGuard]
-  },
 
   { path: '', redirectTo: '/login', pathMatch: 'full' }
 ];

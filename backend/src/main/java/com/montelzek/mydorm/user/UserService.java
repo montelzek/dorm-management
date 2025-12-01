@@ -2,7 +2,6 @@ package com.montelzek.mydorm.user;
 
 import com.montelzek.mydorm.exception.BusinessException;
 import com.montelzek.mydorm.exception.ErrorCodes;
-import com.montelzek.mydorm.payment.PaymentService;
 import com.montelzek.mydorm.room.Room;
 import com.montelzek.mydorm.room.RoomRepository;
 import com.montelzek.mydorm.user.payloads.ResidentPage;
@@ -27,7 +26,6 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final RoomRepository roomRepository;
-    private final PaymentService paymentService;
 
     public List<ResidentPayload> getResidentsAsPayloads() {
         return userRepository.findAllResidents().stream()
@@ -160,12 +158,6 @@ public class UserService {
         user.setRoom(room);
         User savedUser = userRepository.save(user);
 
-        // Automatycznie generuj płatności dla użytkownika
-        try {
-            paymentService.generatePaymentsForUser(savedUser);
-        } catch (Exception e) {
-            log.error("Failed to generate payments for user {}: {}", userId, e.getMessage());
-        }
 
         return toPayload(savedUser);
     }
