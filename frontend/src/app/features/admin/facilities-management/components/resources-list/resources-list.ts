@@ -19,6 +19,7 @@ export class ResourcesListComponent {
 
   readonly edit = output<Resource>();
   readonly toggle = output<Resource>();
+  readonly delete = output<Resource>();
   readonly add = output<void>();
   readonly buildingFilterChange = output<string>();
   readonly statusFilterChange = output<string>();

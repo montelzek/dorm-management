@@ -56,43 +56,28 @@ public class AnnouncementService {
     @Transactional
     public List<AnnouncementPayload> getActiveAnnouncementsForResident(Long userId) {
         try {
-            System.out.println("=== getActiveAnnouncementsForResident called for userId: " + userId);
-            
             User user = userRepository.findById(userId)
                     .orElseThrow(() -> new IllegalArgumentException("User not found: " + userId));
-
-            System.out.println("User found: " + user.getFirstName() + " " + user.getLastName());
             
             List<Long> buildingIds = new ArrayList<>();
             if (user.getRoom() != null && user.getRoom().getBuilding() != null) {
                 buildingIds.add(user.getRoom().getBuilding().getId());
-                System.out.println("User building ID: " + user.getRoom().getBuilding().getId());
-            } else {
-                System.out.println("User has no room or building assigned");
             }
 
-            // If user has no building, return only global announcements
             List<Announcement> announcements;
             if (buildingIds.isEmpty()) {
-                System.out.println("Fetching global announcements only");
                 announcements = announcementRepository.findActiveGlobalAnnouncements();
             } else {
-                System.out.println("Fetching announcements for building IDs: " + buildingIds);
                 announcements = announcementRepository.findActiveAnnouncementsForBuildings(buildingIds);
             }
-            
-            System.out.println("Found " + (announcements != null ? announcements.size() : "null") + " announcements");
-            
-            // Ensure we always return a list, never null
+
             if (announcements == null) {
                 announcements = new ArrayList<>();
             }
 
-            List<AnnouncementPayload> result = announcements.stream()
+            return announcements.stream()
                     .map(this::toPayload)
                     .collect(Collectors.toList());
-            
-            return result;
         } catch (Exception e) {
             log.error("Error in getActiveAnnouncementsForResident: {}", e.getMessage(), e);
             return new ArrayList<>();

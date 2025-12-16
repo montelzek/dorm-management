@@ -1,15 +1,16 @@
-import {Component, computed, inject, OnInit, signal} from '@angular/core';
-import {LowerCasePipe} from '@angular/common';
-import {TranslateModule} from '@ngx-translate/core';
-import {ResidentService} from './services/resident';
-import {ResidentListComponent} from './components/resident-list/resident-list';
-import {MainLayoutComponent} from '../../../shared/components/layout/main-layout/main-layout';
-import {UserService} from '../../../core/services/user.service';
-import {FormsModule} from '@angular/forms';
-import {RoomAssignmentModalComponent} from './components/room-assignment-modal/room-assignment-modal';
-import {ConfirmationDialogComponent} from './components/confirmation-dialog/confirmation-dialog';
-import {ResidentPayload} from './models/resident.models';
-import {ToastService} from '../../../core/services/toast.service';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { LowerCasePipe } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
+import { ResidentService } from './services/resident';
+import { ResidentListComponent } from './components/resident-list/resident-list';
+import { MainLayoutComponent } from '../../../shared/components/layout/main-layout/main-layout';
+import { UserService } from '../../../core/services/user.service';
+import { FormsModule } from '@angular/forms';
+import { RoomAssignmentModalComponent } from './components/room-assignment-modal/room-assignment-modal';
+import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog';
+import { ResidentPayload } from './models/resident.models';
+import { ToastService } from '../../../core/services/toast.service';
+import { ResidentFormModalComponent } from './components/resident-form-modal/resident-form-modal';
 
 @Component({
   selector: 'app-residents-management',
@@ -18,6 +19,7 @@ import {ToastService} from '../../../core/services/toast.service';
     MainLayoutComponent,
     FormsModule,
     RoomAssignmentModalComponent,
+    ResidentFormModalComponent,
     ConfirmationDialogComponent,
     TranslateModule,
     LowerCasePipe
@@ -47,6 +49,7 @@ export class ResidentsManagementComponent implements OnInit {
 
   readonly isModalOpen = signal<boolean>(false);
   readonly selectedResident = signal<ResidentPayload | null>(null);
+  readonly isCreateModalOpen = signal<boolean>(false);
   readonly isDeleteDialogOpen = signal<boolean>(false);
   readonly residentToDelete = signal<ResidentPayload | null>(null);
   readonly isLoading = signal<boolean>(false);
@@ -65,8 +68,7 @@ export class ResidentsManagementComponent implements OnInit {
     const search = this.searchQuery().trim() || undefined;
     const sortBy = this.sortBy();
     const sortDirection = this.sortDirection();
-    
-    // Small delay to show that loading is happening
+
     setTimeout(() => {
       if (buildingId === '') {
         this.residentService.getAllResidents(page, size, search, sortBy, sortDirection);
@@ -79,14 +81,14 @@ export class ResidentsManagementComponent implements OnInit {
 
   onBuildingFilterChange(buildingId: string) {
     this.selectedBuildingId.set(buildingId);
-    this.page.set(0); // Reset to first page
+    this.page.set(0);
     this.loadResidents();
   }
 
   onSearchChange(query: string) {
     this.searchQuery.set(query);
-    this.page.set(0); // Reset to first page when searching
-    this.loadResidents(); // Trigger backend search
+    this.page.set(0);
+    this.loadResidents();
   }
 
   onPageChange(newPage: number) {
@@ -96,16 +98,14 @@ export class ResidentsManagementComponent implements OnInit {
 
   onPageSizeChange(newSize: number) {
     this.size.set(newSize);
-    this.page.set(0); // Reset to first page
+    this.page.set(0);
     this.loadResidents();
   }
 
   onSortChange(field: string) {
     if (this.sortBy() === field) {
-      // Toggle direction if same field
       this.sortDirection.set(this.sortDirection() === 'asc' ? 'desc' : 'asc');
     } else {
-      // New field, default to ascending
       this.sortBy.set(field);
       this.sortDirection.set('asc');
     }
@@ -154,4 +154,30 @@ export class ResidentsManagementComponent implements OnInit {
     });
   }
 
+  openCreateModal() {
+    this.isCreateModalOpen.set(true);
+  }
+
+  closeCreateModal() {
+    this.isCreateModalOpen.set(false);
+  }
+
+  onResidentSubmit(data: any) {
+    this.residentService.createResident(data).subscribe({
+      next: () => {
+        this.toastService.showSuccess('toast.success.residentCreated');
+        this.closeCreateModal();
+        this.loadResidents();
+      },
+      error: (error) => {
+        console.error('Error creating resident:', error);
+        const errorMsg = error?.graphQLErrors?.[0]?.message || error?.message || 'Unknown error';
+        if (errorMsg.includes('Email already exists')) {
+          this.toastService.showError('toast.error.emailExists');
+        } else {
+          this.toastService.showError('toast.error.creatingResident');
+        }
+      }
+    });
+  }
 }

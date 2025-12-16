@@ -35,7 +35,6 @@ public class UserController {
 
     @SchemaMapping(typeName = "UserPayload", field = "building")
     public Object getBuildingForUser(Object source) {
-        // support both domain User and payload UserPayload
         if (source instanceof User user) {
             if (user.getRoom() != null) {
                 return user.getRoom().getBuilding();
@@ -44,7 +43,7 @@ public class UserController {
         }
 
         if (source instanceof GraphQLPayloads.UserPayload up) {
-            return up.building(); // return payload building (id,name) - GraphQL will map fields
+            return up.building();
         }
 
         return null;
@@ -108,5 +107,11 @@ public class UserController {
     @PreAuthorize("isAuthenticated()")
     public UserProfilePayload updateMyProfile(@Argument UpdateProfileInput input, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return userService.updateMyProfile(userDetails.getId(), input);
+    }
+
+    @MutationMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResidentPayload createResident(@Argument com.montelzek.mydorm.user.payloads.CreateResidentInput input) {
+        return userService.createResident(input);
     }
 }

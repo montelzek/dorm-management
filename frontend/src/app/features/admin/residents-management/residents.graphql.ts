@@ -1,4 +1,4 @@
-import {gql} from 'apollo-angular';
+import { gql } from 'apollo-angular';
 
 export const GET_BUILDINGS = gql`
   query GetBuildings {
@@ -86,5 +86,21 @@ export const ASSIGN_ROOM = gql`
 export const DELETE_RESIDENT = gql`
   mutation DeleteResident($userId: ID!) {
     deleteResident(userId: $userId)
+  }
+`;
+
+export const CREATE_RESIDENT = gql`
+  mutation CreateResident($input: CreateResidentInput!) {
+    createResident(input: $input) {
+      id
+      firstName
+      lastName
+      email
+      phone
+      buildingName
+      buildingId
+      roomNumber
+      roomId
+    }
   }
 `;

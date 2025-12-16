@@ -112,6 +112,15 @@ public class ReservationResourceService {
         return toAdminPayload(updated);
     }
 
+    @Transactional
+    public Boolean deleteResource(Long id) {
+        if (!resourceRepository.existsById(id)) {
+            throw new IllegalArgumentException("Resource not found with id: " + id);
+        }
+        resourceRepository.deleteById(id);
+        return true;
+    }
+
     private AdminResourcePayload toAdminPayload(ReservationResource resource) {
         return new AdminResourcePayload(
                 resource.getId(),

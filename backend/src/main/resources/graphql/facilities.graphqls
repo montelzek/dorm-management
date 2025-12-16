@@ -147,7 +147,8 @@ extend type Mutation {
     createReservationResource(input: CreateResourceInput!): AdminResourcePayload!
     updateReservationResource(id: ID!, input: UpdateResourceInput!): AdminResourcePayload!
     toggleResourceStatus(id: ID!): AdminResourcePayload!
-
+    deleteReservationResource(id: ID!): Boolean
+    
     createRoomStandard(input: CreateRoomStandardInput!): RoomStandard!
     updateRoomStandard(id: ID!, input: UpdateRoomStandardInput!): RoomStandard!
     deleteRoomStandard(id: ID!): Boolean
