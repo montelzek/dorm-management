@@ -143,13 +143,16 @@ export class FacilitiesManagementComponent implements OnInit {
     if (item && this.deleteItemType() === 'building') {
       const building = item as Building;
       if (building.roomsCount > 0 || building.resourcesCount > 0) {
-        return `This will attempt to delete ${building.roomsCount} room(s) and ${building.resourcesCount} common space(s). This may fail if rooms have assigned residents.`;
+        return this.translateService.instant('facilities.cascadeWarning.building', {
+          rooms: building.roomsCount,
+          resources: building.resourcesCount
+        });
       }
     }
     if (item && this.deleteItemType() === 'room') {
       const room = item as Room;
       if (room.occupancy > 0) {
-        return `This room has ${room.occupancy} resident(s) assigned and cannot be deleted.`;
+        return this.translateService.instant('facilities.cascadeWarning.room', { count: room.occupancy });
       }
     }
     return '';
@@ -322,7 +325,7 @@ export class FacilitiesManagementComponent implements OnInit {
   loadResources(): void {
     const buildingId = this.resourcesBuildingFilter() || undefined;
     const isActive = this.resourcesStatusFilter() === 'true' ? true :
-                     this.resourcesStatusFilter() === 'false' ? false : undefined;
+      this.resourcesStatusFilter() === 'false' ? false : undefined;
     this.facilitiesService.getResources(this.resourcesPage(), 10, buildingId, isActive);
   }
 
@@ -396,6 +399,12 @@ export class FacilitiesManagementComponent implements OnInit {
   onResourcesPageChange(page: number): void {
     this.resourcesPage.set(page);
     this.loadResources();
+  }
+
+  confirmDeleteResource(resource: Resource): void {
+    this.itemToDelete.set(resource);
+    this.deleteItemType.set('resource');
+    this.isDeleteModalOpen.set(true);
   }
 
   // Standards CRUD
@@ -485,6 +494,8 @@ export class FacilitiesManagementComponent implements OnInit {
       operation = this.facilitiesService.deleteBuilding(item.id);
     } else if (type === 'room') {
       operation = this.facilitiesService.deleteRoom(item.id);
+    } else if (type === 'resource') {
+      operation = this.facilitiesService.deleteResource(item.id);
     } else {
       return;
     }
@@ -497,6 +508,8 @@ export class FacilitiesManagementComponent implements OnInit {
           this.facilitiesService.getAllBuildings();
         } else if (type === 'room') {
           this.loadRooms();
+        } else if (type === 'resource') {
+          this.loadResources();
         }
       },
       error: (error) => {

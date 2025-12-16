@@ -53,4 +53,10 @@ public class ReservationResourceController {
     public AdminResourcePayload toggleResourceStatus(@Argument Long id) {
         return reservationResourceService.toggleResourceStatus(id);
     }
+
+    @MutationMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public Boolean deleteReservationResource(@Argument Long id) {
+        return reservationResourceService.deleteResource(id);
+    }
 }

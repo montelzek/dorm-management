@@ -30,6 +30,8 @@ INSERT INTO room_standards (id, code, name, capacity, price, created_at, updated
 (13, 'X13', 'DS3 Standard', 3, 450.00, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 
+-- Ensure sequence name matches table `room_standards` (fix typo)
+SELECT setval('room_standards_id_seq', COALESCE((SELECT MAX(id) FROM room_standards), 0));
 -- Insert sample rooms (2-4 per building)
 -- INSERT INTO rooms (building_id, room_number, capacity, created_at, updated_at)
 -- VALUES
@@ -126,7 +128,8 @@ VALUES
 
 
 
-
+-- Reset the rooms sequence to continue from the last inserted ID (safe for SERIAL/BIGSERIAL)
+SELECT setval('rooms_id_seq', COALESCE((SELECT MAX(id) FROM rooms), 0));
 
 
 -- Insert sample reservation resources (laundry, common rooms, etc.)

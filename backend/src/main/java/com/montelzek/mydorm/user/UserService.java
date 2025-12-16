@@ -26,12 +26,43 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final RoomRepository roomRepository;
+    private final org.springframework.security.crypto.password.PasswordEncoder passwordEncoder;
 
     public List<ResidentPayload> getResidentsAsPayloads() {
         return userRepository.findAllResidents().stream()
                 .map(this::toPayload)
                 .collect(Collectors.toList());
     }
+
+    public ResidentPayload createResident(com.montelzek.mydorm.user.payloads.CreateResidentInput input) {
+        userRepository.findByEmail(input.email()).ifPresent(u -> {
+            throw new BusinessException(ErrorCodes.VALIDATION_ERROR, "Email already exists", "email");
+        });
+
+        User user = new User();
+        user.setFirstName(input.firstName());
+        user.setLastName(input.lastName());
+        user.setEmail(input.email());
+        user.setPhone(input.phone());
+        user.setPassword(passwordEncoder.encode(input.password()));
+        
+        user.setRoles(java.util.Collections.singleton(ERole.ROLE_RESIDENT));
+
+        if (input.roomId() != null) {
+            Room room = roomRepository.findById(Long.valueOf(input.roomId()))
+                    .orElseThrow(() -> new BusinessException(ErrorCodes.RESOURCE_NOT_FOUND, "Room not found", "roomId"));
+            
+            if (room.getUsers().size() >= room.getCapacity()) {
+                throw new BusinessException(ErrorCodes.VALIDATION_ERROR, "Room is at full capacity", "roomId");
+            }
+            user.setRoom(room);
+        }
+
+        User savedUser = userRepository.save(user);
+        return toPayload(savedUser);
+    }
+
+
 
     public List<ResidentPayload> getResidentsByBuilding(Long buildingId) {
         return userRepository.findResidentsByBuildingId(buildingId).stream()
@@ -43,7 +74,6 @@ public class UserService {
         int pageNumber = page != null ? page : 0;
         int pageSize = size != null ? size : 10;
         
-        // Default sort by firstName ascending if not specified
         String sortField = sortBy != null && !sortBy.trim().isEmpty() ? sortBy : "firstName";
         Sort.Direction direction = "desc".equalsIgnoreCase(sortDirection) ? Sort.Direction.DESC : Sort.Direction.ASC;
         Sort sort = Sort.by(direction, sortField);
@@ -74,7 +104,6 @@ public class UserService {
         int pageNumber = page != null ? page : 0;
         int pageSize = size != null ? size : 10;
         
-        // Default sort by firstName ascending if not specified
         String sortField = sortBy != null && !sortBy.trim().isEmpty() ? sortBy : "firstName";
         Sort.Direction direction = "desc".equalsIgnoreCase(sortDirection) ? Sort.Direction.DESC : Sort.Direction.ASC;
         Sort sort = Sort.by(direction, sortField);
@@ -170,7 +199,6 @@ public class UserService {
                         "userId"
                 ));
 
-        // Reservations will be automatically deleted due to cascade = CascadeType.ALL
         userRepository.delete(user);
         return true;
     }
@@ -183,7 +211,6 @@ public class UserService {
                         "userId"
                 ));
 
-        // Check if email is being changed and if it's already taken by another user
         if (!user.getEmail().equals(input.email())) {
             userRepository.findByEmail(input.email()).ifPresent(existingUser -> {
                 if (!existingUser.getId().equals(userId)) {

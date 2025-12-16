@@ -8,81 +8,140 @@
 
     <!-- Calendar Card -->
     <div class="rounded-lg bg-card shadow-sm border border-card-border p-6">
-      <!-- Month Navigation -->
-      <div class="flex items-center justify-between mb-6">
-        <button
-          (click)="previousMonth()"
-          class="px-4 py-2 text-sm font-medium text-text-primary bg-background rounded-lg hover:bg-card-border transition-colors flex items-center gap-2 cursor-pointer"
-        >
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-          </svg>
-          {{ 'common.previous' | translate }}
-        </button>
 
-        <h2 class="text-2xl font-bold text-text-primary uppercase">
-          {{ viewDate() | date: 'LLLL yyyy' : '' : locale }}
-        </h2>
+      <!-- DESKTOP VIEW -->
+      <div class="hidden md:block">
+        <!-- Month Navigation -->
+        <div class="flex items-center justify-between mb-6">
+          <button (click)="previousMonth()"
+            class="px-4 py-2 text-sm font-medium text-text-primary bg-background rounded-lg hover:bg-card-border transition-colors flex items-center justify-center gap-2 cursor-pointer shadow-sm border border-card-border"
+            [attr.aria-label]="'common.previous' | translate">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+            {{ 'common.previous' | translate }}
+          </button>
 
-        <button
-          (click)="nextMonth()"
-          class="px-4 py-2 text-sm font-medium text-text-primary bg-background rounded-lg hover:bg-card-border transition-colors flex items-center gap-2 cursor-pointer"
-        >
-          {{ 'common.next' | translate }}
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-          </svg>
-        </button>
-      </div>
+          <h2 class="text-2xl font-bold text-text-primary uppercase tracking-wide">
+            {{ viewDate() | date: 'LLLL yyyy' : '' : locale }}
+          </h2>
 
-      <!-- Calendar -->
-      @if (eventsLoading()) {
+          <button (click)="nextMonth()"
+            class="px-4 py-2 text-sm font-medium text-text-primary bg-background rounded-lg hover:bg-card-border transition-colors flex items-center justify-center gap-2 cursor-pointer shadow-sm border border-card-border"
+            [attr.aria-label]="'common.next' | translate">
+            {{ 'common.next' | translate }}
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+        </div>
+
+        @if (eventsLoading()) {
         <div class="flex justify-center items-center py-20">
           <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
         </div>
-      } @else {
+        } @else {
         <div class="calendar-container">
-          <mwl-calendar-month-view
-            [viewDate]="viewDate()"
-            [events]="calendarEvents()"
-            [cellTemplate]="customCellTemplate"
-            [weekStartsOn]="1"
-            [locale]="locale"
-            (dayClicked)="onDayClicked($event)"
-            (viewDateChange)="onViewDateChange($event)"
-          >
-            <ng-template
-              #customCellTemplate
-              let-day="day"
-              let-locale="locale"
-            >
+          <mwl-calendar-month-view [viewDate]="viewDate()" [events]="calendarEvents()"
+            [cellTemplate]="customCellTemplate" [headerTemplate]="headerTemplate" [weekStartsOn]="1" [locale]="locale"
+            (dayClicked)="onDayClicked($event)" (viewDateChange)="onViewDateChange($event)">
+            <!-- Custom Header Template for shorter day names on mobile (still useful if resized) -->
+            <ng-template #headerTemplate let-days="days" let-locale="locale">
+              <div class="cal-header">
+                <div class="cal-cell" *ngFor="let day of days" [class.cal-past]="day.isPast"
+                  [class.cal-today]="day.isToday" [class.cal-future]="day.isFuture" [class.cal-weekend]="day.isWeekend">
+                  <span class="uppercase">{{ day.date | date:'EEEE':undefined:locale }}</span>
+                </div>
+              </div>
+            </ng-template>
+
+            <ng-template #customCellTemplate let-day="day" let-locale="locale">
               <div class="cal-cell-top">
                 <span class="cal-day-number">{{ day.date | date: 'd' }}</span>
                 @if (day.events.length > 0) {
-                  <span class="cal-day-badge">{{ day.events.length }}</span>
+                <span class="cal-day-badge">{{ day.events.length }}</span>
                 }
               </div>
             </ng-template>
           </mwl-calendar-month-view>
         </div>
-      }
+        }
+      </div>
+
+      <!-- MOBILE VIEW (Vertical Week) -->
+      <div class="block md:hidden">
+        <!-- Week Navigation -->
+        <div class="flex items-center justify-between mb-6">
+          <button (click)="previousWeek()"
+            class="p-2 text-sm font-medium text-text-primary bg-background rounded-lg hover:bg-card-border transition-colors flex items-center justify-center shadow-sm border border-card-border"
+            [attr.aria-label]="'common.previous' | translate">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+
+          <div class="text-center">
+            <h2 class="text-lg font-bold text-text-primary uppercase tracking-wide">
+              {{ viewDate() | date: 'LLLL yyyy' : '' : locale }}
+            </h2>
+            <p class="text-xs text-text-secondary">
+              {{ currentWeekDays()[0] | date:'d MMM' : '' : locale }} - {{ currentWeekDays()[6] | date:'d MMM' : '' :
+              locale }}
+            </p>
+          </div>
+
+
+          <button (click)="nextWeek()"
+            class="p-2 text-sm font-medium text-text-primary bg-background rounded-lg hover:bg-card-border transition-colors flex items-center justify-center shadow-sm border border-card-border"
+            [attr.aria-label]="'common.next' | translate">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+        </div>
+
+        @if (eventsLoading()) {
+        <div class="flex justify-center items-center py-10">
+          <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
+        </div>
+        } @else {
+        <div class="space-y-2">
+          @for (day of currentWeekDays(); track day) {
+          <div (click)="onDayClicked({ day: { date: day } })"
+            class="p-4 rounded-lg border bg-background flex items-center justify-between cursor-pointer hover:bg-card transition-colors"
+            [class.border-indigo-500]="(day | date:'yyyy-MM-dd') === (viewDate() | date:'yyyy-MM-dd')"
+            [class.border-card-border]="(day | date:'yyyy-MM-dd') !== (viewDate() | date:'yyyy-MM-dd')">
+            <div class="flex flex-col">
+              <span class="text-xs font-semibold text-text-secondary uppercase">
+                {{ day | date:'EEEE' : '' : locale }}
+              </span>
+              <span class="text-xl font-bold text-text-primary">
+                {{ day | date:'d' }}
+              </span>
+            </div>
+
+            @if (getEventsCountForDay(day) > 0) {
+            <span class="bg-indigo-600 text-white text-xs font-bold px-2.5 py-1 rounded-full">
+              {{ getEventsCountForDay(day) }}
+            </span>
+            }
+          </div>
+          }
+        </div>
+        }
+      </div>
+
     </div>
   </div>
 
   <!-- Day Events Modal -->
-  <app-modal
-    [isOpen]="isDayEventsModalOpen()"
-    [title]="('events.eventsOn' | translate) + ' ' + selectedDate()"
-    size="lg"
-    (close)="closeDayEventsModal()"
-  >
+  <app-modal [isOpen]="isDayEventsModalOpen()" [title]="('events.eventsOn' | translate) + ' ' + selectedDate()"
+    size="lg" (close)="closeDayEventsModal()">
     <div slot="body">
       <div class="space-y-4">
         <!-- Add Event Button -->
-        <button
-          (click)="onAddEventForDay()"
-          class="w-full px-4 py-3 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors flex items-center justify-center gap-2 cursor-pointer"
-        >
+        <button (click)="onAddEventForDay()"
+          class="w-full px-4 py-3 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors flex items-center justify-center gap-2 cursor-pointer">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
           </svg>
@@ -90,92 +149,69 @@
         </button>
 
         @if (selectedDayEvents().length > 0) {
-          <div class="border-t border-card-border pt-4">
-            <h3 class="text-sm font-medium text-text-secondary mb-3">{{ 'admin.existingEvents' | translate }}:</h3>
-            <div class="space-y-3">
-              @for (event of selectedDayEvents(); track event.id) {
-                <div class="p-4 bg-background rounded-lg border border-card-border">
-                  <div class="flex items-start justify-between">
-                    <div class="flex-1">
-                      <h4 class="font-medium text-text-primary">{{ event.title }}</h4>
-                      <div class="mt-1 text-sm text-text-secondary">
-                        <span>{{ event.startTime }} - {{ event.endTime }}</span>
-                        @if (event.building) {
-                          <span class="ml-2">• {{ event.building.name }}</span>
-                        }
-                        @if (event.resource) {
-                          <span class="ml-1">- {{ event.resource.name }}</span>
-                        }
-                      </div>
-                      @if (event.description) {
-                        <p class="mt-2 text-sm text-text-secondary">{{ event.description }}</p>
-                      }
-                    </div>
-                    <div class="flex gap-2 ml-4">
-                      <button
-                        (click)="openEventModal(event)"
-                        class="px-3 py-1 text-sm text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300 cursor-pointer"
-                      >
-                        {{ 'common.edit' | translate }}
-                      </button>
-                      <button
-                        (click)="confirmDeleteEvent(event)"
-                        class="px-3 py-1 text-sm text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 cursor-pointer"
-                      >
-                        {{ 'common.delete' | translate }}
-                      </button>
-                    </div>
+        <div class="border-t border-card-border pt-4">
+          <h3 class="text-sm font-medium text-text-secondary mb-3">{{ 'admin.existingEvents' | translate }}:</h3>
+          <div class="space-y-3">
+            @for (event of selectedDayEvents(); track event.id) {
+            <div class="p-4 bg-background rounded-lg border border-card-border">
+              <div class="flex items-start justify-between">
+                <div class="flex-1">
+                  <h4 class="font-medium text-text-primary">{{ event.title }}</h4>
+                  <div class="mt-1 text-sm text-text-secondary">
+                    <span>{{ event.startTime }} - {{ event.endTime }}</span>
+                    @if (event.building) {
+                    <span class="ml-2">• {{ event.building.name }}</span>
+                    }
+                    @if (event.resource) {
+                    <span class="ml-1">- {{ event.resource.name }}</span>
+                    }
                   </div>
+                  @if (event.description) {
+                  <p class="mt-2 text-sm text-text-secondary">{{ event.description }}</p>
+                  }
                 </div>
-              }
+                <div class="flex gap-2 ml-4">
+                  <button (click)="openEventModal(event)"
+                    class="px-3 py-1 text-sm text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300 cursor-pointer">
+                    {{ 'common.edit' | translate }}
+                  </button>
+                  <button (click)="confirmDeleteEvent(event)"
+                    class="px-3 py-1 text-sm text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 cursor-pointer">
+                    {{ 'common.delete' | translate }}
+                  </button>
+                </div>
+              </div>
             </div>
+            }
           </div>
+        </div>
         } @else {
-          <p class="text-center text-text-secondary py-4">{{ 'events.noEventsOnDay' | translate }}</p>
+        <p class="text-center text-text-secondary py-4">{{ 'events.noEventsOnDay' | translate }}</p>
         }
       </div>
     </div>
   </app-modal>
 
   <!-- Event Form Modal -->
-  <app-modal
-    [isOpen]="isEventModalOpen()"
-    [title]="(isEditMode() ? 'admin.editEvent' : 'admin.createEvent') | translate"
-    size="md"
-    (close)="closeEventModal()"
-  >
+  <app-modal [isOpen]="isEventModalOpen()"
+    [title]="(isEditMode() ? 'admin.editEvent' : 'admin.createEvent') | translate" size="md"
+    (close)="closeEventModal()">
     <div slot="body">
-      <app-event-form-modal
-        [form]="eventForm"
-        [buildings]="allBuildings()"
-        [rooms]="allRooms()"
-        [isLoading]="eventsLoading()"
-        [isEdit]="isEditMode()"
-        (formSubmit)="onEventFormSubmit()"
-        (cancel)="closeEventModal()"
-      ></app-event-form-modal>
+      <app-event-form-modal [form]="eventForm" [buildings]="allBuildings()" [rooms]="allRooms()"
+        [isLoading]="eventsLoading()" [isEdit]="isEditMode()" (formSubmit)="onEventFormSubmit()"
+        (cancel)="closeEventModal()"></app-event-form-modal>
     </div>
   </app-modal>
 
   <!-- Delete Confirmation Modal -->
-  <app-modal
-    [isOpen]="isDeleteModalOpen()"
-    [title]="'admin.confirmDeletion' | translate"
-    size="md"
-    (close)="closeDeleteModal()"
-  >
+  <app-modal [isOpen]="isDeleteModalOpen()" [title]="'admin.confirmDeletion' | translate" size="md"
+    (close)="closeDeleteModal()">
     <div slot="body">
       @if (eventToDelete()) {
-        <app-delete-confirmation-modal
-          [itemName]="eventToDelete()!.title"
-          [itemType]="'events.event' | translate"
-          [cascadeWarning]="''"
-          [isLoading]="eventsLoading()"
-          (confirm)="onConfirmDelete()"
-          (cancel)="closeDeleteModal()"
-        ></app-delete-confirmation-modal>
+      <app-delete-confirmation-modal [itemName]="eventToDelete()!.title" [itemType]="'events.event' | translate"
+        [cascadeWarning]="''" [isLoading]="eventsLoading()" (confirm)="onConfirmDelete()"
+        (cancel)="closeDeleteModal()"></app-delete-confirmation-modal>
       }
     </div>
   </app-modal>
 </app-main-layout>
-

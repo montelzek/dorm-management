@@ -1,12 +1,13 @@
 import { Component, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 import { TechnicianTask } from '../../technician.service';
 import { ButtonComponent } from '../../../../../shared/components/ui/button/button';
 
 @Component({
   selector: 'app-task-detail-modal',
   standalone: true,
-  imports: [CommonModule, ButtonComponent],
+  imports: [CommonModule, TranslateModule, ButtonComponent],
   templateUrl: './task-detail-modal.component.html'
 })
 export class TaskDetailModalComponent {
@@ -18,8 +19,12 @@ export class TaskDetailModalComponent {
     this.cancel.emit();
   }
 
-  formatStatus(status: string): string {
-    return status.replace('_', ' ');
+  getStatusTranslationKey(status: string): string {
+    return `issues.status.${status}`;
+  }
+
+  getPriorityTranslationKey(priority: string): string {
+    return `issues.priority.${priority}`;
   }
 
   getStatusClasses(status: string): string {
@@ -50,3 +55,4 @@ export class TaskDetailModalComponent {
     }
   }
 }
+

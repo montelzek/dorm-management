@@ -16,14 +16,28 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 
     List<Reservation> findByUserId(Long userId);
 
-    @Query("SELECT r FROM Reservation r WHERE r.reservationResource.id = :resourceId AND r.startTime < :endTime AND r.endTime > :startTime AND r.status = 'CONFIRMED'")
+    @Query("""
+       SELECT r
+       FROM Reservation r
+       WHERE r.reservationResource.id = :resourceId
+         AND r.startTime < :endTime
+         AND r.endTime > :startTime
+         AND r.status = 'CONFIRMED'
+       """)
     List<Reservation> findConflictingReservations(
             @Param("resourceId") Long resourceId,
             @Param("startTime") LocalDateTime startTime,
             @Param("endTime") LocalDateTime endTime
     );
 
-    @Query("SELECT r FROM Reservation r WHERE r.user.id = :userId AND r.startTime < :endTime AND r.endTime > :startTime AND r.status = 'CONFIRMED'")
+    @Query("""
+       SELECT r
+       FROM Reservation r
+       WHERE r.user.id = :userId
+         AND r.startTime < :endTime
+         AND r.endTime > :startTime
+         AND r.status = 'CONFIRMED'
+       """)
     List<Reservation> findUserConflictingReservations(
             @Param("userId") Long userId,
             @Param("startTime") LocalDateTime startTime,

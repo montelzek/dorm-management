@@ -1,6 +1,7 @@
 package com.montelzek.mydorm.issue;
 
 import com.montelzek.mydorm.issue.payload.*;
+import com.montelzek.mydorm.user.ERole;
 import com.montelzek.mydorm.user.User;
 import com.montelzek.mydorm.user.UserRepository;
 import jakarta.transaction.Transactional;
@@ -239,8 +240,8 @@ public class IssueService {
         User technician = userRepository.findById(technicianId)
                 .orElseThrow(() -> new IllegalArgumentException("Technician with given ID not found: " + technicianId));
         
-        // Verify that the user is actually a technician
-        if (!technician.getRoles().contains(com.montelzek.mydorm.user.ERole.ROLE_TECHNICIAN)) {
+        // Sprawdzenie, czy użytkownik ma rolę ROLE_TECHNICIAN
+        if (!technician.getRoles().contains(ERole.ROLE_TECHNICIAN)) {
             throw new IllegalArgumentException("User is not a technician");
         }
         
@@ -342,7 +343,7 @@ public class IssueService {
         Issue issue = issueRepository.findById(issueId)
                 .orElseThrow(() -> new IllegalArgumentException("Issue with given ID not found: " + issueId));
         
-        // Verify that the issue is assigned to this technician
+        // Sprawdzenie, czy dana usterka przypisana jest do aktualnie zalogowanego konserwatora
         if (issue.getAssignedTechnician() == null || !issue.getAssignedTechnician().getId().equals(technicianId)) {
             throw new IllegalStateException("This issue is not assigned to you");
         }
@@ -353,8 +354,7 @@ public class IssueService {
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException("Invalid status: " + newStatus);
         }
-        
-        // Technician can only set REPORTED, IN_PROGRESS, or RESOLVED
+
         if (status != EIssueStatus.REPORTED && status != EIssueStatus.IN_PROGRESS && status != EIssueStatus.RESOLVED) {
             throw new IllegalArgumentException("Technician can only set status to REPORTED, IN_PROGRESS, or RESOLVED");
         }

@@ -200,6 +200,12 @@ export const TOGGLE_RESOURCE_STATUS = gql`
   }
 `;
 
+export const DELETE_RESOURCE = gql`
+  mutation DeleteReservationResource($id: ID!) {
+    deleteReservationResource(id: $id)
+  }
+`;
+
 // Room Standards Queries / Mutations
 export const GET_ADMIN_ROOM_STANDARDS = gql`
   query GetAdminRoomStandards {

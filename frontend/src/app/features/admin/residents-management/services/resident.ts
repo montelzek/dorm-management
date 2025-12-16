@@ -1,12 +1,12 @@
-import {inject, Injectable, signal} from '@angular/core';
-import {Apollo} from 'apollo-angular';
-import {ResidentPayload} from '../models/resident.models';
-import {ResidentPage} from '../models/resident-page.models';
-import {RoomPayload} from '../models/room.models';
-import {GET_ALL_RESIDENTS, GET_RESIDENTS_BY_BUILDING, GET_BUILDINGS, GET_AVAILABLE_ROOMS, ASSIGN_ROOM, DELETE_RESIDENT} from '../residents.graphql';
-import {map} from 'rxjs/operators';
-import {Building} from '../../../../shared/models/graphql.types';
-import {Observable} from 'rxjs';
+import { inject, Injectable, signal } from '@angular/core';
+import { Apollo } from 'apollo-angular';
+import { ResidentPayload } from '../models/resident.models';
+import { ResidentPage } from '../models/resident-page.models';
+import { RoomPayload } from '../models/room.models';
+import { GET_ALL_RESIDENTS, GET_RESIDENTS_BY_BUILDING, GET_BUILDINGS, GET_AVAILABLE_ROOMS, ASSIGN_ROOM, DELETE_RESIDENT, CREATE_RESIDENT } from '../residents.graphql';
+import { map } from 'rxjs/operators';
+import { Building } from '../../../../shared/models/graphql.types';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -26,9 +26,9 @@ export class ResidentService {
     this.apollo
       .watchQuery<{ allResidents: ResidentPage }>({
         query: GET_ALL_RESIDENTS,
-        variables: { 
-          page, 
-          size, 
+        variables: {
+          page,
+          size,
           search: search || null,
           sortBy: sortBy || null,
           sortDirection: sortDirection || null
@@ -57,10 +57,10 @@ export class ResidentService {
     this.apollo
       .watchQuery<{ residentsByBuilding: ResidentPage }>({
         query: GET_RESIDENTS_BY_BUILDING,
-        variables: { 
-          buildingId, 
-          page, 
-          size, 
+        variables: {
+          buildingId,
+          page,
+          size,
           search: search || null,
           sortBy: sortBy || null,
           sortDirection: sortDirection || null
@@ -146,6 +146,22 @@ export class ResidentService {
             throw new Error('Failed to delete resident');
           }
           return result.data.deleteResident;
+        })
+      );
+  }
+
+  createResident(input: any): Observable<ResidentPayload> {
+    return this.apollo
+      .mutate<{ createResident: ResidentPayload }>({
+        mutation: CREATE_RESIDENT,
+        variables: { input }
+      })
+      .pipe(
+        map(result => {
+          if (!result.data) {
+            throw new Error('Failed to create resident');
+          }
+          return result.data.createResident;
         })
       );
   }

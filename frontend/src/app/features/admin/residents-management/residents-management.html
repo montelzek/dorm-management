@@ -1,60 +1,69 @@
 <app-main-layout [user]="currentUser()">
   <div class="space-y-6">
-    <!-- Header -->
+
     <div class="flex justify-between items-center">
       <h1 class="text-2xl font-bold text-text-primary">{{ 'admin.residentsManagement' | translate }}</h1>
     </div>
 
-    <!-- Filters and Search -->
-    <div class="flex flex-col md:flex-row gap-4">
-      <!-- Search Input -->
-      <div class="flex-1">
+    <div class="flex flex-col md:flex-row gap-4 items-end">
+
+      <div class="flex-1 w-full">
         <label for="search" class="block text-sm font-medium text-text-secondary mb-2">
           {{ 'residents.searchByName' | translate }}
         </label>
-        <input
-          id="search"
-          type="text"
-          [value]="searchQuery()"
-          (input)="onSearchChange($any($event.target).value)"
+        <input id="search" type="text" [value]="searchQuery()" (input)="onSearchChange($any($event.target).value)"
           [placeholder]="'residents.searchResidents' | translate"
-          class="w-full px-4 py-2 rounded-lg border border-card-border bg-card text-text-primary placeholder-text-secondary focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-        />
+          class="w-full px-4 py-2 rounded-lg border border-card-border bg-card text-text-primary placeholder-text-secondary focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" />
       </div>
 
-      <!-- Building Filter -->
       <div class="w-full md:w-64">
         <label for="building" class="block text-sm font-medium text-text-secondary mb-2">
           {{ 'residents.filterByBuilding' | translate }}
         </label>
-        <select
-          id="building"
-          [value]="selectedBuildingId()"
+        <select id="building" [value]="selectedBuildingId()"
           (change)="onBuildingFilterChange($any($event.target).value)"
-          class="w-full px-4 py-2 rounded-lg border border-card-border bg-card text-text-primary focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-        >
+          class="w-full px-4 py-2 rounded-lg border border-card-border bg-card text-text-primary focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
           <option value="">{{ 'dashboard.allBuildings' | translate }}</option>
           @for (building of buildings(); track building.id) {
-            <option [value]="building.id">{{ building.name }}</option>
+          <option [value]="building.id">{{ building.name }}</option>
           }
         </select>
       </div>
+
+      <button (click)="openCreateModal()"
+        class="w-full md:w-auto px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition-colors font-medium flex items-center justify-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd"
+            d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+            clip-rule="evenodd" />
+        </svg>
+        {{ 'residents.addResident' | translate }}
+      </button>
     </div>
 
-    <!-- Results Count and Page Size -->
+    <app-resident-form-modal [isOpen]="isCreateModalOpen()" (close)="closeCreateModal()"
+      (submitForm)="onResidentSubmit($event)" />
+
+    <app-room-assignment-modal [isOpen]="isModalOpen()" [resident]="selectedResident()" (close)="onModalClose()"
+      (assigned)="onRoomAssigned()" />
+
+    <app-confirmation-dialog [isOpen]="isDeleteDialogOpen()" [title]="'residents.deleteResident' | translate"
+      [message]="('residents.deleteConfirmation' | translate) + ' ' + (residentToDelete()?.firstName || '') + ' ' + (residentToDelete()?.lastName || '') + '? ' + ('residents.cannotBeUndone' | translate)"
+      [confirmText]="'common.delete' | translate" [cancelText]="'common.cancel' | translate"
+      (confirm)="onConfirmDelete()" (cancel)="onCancelDelete()" />
+
+
     <div class="flex justify-between items-center">
       <div class="text-sm text-text-secondary">
-        {{ 'common.showing' | translate }} {{ allResidents().length }} {{ 'common.of' | translate }} {{ totalElements() }} {{ 'residents.title' | translate | lowercase }}
+        {{ 'common.showing' | translate }} {{ allResidents().length }} {{ 'common.of' | translate }} {{ totalElements()
+        }}
+        {{ 'residents.title' | translate | lowercase }}
       </div>
-      
+
       <div class="flex items-center gap-2">
         <label for="pageSize" class="text-sm text-text-secondary">{{ 'issues.itemsPerPage' | translate }}:</label>
-        <select
-          id="pageSize"
-          [value]="size()"
-          (change)="onPageSizeChange(+$any($event.target).value)"
-          class="px-3 py-1 rounded-lg border border-card-border bg-card text-text-primary focus:outline-none focus:ring-2 focus:ring-primary"
-        >
+        <select id="pageSize" [value]="size()" (change)="onPageSizeChange(+$any($event.target).value)"
+          class="px-3 py-1 rounded-lg border border-card-border bg-card text-text-primary focus:outline-none focus:ring-2 focus:ring-primary">
           <option [value]="5">5</option>
           <option [value]="10">10</option>
           <option [value]="20">20</option>
@@ -63,115 +72,78 @@
       </div>
     </div>
 
-    <!-- Loading State -->
     @if (isLoading()) {
-      <div class="flex justify-center items-center py-12">
-        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-        <span class="ml-3 text-text-secondary">{{ 'residents.loadingResidents' | translate }}</span>
-      </div>
+    <div class="flex justify-center items-center py-12">
+      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      <span class="ml-3 text-text-secondary">{{ 'residents.loadingResidents' | translate }}</span>
+    </div>
     }
 
-    <!-- Empty State -->
     @if (!isLoading() && allResidents().length === 0) {
-      <div class="text-center py-12">
-        <svg class="mx-auto h-12 w-12 text-text-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-        </svg>
-        <h3 class="mt-2 text-sm font-medium text-text-primary">{{ 'residents.noResidentsFound' | translate }}</h3>
-        <p class="mt-1 text-sm text-text-secondary">
-          @if (searchQuery()) {
-            {{ 'residents.adjustSearch' | translate }}
-          } @else if (selectedBuildingId()) {
-            {{ 'residents.noResidentsInBuilding' | translate }}
-          } @else {
-            {{ 'residents.getStarted' | translate }}
-          }
-        </p>
-      </div>
+    <div class="text-center py-12">
+      <svg class="mx-auto h-12 w-12 text-text-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+      </svg>
+      <h3 class="mt-2 text-sm font-medium text-text-primary">{{ 'residents.noResidentsFound' | translate }}</h3>
+      <p class="mt-1 text-sm text-text-secondary">
+        @if (searchQuery()) {
+        {{ 'residents.adjustSearch' | translate }}
+        } @else if (selectedBuildingId()) {
+        {{ 'residents.noResidentsInBuilding' | translate }}
+        } @else {
+        {{ 'residents.getStarted' | translate }}
+        }
+      </p>
+    </div>
     }
 
-    <!-- Resident List -->
     @if (!isLoading() && allResidents().length > 0) {
-      <!-- Wrapper only for desktop table -->
-      <div class="hidden md:block rounded-lg bg-card shadow-sm border border-card-border overflow-hidden">
-        <app-resident-list 
-          [residents]="allResidents()"
-          [sortBy]="sortBy()"
-          [sortDirection]="sortDirection()"
-          (assignRoom)="onAssignRoom($event)"
-          (deleteResident)="onDeleteResident($event)"
-          (sortChange)="onSortChange($event)"
-        ></app-resident-list>
+    <div class="hidden md:block rounded-lg bg-card shadow-sm border border-card-border overflow-hidden">
+      <app-resident-list [residents]="allResidents()" [sortBy]="sortBy()" [sortDirection]="sortDirection()"
+        (assignRoom)="onAssignRoom($event)" (deleteResident)="onDeleteResident($event)"
+        (sortChange)="onSortChange($event)"></app-resident-list>
+    </div>
+
+    <div class="md:hidden">
+      <app-resident-list [residents]="allResidents()" [sortBy]="sortBy()" [sortDirection]="sortDirection()"
+        (assignRoom)="onAssignRoom($event)" (deleteResident)="onDeleteResident($event)"
+        (sortChange)="onSortChange($event)"></app-resident-list>
+    </div>
+
+    @if (totalPages() > 1) {
+    <div class="flex justify-center items-center gap-2 mt-6">
+      <button (click)="onPageChange(currentPage() - 1)" [disabled]="currentPage() === 0"
+        class="px-4 py-2 rounded-lg bg-card border border-card-border text-text-primary hover:bg-background disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+        {{ 'common.previous' | translate }}
+      </button>
+
+      <div class="flex gap-1">
+        @for (pageNum of [].constructor(totalPages()); track $index) {
+        <button (click)="onPageChange($index)" [class.bg-indigo-600]="currentPage() === $index"
+          [class.text-white]="currentPage() === $index" [class.bg-card]="currentPage() !== $index"
+          [class.text-text-primary]="currentPage() !== $index"
+          class="px-3 py-2 rounded-lg border border-card-border hover:bg-indigo-600 hover:text-white transition-colors min-w-[40px]">
+          {{ $index + 1 }}
+        </button>
+        }
       </div>
-      
-      <!-- Mobile cards without wrapper -->
-      <div class="md:hidden">
-        <app-resident-list 
-          [residents]="allResidents()"
-          [sortBy]="sortBy()"
-          [sortDirection]="sortDirection()"
-          (assignRoom)="onAssignRoom($event)"
-          (deleteResident)="onDeleteResident($event)"
-          (sortChange)="onSortChange($event)"
-        ></app-resident-list>
-      </div>
 
-      <!-- Pagination Controls -->
-      @if (totalPages() > 1) {
-        <div class="flex justify-center items-center gap-2 mt-6">
-          <button
-            (click)="onPageChange(currentPage() - 1)"
-            [disabled]="currentPage() === 0"
-            class="px-4 py-2 rounded-lg bg-card border border-card-border text-text-primary hover:bg-background disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-          >
-            {{ 'common.previous' | translate }}
-          </button>
-
-          <div class="flex gap-1">
-            @for (pageNum of [].constructor(totalPages()); track $index) {
-              <button
-                (click)="onPageChange($index)"
-                [class.bg-indigo-600]="currentPage() === $index"
-                [class.text-white]="currentPage() === $index"
-                [class.bg-card]="currentPage() !== $index"
-                [class.text-text-primary]="currentPage() !== $index"
-                class="px-3 py-2 rounded-lg border border-card-border hover:bg-indigo-600 hover:text-white transition-colors min-w-[40px]"
-              >
-                {{ $index + 1 }}
-              </button>
-            }
-          </div>
-
-          <button
-            (click)="onPageChange(currentPage() + 1)"
-            [disabled]="currentPage() === totalPages() - 1"
-            class="px-4 py-2 rounded-lg bg-card border border-card-border text-text-primary hover:bg-background disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-          >
-            {{ 'common.next' | translate }}
-          </button>
-        </div>
-      }
+      <button (click)="onPageChange(currentPage() + 1)" [disabled]="currentPage() === totalPages() - 1"
+        class="px-4 py-2 rounded-lg bg-card border border-card-border text-text-primary hover:bg-background disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+        {{ 'common.next' | translate }}
+      </button>
+    </div>
+    }
     }
   </div>
 
-  <!-- Room Assignment Modal -->
-  <app-room-assignment-modal
-    [isOpen]="isModalOpen()"
-    [resident]="selectedResident()"
-    (close)="onModalClose()"
-    (assigned)="onRoomAssigned()"
-  />
+  <app-room-assignment-modal [isOpen]="isModalOpen()" [resident]="selectedResident()" (close)="onModalClose()"
+    (assigned)="onRoomAssigned()" />
 
-  <!-- Delete Confirmation Dialog -->
-  <app-confirmation-dialog
-    [isOpen]="isDeleteDialogOpen()"
-    [title]="'residents.deleteResident' | translate"
+  <app-confirmation-dialog [isOpen]="isDeleteDialogOpen()" [title]="'residents.deleteResident' | translate"
     [message]="('residents.deleteConfirmation' | translate) + ' ' + (residentToDelete()?.firstName || '') + ' ' + (residentToDelete()?.lastName || '') + '? ' + ('residents.cannotBeUndone' | translate)"
-    [confirmText]="'common.delete' | translate"
-    [cancelText]="'common.cancel' | translate"
-    (confirm)="onConfirmDelete()"
-    (cancel)="onCancelDelete()"
-  />
+    [confirmText]="'common.delete' | translate" [cancelText]="'common.cancel' | translate" (confirm)="onConfirmDelete()"
+    (cancel)="onCancelDelete()" />
 
 </app-main-layout>
-

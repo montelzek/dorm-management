@@ -1,9 +1,9 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { CalendarEvent, CalendarView, CalendarModule, CalendarUtils, DateAdapter, CalendarA11y, CalendarDateFormatter, CalendarEventTitleFormatter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
-import { startOfMonth, endOfMonth, format, addMonths, subMonths } from 'date-fns';
+import { startOfMonth, endOfMonth, format, addMonths, subMonths, startOfWeek, endOfWeek, eachDayOfInterval, addWeeks, subWeeks } from 'date-fns';
 import { MainLayoutComponent } from '../../../shared/components/layout/main-layout/main-layout';
 import { UserService } from '../../../core/services/user.service';
 import { EventsService, Event as DormEvent } from '../../admin/events-management/services/events.service';
@@ -36,10 +36,10 @@ export class ResidentEventsComponent implements OnInit {
 
   readonly currentUser = this.userService.currentUser;
   readonly CalendarView = CalendarView;
-  
+
   // Locale for calendar (string code for Angular pipes)
   readonly locale: string = 'pl';
-  
+
   // State
   readonly viewDate = signal<Date>(new Date());
   readonly view = signal<CalendarView>(CalendarView.Month);
@@ -47,9 +47,16 @@ export class ResidentEventsComponent implements OnInit {
   readonly dormEvents = signal<DormEvent[]>([]);
   readonly selectedDayEvents = signal<DormEvent[]>([]);
   readonly selectedDate = signal<string>('');
-  
+
   // Loading state
   readonly eventsLoading = signal<boolean>(false);
+
+  // Computed property for mobile week view
+  readonly currentWeekDays = computed(() => {
+    const start = startOfWeek(this.viewDate(), { weekStartsOn: 1 });
+    const end = endOfWeek(this.viewDate(), { weekStartsOn: 1 });
+    return eachDayOfInterval({ start, end });
+  });
 
   ngOnInit(): void {
     this.userService.loadCurrentUser();
@@ -59,7 +66,7 @@ export class ResidentEventsComponent implements OnInit {
   loadEvents(): void {
     const start = startOfMonth(this.viewDate());
     const end = endOfMonth(this.viewDate());
-    
+
     this.eventsLoading.set(true);
     this.eventsService.getEventsByDateRange(
       format(start, 'yyyy-MM-dd'),
@@ -107,13 +114,31 @@ export class ResidentEventsComponent implements OnInit {
     this.loadEvents();
   }
 
+  previousWeek(): void {
+    this.viewDate.set(subWeeks(this.viewDate(), 1));
+    // We might need to reload events if the week crosses month boundary, 
+    // but simplified loadEvents loads whole month of viewDate.
+    // Ideally we should check if month changed, but reloading is safe.
+    this.loadEvents();
+  }
+
+  nextWeek(): void {
+    this.viewDate.set(addWeeks(this.viewDate(), 1));
+    this.loadEvents();
+  }
+
+  getEventsCountForDay(date: Date): number {
+    const formattedDate = format(date, 'yyyy-MM-dd');
+    return this.dormEvents().filter(e => e.eventDate === formattedDate).length;
+  }
+
   onDayClicked(event: any): void {
     const date = event.day.date;
     const formattedDate = format(date, 'yyyy-MM-dd');
-    
+
     // Find events for this day
     const eventsOnThisDay = this.dormEvents().filter(e => e.eventDate === formattedDate);
-    
+
     if (eventsOnThisDay.length > 0) {
       this.selectedDate.set(formattedDate);
       this.selectedDayEvents.set(eventsOnThisDay);

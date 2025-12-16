@@ -167,7 +167,8 @@
     "deselectAll": "Deselect all",
     "optional": "optional",
     "timestamps": "Timestamps",
-    "saving": "Saving"
+    "saving": "Saving",
+    "name": "Name"
   },
   "issues": {
     "title": "Issues",
@@ -334,7 +335,38 @@
   },
   "residents": {
     "title": "Residents",
-    "addResident": "Add Resident"
+    "addResident": "Add Resident",
+    "create": "Create",
+    "edit": "Edit",
+    "delete": "Delete",
+    "assignedRoom": "Assigned Room",
+    "noAssignedRoom": "No assigned room",
+    "createSuccess": "Resident created successfully",
+    "createError": "Error creating resident",
+    "residentDetails": "Resident Details",
+    "assignRoom": "Assign Room",
+    "searchByName": "Search by name or room number",
+    "searchResidents": "Search residents...",
+    "filterByBuilding": "Filter by building",
+    "noResidentsFound": "No residents found",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "email": "Email",
+    "phone": "Phone",
+    "buildingName": "Building Name",
+    "roomNumber": "Room Number",
+    "actions": "Actions",
+    "change": "Change",
+    "assign": "Assign",
+    "room": "Room",
+    "changeRoom": "Change Room",
+    "deleteResident": "Delete Resident",
+    "adjustSearch": "Try adjusting your search query.",
+    "noResidentsInBuilding": "No residents in this building.",
+    "getStarted": "Get started by adding residents to the system.",
+    "loadingResidents": "Loading residents...",
+    "deleteConfirmation": "Are you sure you want to delete",
+    "cannotBeUndone": "This action cannot be undone."
   },
   "marketplace": {
     "title": "Marketplace",
@@ -630,6 +662,12 @@
     "spaceActivatedSuccess": "Common space activated",
     "spaceDeactivatedSuccess": "Common space deactivated",
     "errorTogglingStatus": "Error toggling status",
+    "spaceDeletedSuccess": "Common space deleted successfully",
+    "errorDeletingSpace": "Error deleting space",
+    "cascadeWarning": {
+      "building": "This will attempt to delete {{rooms}} room(s) and {{resources}} common space(s). This may fail if rooms have assigned residents.",
+      "room": "This room has {{count}} resident(s) assigned and cannot be deleted."
+    },
     "errorLoadingStandards": "Error loading standards",
     "standardCreatedSuccess": "Room standard created successfully",
     "errorCreatingStandard": "Error creating standard",
@@ -796,7 +834,10 @@
     "noAssignedTasks": "You don't have any assigned tasks at the moment.",
     "location": "Location",
     "details": "Details",
-    "viewDetails": "View Details"
+    "viewDetails": "View Details",
+    "reporterInformation": "Reporter Information",
+    "name": "Name",
+    "lastUpdated": "Last Updated"
   },
   "receptionist": {
     "packages": "Packages",
@@ -855,6 +896,8 @@
       "loadingAnnouncements": "Failed to load announcements",
       "duringRegistration": "An error occurred during registration",
       "duringLogin": "An error occurred during login",
+      "creatingResident": "Failed to create resident",
+      "emailExists": "User with this email already exists",
       "deletingResident": "Failed to delete resident",
       "assigningRoom": "Failed to assign room",
       "assigningTechnician": "Failed to assign technician",

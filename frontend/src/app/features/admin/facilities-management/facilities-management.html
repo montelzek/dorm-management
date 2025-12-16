@@ -9,40 +9,28 @@
     <!-- Tabs -->
     <div class="border-b border-card-border">
       <nav class="-mb-px flex space-x-8">
-        <button
-          (click)="switchTab('buildings')"
-          [class]="activeTab() === 'buildings'
+        <button (click)="switchTab('buildings')" [class]="activeTab() === 'buildings'
             ? 'border-indigo-500 text-indigo-600 dark:text-indigo-400'
             : 'border-transparent text-text-secondary hover:text-text-primary hover:border-gray-300'"
-          class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors cursor-pointer"
-        >
+          class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors cursor-pointer">
           {{ 'buildings.title' | translate }}
         </button>
-        <button
-          (click)="switchTab('rooms')"
-          [class]="activeTab() === 'rooms'
+        <button (click)="switchTab('rooms')" [class]="activeTab() === 'rooms'
             ? 'border-indigo-500 text-indigo-600 dark:text-indigo-400'
             : 'border-transparent text-text-secondary hover:text-text-primary hover:border-gray-300'"
-          class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors cursor-pointer"
-        >
+          class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors cursor-pointer">
           {{ 'rooms.title' | translate }}
         </button>
-        <button
-          (click)="switchTab('resources')"
-          [class]="activeTab() === 'resources'
+        <button (click)="switchTab('resources')" [class]="activeTab() === 'resources'
             ? 'border-indigo-500 text-indigo-600 dark:text-indigo-400'
             : 'border-transparent text-text-secondary hover:text-text-primary hover:border-gray-300'"
-          class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors cursor-pointer"
-        >
+          class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors cursor-pointer">
           {{ 'facilities.commonSpaces' | translate }}
         </button>
-        <button
-          (click)="switchTab('standards')"
-          [class]="activeTab() === 'standards'
+        <button (click)="switchTab('standards')" [class]="activeTab() === 'standards'
             ? 'border-indigo-500 text-indigo-600 dark:text-indigo-400'
             : 'border-transparent text-text-secondary hover:text-text-primary hover:border-gray-300'"
-          class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors cursor-pointer"
-        >
+          class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors cursor-pointer">
           {{ 'facilities.roomStandards' | translate }}
         </button>
       </nav>
@@ -51,249 +39,175 @@
     <!-- Tab Content -->
     <div class="rounded-lg bg-card shadow-sm border border-card-border p-6">
       @if (activeTab() === 'buildings') {
-        <app-buildings-list
-          [buildings]="buildings()"
-          [isLoading]="buildingsLoading()"
-          (add)="openBuildingModal()"
-          (edit)="openBuildingModal($event)"
-          (delete)="confirmDeleteBuilding($event)"
-        ></app-buildings-list>
+      <app-buildings-list [buildings]="buildings()" [isLoading]="buildingsLoading()" (add)="openBuildingModal()"
+        (edit)="openBuildingModal($event)" (delete)="confirmDeleteBuilding($event)"></app-buildings-list>
       }
 
       @if (activeTab() === 'rooms') {
-        <!-- Top Info Bar for Rooms -->
-        @if (roomsTotalElements() > 0) {
-          <div class="mb-6 flex flex-col sm:flex-row items-center justify-between gap-4 pb-4 border-b border-card-border">
-            <div class="text-sm text-text-secondary">
-              {{ 'common.showing' | translate }} {{ roomsCurrentPage() * roomsPageSize() + 1 }} {{ 'common.to' | translate }}
-              {{ Math.min((roomsCurrentPage() + 1) * roomsPageSize(), roomsTotalElements()) }} {{ 'common.of' | translate }}
-              {{ roomsTotalElements() }} {{ 'facilities.rooms' | translate | lowercase }}
-            </div>
+      <!-- Top Info Bar for Rooms -->
+      @if (roomsTotalElements() > 0) {
+      <div class="mb-6 flex flex-col sm:flex-row items-center justify-between gap-4 pb-4 border-b border-card-border">
+        <div class="text-sm text-text-secondary">
+          {{ 'common.showing' | translate }} {{ roomsCurrentPage() * roomsPageSize() + 1 }} {{ 'common.to' | translate
+          }}
+          {{ Math.min((roomsCurrentPage() + 1) * roomsPageSize(), roomsTotalElements()) }} {{ 'common.of' | translate }}
+          {{ roomsTotalElements() }} {{ 'facilities.rooms' | translate | lowercase }}
+        </div>
+      </div>
+      }
+
+      <app-rooms-list [rooms]="rooms()" [buildings]="allBuildings()" [isLoading]="roomsLoading()"
+        [selectedBuilding]="roomsBuildingFilter()" [selectedStatus]="roomsStatusFilter()"
+        [searchQuery]="roomsSearchFilter()" (add)="openRoomModal()" (edit)="openRoomModal($event)"
+        (delete)="confirmDeleteRoom($event)" (buildingFilterChange)="onRoomBuildingFilterChange($event)"
+        (statusFilterChange)="onRoomStatusFilterChange($event)"
+        (searchChange)="onRoomSearchChange($event)"></app-rooms-list>
+
+      <!-- Pagination for Rooms -->
+      @if (roomsTotalElements() > 0) {
+      <div class="mt-6 pt-4 border-t border-card-border">
+        <div class="flex justify-center">
+          <div class="flex gap-1">
+            <button (click)="onRoomsPageChange(roomsCurrentPage() - 1)" [disabled]="roomsCurrentPage() === 0"
+              class="px-3 py-1 rounded-md bg-card text-text-primary border border-card-border hover:bg-indigo-600 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+              {{ 'common.previous' | translate }}
+            </button>
+
+            @for (pageNum of [].constructor(roomsTotalPages()); track $index) {
+            @if ($index === 0 || $index === roomsTotalPages() - 1 || ($index >= roomsCurrentPage() - 1 && $index <=
+              roomsCurrentPage() + 1)) { <button (click)="onRoomsPageChange($index)"
+              [class]="$index === roomsCurrentPage() ? 'px-3 py-1 rounded-md bg-indigo-600 text-white' : 'px-3 py-1 rounded-md bg-card text-text-primary border border-card-border hover:bg-indigo-600 hover:text-white transition-colors'">
+              {{ $index + 1 }}
+              </button>
+              } @else if ($index === roomsCurrentPage() - 2 || $index === roomsCurrentPage() + 2) {
+              <span class="px-2 py-1 text-text-secondary">...</span>
+              }
+              }
+
+              <button (click)="onRoomsPageChange(roomsCurrentPage() + 1)"
+                [disabled]="roomsCurrentPage() === roomsTotalPages() - 1"
+                class="px-3 py-1 rounded-md bg-card text-text-primary border border-card-border hover:bg-indigo-600 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+                {{ 'common.next' | translate }}
+              </button>
           </div>
-        }
-
-        <app-rooms-list
-          [rooms]="rooms()"
-          [buildings]="allBuildings()"
-          [isLoading]="roomsLoading()"
-          [selectedBuilding]="roomsBuildingFilter()"
-          [selectedStatus]="roomsStatusFilter()"
-          [searchQuery]="roomsSearchFilter()"
-          (add)="openRoomModal()"
-          (edit)="openRoomModal($event)"
-          (delete)="confirmDeleteRoom($event)"
-          (buildingFilterChange)="onRoomBuildingFilterChange($event)"
-          (statusFilterChange)="onRoomStatusFilterChange($event)"
-          (searchChange)="onRoomSearchChange($event)"
-        ></app-rooms-list>
-
-        <!-- Pagination for Rooms -->
-        @if (roomsTotalElements() > 0) {
-          <div class="mt-6 pt-4 border-t border-card-border">
-            <div class="flex justify-center">
-              <div class="flex gap-1">
-                <button
-                  (click)="onRoomsPageChange(roomsCurrentPage() - 1)"
-                  [disabled]="roomsCurrentPage() === 0"
-                  class="px-3 py-1 rounded-md bg-card text-text-primary border border-card-border hover:bg-indigo-600 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                >
-                  {{ 'common.previous' | translate }}
-                </button>
-
-                @for (pageNum of [].constructor(roomsTotalPages()); track $index) {
-                  @if ($index === 0 || $index === roomsTotalPages() - 1 || ($index >= roomsCurrentPage() - 1 && $index <= roomsCurrentPage() + 1)) {
-                    <button
-                      (click)="onRoomsPageChange($index)"
-                      [class]="$index === roomsCurrentPage() ? 'px-3 py-1 rounded-md bg-indigo-600 text-white' : 'px-3 py-1 rounded-md bg-card text-text-primary border border-card-border hover:bg-indigo-600 hover:text-white transition-colors'"
-                    >
-                      {{ $index + 1 }}
-                    </button>
-                  } @else if ($index === roomsCurrentPage() - 2 || $index === roomsCurrentPage() + 2) {
-                    <span class="px-2 py-1 text-text-secondary">...</span>
-                  }
-                }
-
-                <button
-                  (click)="onRoomsPageChange(roomsCurrentPage() + 1)"
-                  [disabled]="roomsCurrentPage() === roomsTotalPages() - 1"
-                  class="px-3 py-1 rounded-md bg-card text-text-primary border border-card-border hover:bg-indigo-600 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                >
-                  {{ 'common.next' | translate }}
-                </button>
-              </div>
-            </div>
-          </div>
-        }
+        </div>
+      </div>
+      }
       }
 
       @if (activeTab() === 'resources') {
-        <!-- Top Info Bar for Resources -->
-        @if (resourcesTotalElements() > 0) {
-          <div class="mb-6 flex flex-col sm:flex-row items-center justify-between gap-4 pb-4 border-b border-card-border">
-            <div class="text-sm text-text-secondary">
-              {{ 'common.showing' | translate }} {{ resourcesCurrentPage() * resourcesPageSize() + 1 }} {{ 'common.to' | translate }}
-              {{ Math.min((resourcesCurrentPage() + 1) * resourcesPageSize(), resourcesTotalElements()) }} {{ 'common.of' | translate }}
-              {{ resourcesTotalElements() }} {{ 'facilities.spaces' | translate | lowercase }}
-            </div>
+      <!-- Top Info Bar for Resources -->
+      @if (resourcesTotalElements() > 0) {
+      <div class="mb-6 flex flex-col sm:flex-row items-center justify-between gap-4 pb-4 border-b border-card-border">
+        <div class="text-sm text-text-secondary">
+          {{ 'common.showing' | translate }} {{ resourcesCurrentPage() * resourcesPageSize() + 1 }} {{ 'common.to' |
+          translate }}
+          {{ Math.min((resourcesCurrentPage() + 1) * resourcesPageSize(), resourcesTotalElements()) }} {{ 'common.of' |
+          translate }}
+          {{ resourcesTotalElements() }} {{ 'facilities.spaces' | translate | lowercase }}
+        </div>
+      </div>
+      }
+
+      <app-resources-list [resources]="resources()" [buildings]="allBuildings()" [isLoading]="resourcesLoading()"
+        [selectedBuilding]="resourcesBuildingFilter()" [selectedStatus]="resourcesStatusFilter()"
+        (add)="openResourceModal()" (edit)="openResourceModal($event)" (delete)="confirmDeleteResource($event)"
+        (toggle)="toggleResourceStatus($event)" (buildingFilterChange)="onResourceBuildingFilterChange($event)"
+        (statusFilterChange)="onResourceStatusFilterChange($event)"></app-resources-list>
+
+      <!-- Pagination for Resources -->
+      @if (resourcesTotalElements() > 0) {
+      <div class="mt-6 pt-4 border-t border-card-border">
+        <div class="flex justify-center">
+          <div class="flex gap-1">
+            <button (click)="onResourcesPageChange(resourcesCurrentPage() - 1)"
+              [disabled]="resourcesCurrentPage() === 0"
+              class="px-3 py-1 rounded-md bg-card text-text-primary border border-card-border hover:bg-indigo-600 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+              {{ 'common.previous' | translate }}
+            </button>
+
+            @for (pageNum of [].constructor(resourcesTotalPages()); track $index) {
+            @if ($index === 0 || $index === resourcesTotalPages() - 1 || ($index >= resourcesCurrentPage() - 1 && $index
+            <= resourcesCurrentPage() + 1)) { <button (click)="onResourcesPageChange($index)"
+              [class]="$index === resourcesCurrentPage() ? 'px-3 py-1 rounded-md bg-indigo-600 text-white' : 'px-3 py-1 rounded-md bg-card text-text-primary border border-card-border hover:bg-indigo-600 hover:text-white transition-colors'">
+              {{ $index + 1 }}
+              </button>
+              } @else if ($index === resourcesCurrentPage() - 2 || $index === resourcesCurrentPage() + 2) {
+              <span class="px-2 py-1 text-text-secondary">...</span>
+              }
+              }
+
+              <button (click)="onResourcesPageChange(resourcesCurrentPage() + 1)"
+                [disabled]="resourcesCurrentPage() === resourcesTotalPages() - 1"
+                class="px-3 py-1 rounded-md bg-card text-text-primary border border-card-border hover:bg-indigo-600 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+                {{ 'common.next' | translate }}
+              </button>
           </div>
-        }
-
-        <app-resources-list
-          [resources]="resources()"
-          [buildings]="allBuildings()"
-          [isLoading]="resourcesLoading()"
-          [selectedBuilding]="resourcesBuildingFilter()"
-          [selectedStatus]="resourcesStatusFilter()"
-          (add)="openResourceModal()"
-          (edit)="openResourceModal($event)"
-          (toggle)="toggleResourceStatus($event)"
-          (buildingFilterChange)="onResourceBuildingFilterChange($event)"
-          (statusFilterChange)="onResourceStatusFilterChange($event)"
-        ></app-resources-list>
-
-        <!-- Pagination for Resources -->
-        @if (resourcesTotalElements() > 0) {
-          <div class="mt-6 pt-4 border-t border-card-border">
-            <div class="flex justify-center">
-              <div class="flex gap-1">
-                <button
-                  (click)="onResourcesPageChange(resourcesCurrentPage() - 1)"
-                  [disabled]="resourcesCurrentPage() === 0"
-                  class="px-3 py-1 rounded-md bg-card text-text-primary border border-card-border hover:bg-indigo-600 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                >
-                  {{ 'common.previous' | translate }}
-                </button>
-
-                @for (pageNum of [].constructor(resourcesTotalPages()); track $index) {
-                  @if ($index === 0 || $index === resourcesTotalPages() - 1 || ($index >= resourcesCurrentPage() - 1 && $index <= resourcesCurrentPage() + 1)) {
-                    <button
-                      (click)="onResourcesPageChange($index)"
-                      [class]="$index === resourcesCurrentPage() ? 'px-3 py-1 rounded-md bg-indigo-600 text-white' : 'px-3 py-1 rounded-md bg-card text-text-primary border border-card-border hover:bg-indigo-600 hover:text-white transition-colors'"
-                    >
-                      {{ $index + 1 }}
-                    </button>
-                  } @else if ($index === resourcesCurrentPage() - 2 || $index === resourcesCurrentPage() + 2) {
-                    <span class="px-2 py-1 text-text-secondary">...</span>
-                  }
-                }
-
-                <button
-                  (click)="onResourcesPageChange(resourcesCurrentPage() + 1)"
-                  [disabled]="resourcesCurrentPage() === resourcesTotalPages() - 1"
-                  class="px-3 py-1 rounded-md bg-card text-text-primary border border-card-border hover:bg-indigo-600 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                >
-                  {{ 'common.next' | translate }}
-                </button>
-              </div>
-            </div>
-          </div>
-        }
+        </div>
+      </div>
+      }
       }
 
       @if (activeTab() === 'standards') {
-        <app-room-standards-list
-          [standards]="roomStandards()"
-          [isLoading]="roomStandardsLoading()"
-          (add)="openStandardModal()"
-          (edit)="openStandardModal($event)"
-          (delete)="confirmDeleteStandard($event)"
-        ></app-room-standards-list>
+      <app-room-standards-list [standards]="roomStandards()" [isLoading]="roomStandardsLoading()"
+        (add)="openStandardModal()" (edit)="openStandardModal($event)"
+        (delete)="confirmDeleteStandard($event)"></app-room-standards-list>
       }
     </div>
   </div>
 
   <!-- Building Modal -->
-  <app-modal
-    [isOpen]="isBuildingModalOpen()"
-    [title]="(isEditMode() ? 'facilities.editBuilding' : 'facilities.addBuilding') | translate"
-    size="md"
-    (close)="closeBuildingModal()"
-  >
+  <app-modal [isOpen]="isBuildingModalOpen()"
+    [title]="(isEditMode() ? 'facilities.editBuilding' : 'facilities.addBuilding') | translate" size="md"
+    (close)="closeBuildingModal()">
     <div slot="body">
-      <app-building-form-modal
-        [form]="buildingForm"
-        [isLoading]="buildingsLoading()"
-        [isEdit]="isEditMode()"
-        (formSubmit)="onBuildingFormSubmit()"
-        (cancel)="closeBuildingModal()"
-      ></app-building-form-modal>
+      <app-building-form-modal [form]="buildingForm" [isLoading]="buildingsLoading()" [isEdit]="isEditMode()"
+        (formSubmit)="onBuildingFormSubmit()" (cancel)="closeBuildingModal()"></app-building-form-modal>
     </div>
   </app-modal>
 
   <!-- Room Modal -->
-  <app-modal
-    [isOpen]="isRoomModalOpen()"
-    [title]="(isEditMode() ? 'facilities.editRoom' : 'facilities.addRoom') | translate"
-    size="md"
-    (close)="closeRoomModal()"
-  >
+  <app-modal [isOpen]="isRoomModalOpen()"
+    [title]="(isEditMode() ? 'facilities.editRoom' : 'facilities.addRoom') | translate" size="md"
+    (close)="closeRoomModal()">
     <div slot="body">
-      <app-room-form-modal
-        [form]="roomForm"
-        [buildings]="allBuildings()"
-        [standards]="getAvailableStandardsForCapacity(roomForm.get('capacity')?.value)"
-        [isLoading]="roomsLoading()"
-        [isEdit]="isEditMode()"
-        (formSubmit)="onRoomFormSubmit()"
-        (cancel)="closeRoomModal()"
-      ></app-room-form-modal>
+      <app-room-form-modal [form]="roomForm" [buildings]="allBuildings()"
+        [standards]="getAvailableStandardsForCapacity(roomForm.get('capacity')?.value)" [isLoading]="roomsLoading()"
+        [isEdit]="isEditMode()" (formSubmit)="onRoomFormSubmit()" (cancel)="closeRoomModal()"></app-room-form-modal>
     </div>
   </app-modal>
 
   <!-- Resource Modal -->
-  <app-modal
-    [isOpen]="isResourceModalOpen()"
-    [title]="(isEditMode() ? 'facilities.editCommonSpace' : 'facilities.addCommonSpace') | translate"
-    size="md"
-    (close)="closeResourceModal()"
-  >
+  <app-modal [isOpen]="isResourceModalOpen()"
+    [title]="(isEditMode() ? 'facilities.editCommonSpace' : 'facilities.addCommonSpace') | translate" size="md"
+    (close)="closeResourceModal()">
     <div slot="body">
-      <app-resource-form-modal
-        [form]="resourceForm"
-        [buildings]="allBuildings()"
-        [isLoading]="resourcesLoading()"
-        [isEdit]="isEditMode()"
-        (formSubmit)="onResourceFormSubmit()"
-        (cancel)="closeResourceModal()"
-      ></app-resource-form-modal>
+      <app-resource-form-modal [form]="resourceForm" [buildings]="allBuildings()" [isLoading]="resourcesLoading()"
+        [isEdit]="isEditMode()" (formSubmit)="onResourceFormSubmit()"
+        (cancel)="closeResourceModal()"></app-resource-form-modal>
     </div>
   </app-modal>
 
   <!-- Standard Modal -->
-  <app-modal
-    [isOpen]="isStandardModalOpen()"
-    [title]="(isEditMode() ? 'facilities.editStandard' : 'facilities.addStandard') | translate"
-    size="md"
-    (close)="closeStandardModal()"
-  >
+  <app-modal [isOpen]="isStandardModalOpen()"
+    [title]="(isEditMode() ? 'facilities.editStandard' : 'facilities.addStandard') | translate" size="md"
+    (close)="closeStandardModal()">
     <div slot="body">
-      <app-room-standard-form-modal
-        [form]="standardForm"
-        [isLoading]="roomStandardsLoading()"
-        [isEdit]="isEditMode()"
-        (formSubmit)="onStandardFormSubmit()"
-        (cancel)="closeStandardModal()"
-      ></app-room-standard-form-modal>
+      <app-room-standard-form-modal [form]="standardForm" [isLoading]="roomStandardsLoading()" [isEdit]="isEditMode()"
+        (formSubmit)="onStandardFormSubmit()" (cancel)="closeStandardModal()"></app-room-standard-form-modal>
     </div>
   </app-modal>
 
   <!-- Delete Confirmation Modal -->
-  <app-modal
-    [isOpen]="isDeleteModalOpen()"
-    [title]="'facilities.confirmDeletion' | translate"
-    size="md"
-    (close)="closeDeleteModal()"
-  >
+  <app-modal [isOpen]="isDeleteModalOpen()" [title]="'facilities.confirmDeletion' | translate" size="md"
+    (close)="closeDeleteModal()">
     <div slot="body">
       @if (itemToDelete()) {
-        <app-delete-confirmation-modal
-          [itemName]="deleteItemType() === 'building' ? itemToDelete().name : deleteItemType() === 'room' ? (('table.room' | translate) + ' ' + itemToDelete().roomNumber) : itemToDelete().name"
-          [itemType]="getTranslatedItemType()"
-          [cascadeWarning]="cascadeWarning()"
-          [isLoading]="buildingsLoading() || roomsLoading()"
-          (confirm)="onConfirmDelete()"
-          (cancel)="closeDeleteModal()"
-        ></app-delete-confirmation-modal>
+      <app-delete-confirmation-modal
+        [itemName]="deleteItemType() === 'building' ? itemToDelete().name : deleteItemType() === 'room' ? (('table.room' | translate) + ' ' + itemToDelete().roomNumber) : itemToDelete().name"
+        [itemType]="getTranslatedItemType()" [cascadeWarning]="cascadeWarning()"
+        [isLoading]="buildingsLoading() || roomsLoading()" (confirm)="onConfirmDelete()"
+        (cancel)="closeDeleteModal()"></app-delete-confirmation-modal>
       }
     </div>
   </app-modal>

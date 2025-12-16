@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { CalendarEvent, CalendarView, CalendarModule, CalendarUtils, DateAdapter, CalendarA11y, CalendarDateFormatter, CalendarEventTitleFormatter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
-import { startOfMonth, endOfMonth, format, addMonths, subMonths } from 'date-fns';
+import { startOfMonth, endOfMonth, format, addMonths, subMonths, startOfWeek, endOfWeek, eachDayOfInterval, addWeeks, subWeeks } from 'date-fns';
 import { MainLayoutComponent } from '../../../shared/components/layout/main-layout/main-layout';
 import { UserService } from '../../../core/services/user.service';
 import { EventsService, Event as DormEvent, CreateEventInput } from './services/events.service';
@@ -19,15 +19,15 @@ function futureDateValidator(control: AbstractControl): ValidationErrors | null 
   if (!control.value) {
     return null; // Don't validate empty values (let required validator handle that)
   }
-  
+
   const selectedDate = new Date(control.value);
   const today = new Date();
   today.setHours(0, 0, 0, 0); // Reset time to midnight for fair comparison
-  
+
   if (selectedDate < today) {
     return { pastDate: true };
   }
-  
+
   return null;
 }
 
@@ -67,10 +67,10 @@ export class EventsManagementComponent implements OnInit {
 
   readonly currentUser = this.userService.currentUser;
   readonly CalendarView = CalendarView;
-  
+
   // Locale for calendar (string code for Angular pipes)
   readonly locale: string = 'pl';
-  
+
   // State
   readonly viewDate = signal<Date>(new Date());
   readonly view = signal<CalendarView>(CalendarView.Month);
@@ -78,7 +78,14 @@ export class EventsManagementComponent implements OnInit {
   readonly dormEvents = signal<DormEvent[]>([]);
   readonly selectedDayEvents = signal<DormEvent[]>([]);
   readonly selectedDate = signal<string>('');
-  
+
+  // Mobile Week View Helper
+  readonly currentWeekDays = computed(() => {
+    const start = startOfWeek(this.viewDate(), { weekStartsOn: 1 });
+    const end = endOfWeek(this.viewDate(), { weekStartsOn: 1 });
+    return eachDayOfInterval({ start, end });
+  });
+
   // Buildings and common spaces (STANDARD resources, excluding LAUNDRY)
   readonly allBuildings = this.facilitiesService.allBuildings;
   readonly allRooms = computed(() => {
@@ -92,17 +99,17 @@ export class EventsManagementComponent implements OnInit {
       }));
     return commonSpaces;
   });
-  
+
   // Modal states
   readonly isEventModalOpen = signal<boolean>(false);
   readonly isDayEventsModalOpen = signal<boolean>(false);
   readonly isDeleteModalOpen = signal<boolean>(false);
-  
+
   // Edit mode
   readonly isEditMode = signal<boolean>(false);
   readonly selectedEvent = signal<DormEvent | null>(null);
   readonly eventToDelete = signal<DormEvent | null>(null);
-  
+
   // Loading state
   readonly eventsLoading = signal<boolean>(false);
 
@@ -134,7 +141,7 @@ export class EventsManagementComponent implements OnInit {
   loadEvents(): void {
     const start = startOfMonth(this.viewDate());
     const end = endOfMonth(this.viewDate());
-    
+
     this.eventsLoading.set(true);
     this.eventsService.getEventsByDateRange(
       format(start, 'yyyy-MM-dd'),
@@ -185,13 +192,28 @@ export class EventsManagementComponent implements OnInit {
     this.loadEvents();
   }
 
+  previousWeek(): void {
+    this.viewDate.set(subWeeks(this.viewDate(), 1));
+    this.loadEvents();
+  }
+
+  nextWeek(): void {
+    this.viewDate.set(addWeeks(this.viewDate(), 1));
+    this.loadEvents();
+  }
+
+  getEventsCountForDay(date: Date): number {
+    const formattedDate = format(date, 'yyyy-MM-dd');
+    return this.dormEvents().filter(e => e.eventDate === formattedDate).length;
+  }
+
   onDayClicked(event: any): void {
     const date = event.day.date;
     const formattedDate = format(date, 'yyyy-MM-dd');
-    
+
     // Find events for this day
     const eventsOnThisDay = this.dormEvents().filter(e => e.eventDate === formattedDate);
-    
+
     this.selectedDate.set(formattedDate);
     this.selectedDayEvents.set(eventsOnThisDay);
     this.isDayEventsModalOpen.set(true);
@@ -244,12 +266,12 @@ export class EventsManagementComponent implements OnInit {
     }
 
     const formValue = this.eventForm.getRawValue();
-    
+
     // Extra validation: ensure date is not in the past
     const eventDate = new Date(formValue.eventDate!);
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    
+
     if (eventDate < today) {
       this.toastService.showError(this.translateService.instant('admin.cannotCreatePastEvents'));
       return;
@@ -264,7 +286,7 @@ export class EventsManagementComponent implements OnInit {
       resourceId: formValue.resourceId || null
     };
 
-    const operation = this.isEditMode() 
+    const operation = this.isEditMode()
       ? this.eventsService.updateEvent(this.selectedEvent()!.id, input)
       : this.eventsService.createEvent(input);
 

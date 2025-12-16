@@ -39,6 +39,7 @@ public class ReservationService {
     @Transactional
     public Reservation createReservation(ZonedDateTime startTime, ZonedDateTime endTime, Long resourceId, User user) {
 
+
         if (!endTime.isAfter(startTime)) {
             throw new IllegalArgumentException("End time must be later than start time.");
         }
@@ -68,11 +69,6 @@ public class ReservationService {
 
         if (resource.getResourceType() == EResourceType.LAUNDRY) {
 
-            if (currentUser.getRoom() == null || !currentUser.getRoom().getBuilding().getId().equals(resource.getBuilding().getId())) {
-                throw new IllegalStateException("You can only reserve laundry in your own building.");
-            }
-
-            // Check weekly limit for laundry (max 2 per week)
             long laundryReservationsThisWeek = reservationRepository.countUserLaundryReservationsInWeek(
                     currentUser.getId(), weekStartDateTime, weekEndDateTime);
             
