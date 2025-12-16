@@ -1,16 +1,12 @@
 <div class="space-y-4">
   <!-- Filter -->
-  <div class="flex justify-between items-center">
-    <div class="flex items-center gap-2">
-      <label for="statusFilter" class="text-sm font-medium text-text-primary">
+  <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
+    <div class="flex flex-col sm:flex-row sm:items-center gap-2 w-full sm:w-auto">
+      <label for="statusFilter" class="text-sm font-medium text-text-primary whitespace-nowrap">
         {{ 'issues.filterByStatus' | translate }}:
       </label>
-      <select
-        id="statusFilter"
-        [value]="statusFilter()"
-        (change)="onFilterChange($event)"
-        class="rounded-md border-input-border bg-input-bg px-3 py-1.5 text-input-text text-sm placeholder:text-input-placeholder focus:border-input-focus-border focus:outline-none focus:ring-2 focus:ring-input-focus-border"
-      >
+      <select id="statusFilter" [value]="statusFilter()" (change)="onFilterChange($event)"
+        class="w-full sm:w-auto rounded-md border-input-border bg-input-bg px-3 py-2 text-input-text text-sm placeholder:text-input-placeholder focus:border-input-focus-border focus:outline-none focus:ring-2 focus:ring-input-focus-border">
         <option value="">{{ 'issues.allStatuses' | translate }}</option>
         <option value="REPORTED">{{ 'issues.status.reported' | translate }}</option>
         <option value="IN_PROGRESS">{{ 'issues.status.inProgress' | translate }}</option>
@@ -22,75 +18,116 @@
 
   <!-- Loading State -->
   @if (isLoading()) {
-    <div class="flex justify-center items-center py-12">
-      <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-    </div>
+  <div class="flex justify-center items-center py-12">
+    <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+  </div>
   }
-
   <!-- Empty State -->
   @else if (issues().length === 0) {
-    <div class="text-center py-12">
-      <svg class="mx-auto h-12 w-12 text-text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
-      </svg>
-      <h3 class="mt-2 text-sm font-medium text-text-primary">{{ 'issues.noIssues' | translate }}</h3>
-      <p class="mt-1 text-sm text-text-secondary">
-        @if (statusFilter()) {
-          {{ 'issues.tryChangingFilter' | translate }}
-        } @else {
-          {{ 'issues.reportFirstIssue' | translate }}
-        }
-      </p>
-    </div>
+  <div class="text-center py-12">
+    <svg class="mx-auto h-12 w-12 text-text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+        d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2">
+      </path>
+    </svg>
+    <h3 class="mt-2 text-sm font-medium text-text-primary">{{ 'issues.noIssues' | translate }}</h3>
+    <p class="mt-1 text-sm text-text-secondary">
+      @if (statusFilter()) {
+      {{ 'issues.tryChangingFilter' | translate }}
+      } @else {
+      {{ 'issues.reportFirstIssue' | translate }}
+      }
+    </p>
+  </div>
   }
-
   <!-- Issues List -->
   @else {
-    <div class="space-y-3">
-      @for (issue of issues(); track issue.id) {
-        <div class="bg-card border border-card-border rounded-lg p-4">
-          <div class="flex justify-between items-start gap-4">
-            <div class="flex-1 min-w-0">
-              <div class="flex items-center gap-2 mb-2">
-                <h3 class="text-lg font-semibold text-text-primary truncate">
-                  {{ issue.title }}
-                </h3>
-                <span [ngClass]="getStatusClass(issue.status)">
-                  {{ getStatusKey(issue.status) | translate }}
-                </span>
-                <span [ngClass]="getPriorityClass(issue.priority)">
-                  {{ getPriorityKey(issue.priority) | translate }}
-                </span>
-              </div>
-              
-              <p class="text-sm text-text-secondary mb-2">
-                {{ truncateText(issue.description, 150) }}
-              </p>
-              
-              <div class="flex items-center gap-4 text-xs text-text-secondary">
-                <span>{{ 'table.created' | translate }}: {{ issue.createdAt }}</span>
-                @if (issue.room) {
-                  <span>{{ 'header.room' | translate }}: {{ issue.room.roomNumber }}</span>
-                }
-                @if (issue.building) {
-                  <span>{{ 'table.building' | translate }}: {{ issue.building.name }}</span>
-                }
-              </div>
-            </div>
+  <div class="space-y-3">
+    @for (issue of issues(); track issue.id) {
+    <div class="bg-card border border-card-border rounded-lg p-3 sm:p-4">
+      <!-- Mobile Layout (< 640px) -->
+      <div class="sm:hidden space-y-3">
+        <!-- Title - Full width on mobile -->
+        <h3 class="text-base font-semibold text-text-primary break-words">
+          {{ issue.title }}
+        </h3>
 
-            @if (issue.status === 'REPORTED') {
-              <app-button
-                variant="danger"
-                size="sm"
-                (click)="onCancelIssue(issue.id)"
-              >
-                {{ 'issues.cancelIssue' | translate }}
-              </app-button>
+        <!-- Badges - Below title on mobile -->
+        <div class="flex flex-wrap items-center gap-2">
+          <span [ngClass]="getStatusClass(issue.status)">
+            {{ getStatusKey(issue.status) | translate }}
+          </span>
+          <span [ngClass]="getPriorityClass(issue.priority)">
+            {{ getPriorityKey(issue.priority) | translate }}
+          </span>
+        </div>
+
+        <!-- Description -->
+        <p class="text-sm text-text-secondary break-words">
+          {{ truncateText(issue.description, 150) }}
+        </p>
+
+        <!-- Metadata -->
+        <div class="flex flex-col gap-2 text-xs text-text-secondary">
+          <span class="break-words">{{ 'table.created' | translate }}: {{ issue.createdAt }}</span>
+          @if (issue.room) {
+          <span>{{ 'header.room' | translate }}: {{ issue.room.roomNumber }}</span>
+          }
+          @if (issue.building) {
+          <span>{{ 'table.building' | translate }}: {{ issue.building.name }}</span>
+          }
+        </div>
+
+        <!-- Cancel Button - Bottom on mobile -->
+        @if (issue.status === 'REPORTED') {
+        <app-button variant="danger" size="sm" (click)="onCancelIssue(issue.id)" class="w-full mt-4">
+          {{ 'issues.cancelIssue' | translate }}
+        </app-button>
+        }
+      </div>
+
+      <!-- Desktop Layout (>= 640px) -->
+      <div class="hidden sm:flex justify-between items-start gap-4">
+        <div class="flex-1 min-w-0">
+          <!-- Title and Badges inline on desktop -->
+          <div class="flex items-center gap-2 mb-2 flex-wrap">
+            <h3 class="text-lg font-semibold text-text-primary">
+              {{ issue.title }}
+            </h3>
+            <span [ngClass]="getStatusClass(issue.status)">
+              {{ getStatusKey(issue.status) | translate }}
+            </span>
+            <span [ngClass]="getPriorityClass(issue.priority)">
+              {{ getPriorityKey(issue.priority) | translate }}
+            </span>
+          </div>
+
+          <!-- Description -->
+          <p class="text-sm text-text-secondary mb-2">
+            {{ truncateText(issue.description, 150) }}
+          </p>
+
+          <!-- Metadata -->
+          <div class="flex items-center gap-4 text-xs text-text-secondary">
+            <span>{{ 'table.created' | translate }}: {{ issue.createdAt }}</span>
+            @if (issue.room) {
+            <span>{{ 'header.room' | translate }}: {{ issue.room.roomNumber }}</span>
+            }
+            @if (issue.building) {
+            <span>{{ 'table.building' | translate }}: {{ issue.building.name }}</span>
             }
           </div>
         </div>
-      }
+
+        <!-- Cancel Button - Right side on desktop -->
+        @if (issue.status === 'REPORTED') {
+        <app-button variant="danger" size="sm" (click)="onCancelIssue(issue.id)" class="flex-shrink-0">
+          {{ 'issues.cancelIssue' | translate }}
+        </app-button>
+        }
+      </div>
     </div>
+    }
+  </div>
   }
 </div>
-

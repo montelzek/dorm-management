@@ -176,8 +176,9 @@
     "selectAll": "Zaznacz wszystkie",
     "deselectAll": "Odznacz wszystkie",
     "optional": "opcjonalne",
-    "timestamps": "Znaczniki czasu",
-    "saving": "Zapisywanie"
+    "timestamps": "Sygnatury czasowe",
+    "saving": "Zapisywanie",
+    "name": "Nazwisko"
   },
   "issues": {
     "title": "Zgłoszenia",
@@ -665,12 +666,12 @@
     "checkAssigned": "Sprawdź przypisane zgłoszenia",
     "newTasks": "Nowe zgłoszenia",
     "tasksHistory": "Historia zgłoszeń",
-    "myTasks": "Moje zadania",
+    "myTasks": "Moje zgłoszenia",
     "noNewTasks": "Brak nowych zadań",
     "noCompletedTasks": "Brak ukończonych zadań",
     "acceptTask": "Przyjmij zadanie",
     "completeTask": "Ukończ zadanie",
-    "taskDetails": "Szczegóły zadania",
+    "taskDetails": "Szczegóły zgłoszenia",
     "viewCompleted": "Przeglądaj ukończone zadania konserwacyjne",
     "tasks": "zadań",
     "assignedTo": "Przypisany do",
@@ -690,7 +691,10 @@
     "noAssignedTasks": "Nie masz obecnie przypisanych żadnych zadań.",
     "location": "Lokalizacja",
     "details": "Szczegóły",
-    "viewDetails": "Zobacz szczegóły"
+    "viewDetails": "Zobacz szczegóły",
+    "reporterInformation": "Informacje o zgłaszającym",
+    "name": "Nazwisko",
+    "lastUpdated": "Ostatnia aktualizacja"
   },
   "receptionist": {
     "packages": "Przesyłki",

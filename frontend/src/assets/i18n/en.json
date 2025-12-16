@@ -167,7 +167,8 @@
     "deselectAll": "Deselect all",
     "optional": "optional",
     "timestamps": "Timestamps",
-    "saving": "Saving"
+    "saving": "Saving",
+    "name": "Name"
   },
   "issues": {
     "title": "Issues",
@@ -796,7 +797,10 @@
     "noAssignedTasks": "You don't have any assigned tasks at the moment.",
     "location": "Location",
     "details": "Details",
-    "viewDetails": "View Details"
+    "viewDetails": "View Details",
+    "reporterInformation": "Reporter Information",
+    "name": "Name",
+    "lastUpdated": "Last Updated"
   },
   "receptionist": {
     "packages": "Packages",
