@@ -6,7 +6,6 @@ import { ToastService } from '../../../../core/services/toast.service';
 import { TranslateService } from '@ngx-translate/core';
 import {
   GET_ADMIN_BUILDINGS,
-  GET_BUILDING_DETAILS,
   CREATE_BUILDING,
   UPDATE_BUILDING,
   DELETE_BUILDING,
@@ -22,7 +21,8 @@ import {
   GET_ADMIN_ROOM_STANDARDS,
   CREATE_ROOM_STANDARD,
   UPDATE_ROOM_STANDARD,
-  DELETE_ROOM_STANDARD
+  DELETE_ROOM_STANDARD,
+  DELETE_RESOURCE
 } from '../facilities.graphql';
 
 export interface Building {
@@ -441,6 +441,30 @@ export class FacilitiesService {
       catchError(error => {
         this.toastService.showError(this.translateService.instant('facilities.errorTogglingStatus') + ': ' + error.message);
         throw error;
+      })
+    );
+  }
+
+  deleteResource(id: string): Observable<boolean> {
+    return this.apollo.mutate<{ deleteReservationResource: boolean }>({
+      mutation: DELETE_RESOURCE,
+      variables: { id },
+      fetchPolicy: 'no-cache',
+      errorPolicy: 'all'
+    }).pipe(
+      take(1),
+      map(result => {
+        const success = result.data?.deleteReservationResource ?? false;
+        if (success) {
+          this.toastService.showSuccess(this.translateService.instant('facilities.spaceDeletedSuccess'));
+        }
+        return success;
+      }),
+      catchError(error => {
+        console.error('Delete space error:', error);
+        const errorMsg = error?.graphQLErrors?.[0]?.message || error?.message || 'Unknown error';
+        this.toastService.showError(this.translateService.instant('facilities.errorDeletingSpace') + ': ' + errorMsg);
+        return of(false);
       })
     );
   }
