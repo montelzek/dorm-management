@@ -114,4 +114,24 @@ public class UserController {
     public ResidentPayload createResident(@Argument com.montelzek.mydorm.user.payloads.CreateResidentInput input) {
         return userService.createResident(input);
     }
+
+    // Technician management
+
+    @QueryMapping
+    @PreAuthorize("isAuthenticated()")
+    public ResidentPage allTechnicians(@Argument Integer page, @Argument Integer size, @Argument String search, @Argument String sortBy, @Argument String sortDirection) {
+        return userService.getTechniciansPage(page, size, search, sortBy, sortDirection);
+    }
+
+    @MutationMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResidentPayload createTechnician(@Argument com.montelzek.mydorm.user.payloads.CreateTechnicianInput input) {
+        return userService.createTechnician(input);
+    }
+
+    @MutationMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public Boolean deleteTechnician(@Argument Long userId) {
+        return userService.deleteTechnician(userId);
+    }
 }

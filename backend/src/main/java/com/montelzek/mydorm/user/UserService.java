@@ -62,6 +62,24 @@ public class UserService {
         return toPayload(savedUser);
     }
 
+    public ResidentPayload createTechnician(com.montelzek.mydorm.user.payloads.CreateTechnicianInput input) {
+        userRepository.findByEmail(input.email()).ifPresent(u -> {
+            throw new BusinessException(ErrorCodes.VALIDATION_ERROR, "Email already exists", "email");
+        });
+
+        User user = new User();
+        user.setFirstName(input.firstName());
+        user.setLastName(input.lastName());
+        user.setEmail(input.email());
+        user.setPhone(input.phone());
+        user.setPassword(passwordEncoder.encode(input.password()));
+        
+        user.setRoles(java.util.Collections.singleton(ERole.ROLE_TECHNICIAN));
+
+        User savedUser = userRepository.save(user);
+        return toPayload(savedUser);
+    }
+
 
 
     public List<ResidentPayload> getResidentsByBuilding(Long buildingId) {
@@ -121,6 +139,37 @@ public class UserService {
                 .map(this::toPayload)
                 .collect(Collectors.toList());
 
+        return new ResidentPage(
+                content,
+                (int) userPage.getTotalElements(),
+                userPage.getTotalPages(),
+                userPage.getNumber(),
+                userPage.getSize()
+        );
+    }
+
+    public ResidentPage getTechniciansPage(Integer page, Integer size, String search, String sortBy, String sortDirection) {
+        int pageNumber = page != null ? page : 0;
+        int pageSize = size != null ? size : 10;
+        
+        String sortField = sortBy != null && !sortBy.trim().isEmpty() ? sortBy : "firstName";
+        Sort.Direction direction = "desc".equalsIgnoreCase(sortDirection) ? Sort.Direction.DESC : Sort.Direction.ASC;
+        Sort sort = Sort.by(direction, sortField);
+
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
+        Page<User> userPage;
+
+        if (search != null && !search.trim().isEmpty()) {
+            userPage = userRepository.findAllTechniciansWithSearch(search.trim(), pageable);
+        } else {
+            userPage = userRepository.findAllTechnicians(pageable);
+        }
+
+        List<ResidentPayload> content = userPage.getContent().stream()
+                .map(this::toPayload)
+                .collect(Collectors.toList());
+
+        // Reusing ResidentPage for now as it has the same structure
         return new ResidentPage(
                 content,
                 (int) userPage.getTotalElements(),
@@ -201,6 +250,10 @@ public class UserService {
 
         userRepository.delete(user);
         return true;
+    }
+
+    public boolean deleteTechnician(Long userId) {
+        return deleteResident(userId); // Reusing deletion logic
     }
 
     public UserProfilePayload updateMyProfile(Long userId, UpdateProfileInput input) {

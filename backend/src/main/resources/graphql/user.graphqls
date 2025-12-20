@@ -1,7 +1,9 @@
 extend type Query {
     allResidents(page: Int, size: Int, search: String, sortBy: String, sortDirection: String): ResidentPage!
     residentsByBuilding(buildingId: ID!, page: Int, size: Int, search: String, sortBy: String, sortDirection: String): ResidentPage!
+
     availableRooms(buildingId: ID): [RoomPayload!]!
+    allTechnicians(page: Int, size: Int, search: String, sortBy: String, sortDirection: String): ResidentPage!
 }
 
 
@@ -57,7 +59,16 @@ input CreateResidentInput {
     email: String!
     phone: String
     password: String!
+
     roomId: ID
+}
+
+input CreateTechnicianInput {
+    firstName: String!
+    lastName: String!
+    email: String!
+    phone: String
+    password: String!
 }
 
 extend type Mutation {
@@ -65,4 +76,6 @@ extend type Mutation {
     deleteResident(userId: ID!): Boolean!
     updateMyProfile(input: UpdateProfileInput!): UserProfilePayload!
     createResident(input: CreateResidentInput!): ResidentPayload!
+    createTechnician(input: CreateTechnicianInput!): ResidentPayload!
+    deleteTechnician(userId: ID!): Boolean!
 }
