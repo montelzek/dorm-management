@@ -24,7 +24,7 @@
   "nav": {
     "dashboard": "Dashboard",
     "residents": "Residents",
-    "residentsManagement": "Residents Management",
+    "residentsManagement": "Users Management",
     "buildings": "Buildings",
     "buildingsFacilities": "Buildings & Facilities",
     "rooms": "Rooms",
@@ -136,6 +136,8 @@
     }
   },
   "common": {
+    "required": "Field is required",
+    "passwordMinLength": "Password must be at least 6 characters",
     "save": "Save",
     "cancel": "Cancel",
     "delete": "Delete",
@@ -159,6 +161,8 @@
     "next": "Next",
     "previous": "Previous",
     "showing": "Showing",
+    "required": "Field is required",
+    "passwordMinLength": "Password must be at least 6 characters",
     "to": "to",
     "of": "of",
     "results": "results",
@@ -532,6 +536,15 @@
     "totalFloors": "Total Floors",
     "noBuildings": "No buildings",
     "deleteBuilding": "Delete Building"
+  },
+  "users": {
+    "title": "Users Management",
+    "residents": "Residents",
+    "technicians": "Technicians",
+    "addTechnician": "Add Technician",
+    "deleteTechnician": "Delete Technician",
+    "searchTechnicians": "Search Technician",
+    "searchByName": "Search by name and surname"
   },
   "rooms": {
     "title": "Rooms",

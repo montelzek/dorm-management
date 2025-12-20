@@ -24,7 +24,7 @@
   "nav": {
     "dashboard": "Panel główny",
     "residents": "Mieszkańcy",
-    "residentsManagement": "Zarządzanie mieszkańcami",
+    "residentsManagement": "Zarządzanie użytkownikami",
     "buildings": "Budynki",
     "buildingsFacilities": "Budynki i zasoby",
     "rooms": "Pokoje",
@@ -142,6 +142,8 @@
     }
   },
   "common": {
+    "required": "Pole jest wymagane",
+    "passwordMinLength": "Hasło musi mieć co najmniej 6 znaków",
     "save": "Zapisz",
     "cancel": "Anuluj",
     "delete": "Usuń",
@@ -398,6 +400,15 @@
     "totalFloors": "Liczba pięter",
     "noBuildings": "Brak budynków",
     "deleteBuilding": "Usuń budynek"
+  },
+  "users": {
+    "title": "Zarządzanie użytkownikami",
+    "residents": "Mieszkańcy",
+    "technicians": "Konserwatorzy",
+    "addTechnician": "Dodaj konserwatora",
+    "deleteTechnician": "Usuń konserwatora",
+    "searchTechnicians": "Szukaj konserwatora",
+    "searchByName": "Wyszukaj po imieniu i nazwisku"
   },
   "rooms": {
     "title": "Pokoje",
