@@ -53,6 +53,16 @@
           {{ Math.min((roomsCurrentPage() + 1) * roomsPageSize(), roomsTotalElements()) }} {{ 'common.of' | translate }}
           {{ roomsTotalElements() }} {{ 'facilities.rooms' | translate | lowercase }}
         </div>
+        <div class="flex items-center gap-2">
+          <label for="roomsPageSize" class="text-sm text-text-secondary">{{ 'common.pageSize' | translate }}:</label>
+          <select id="roomsPageSize" [value]="roomsPageSize()" (change)="onRoomsPageSizeChange($event)"
+            class="rounded-lg border-2 border-input-border bg-input-bg px-3 py-1.5 text-input-text text-sm focus:border-input-focus-border focus:outline-none focus:ring-2 focus:ring-input-focus-border transition-all">
+            <option [value]="5">5</option>
+            <option [value]="10">10</option>
+            <option [value]="20">20</option>
+            <option [value]="50">50</option>
+          </select>
+        </div>
       </div>
       }
 
@@ -105,6 +115,17 @@
           {{ Math.min((resourcesCurrentPage() + 1) * resourcesPageSize(), resourcesTotalElements()) }} {{ 'common.of' |
           translate }}
           {{ resourcesTotalElements() }} {{ 'facilities.spaces' | translate | lowercase }}
+        </div>
+        <div class="flex items-center gap-2">
+          <label for="resourcesPageSize" class="text-sm text-text-secondary">{{ 'common.pageSize' | translate
+            }}:</label>
+          <select id="resourcesPageSize" [value]="resourcesPageSize()" (change)="onResourcesPageSizeChange($event)"
+            class="rounded-lg border-2 border-input-border bg-input-bg px-3 py-1.5 text-input-text text-sm focus:border-input-focus-border focus:outline-none focus:ring-2 focus:ring-input-focus-border transition-all">
+            <option [value]="5">5</option>
+            <option [value]="10">10</option>
+            <option [value]="20">20</option>
+            <option [value]="50">50</option>
+          </select>
         </div>
       </div>
       }

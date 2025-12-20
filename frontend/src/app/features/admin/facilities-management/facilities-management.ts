@@ -65,7 +65,7 @@ export class FacilitiesManagementComponent implements OnInit {
   readonly rooms = this.facilitiesService.rooms;
   readonly roomsLoading = this.facilitiesService.roomsLoading;
   readonly roomsCurrentPage = this.facilitiesService.roomsCurrentPage;
-  readonly roomsPageSize = this.facilitiesService.roomsPageSize;
+  readonly roomsPageSize = signal<number>(10);
   readonly roomsTotalPages = this.facilitiesService.roomsTotalPages;
   readonly roomsTotalElements = this.facilitiesService.roomsTotalElements;
 
@@ -73,7 +73,7 @@ export class FacilitiesManagementComponent implements OnInit {
   readonly resources = this.facilitiesService.resources;
   readonly resourcesLoading = this.facilitiesService.resourcesLoading;
   readonly resourcesCurrentPage = this.facilitiesService.resourcesCurrentPage;
-  readonly resourcesPageSize = this.facilitiesService.resourcesPageSize;
+  readonly resourcesPageSize = signal<number>(10);
   readonly resourcesTotalPages = this.facilitiesService.resourcesTotalPages;
   readonly resourcesTotalElements = this.facilitiesService.resourcesTotalElements;
 
@@ -241,7 +241,7 @@ export class FacilitiesManagementComponent implements OnInit {
     const buildingId = this.roomsBuildingFilter() || undefined;
     const status = this.roomsStatusFilter() || undefined;
     const search = this.roomsSearchFilter() || undefined;
-    this.facilitiesService.getRooms(this.roomsPage(), 10, buildingId, status, search);
+    this.facilitiesService.getRooms(this.roomsPage(), this.roomsPageSize(), buildingId, status, search);
   }
 
   openRoomModal(room?: Room): void {
@@ -321,12 +321,19 @@ export class FacilitiesManagementComponent implements OnInit {
     this.loadRooms();
   }
 
+  onRoomsPageSizeChange(event: Event): void {
+    const size = Number((event.target as HTMLSelectElement).value);
+    this.roomsPageSize.set(size);
+    this.roomsPage.set(0);
+    this.loadRooms();
+  }
+
   // Resources CRUD
   loadResources(): void {
     const buildingId = this.resourcesBuildingFilter() || undefined;
     const isActive = this.resourcesStatusFilter() === 'true' ? true :
       this.resourcesStatusFilter() === 'false' ? false : undefined;
-    this.facilitiesService.getResources(this.resourcesPage(), 10, buildingId, isActive);
+    this.facilitiesService.getResources(this.resourcesPage(), this.resourcesPageSize(), buildingId, isActive);
   }
 
   openResourceModal(resource?: Resource): void {
@@ -398,6 +405,13 @@ export class FacilitiesManagementComponent implements OnInit {
 
   onResourcesPageChange(page: number): void {
     this.resourcesPage.set(page);
+    this.loadResources();
+  }
+
+  onResourcesPageSizeChange(event: Event): void {
+    const size = Number((event.target as HTMLSelectElement).value);
+    this.resourcesPageSize.set(size);
+    this.resourcesPage.set(0);
     this.loadResources();
   }
 

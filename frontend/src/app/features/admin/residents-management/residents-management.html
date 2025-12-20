@@ -120,13 +120,17 @@
 
       <div class="flex gap-1">
         @for (pageNum of [].constructor(totalPages()); track $index) {
-        <button (click)="onPageChange($index)" [class.bg-indigo-600]="currentPage() === $index"
+        @if ($index === 0 || $index === totalPages() - 1 || ($index >= currentPage() - 1 && $index <= currentPage() +
+          1)) { <button (click)="onPageChange($index)" [class.bg-indigo-600]="currentPage() === $index"
           [class.text-white]="currentPage() === $index" [class.bg-card]="currentPage() !== $index"
           [class.text-text-primary]="currentPage() !== $index"
           class="px-3 py-2 rounded-lg border border-card-border hover:bg-indigo-600 hover:text-white transition-colors min-w-[40px]">
           {{ $index + 1 }}
-        </button>
-        }
+          </button>
+          } @else if ($index === currentPage() - 2 || $index === currentPage() + 2) {
+          <span class="px-2 py-1 text-text-secondary">...</span>
+          }
+          }
       </div>
 
       <button (click)="onPageChange(currentPage() + 1)" [disabled]="currentPage() === totalPages() - 1"

@@ -174,7 +174,8 @@
     "optional": "opcjonalne",
     "timestamps": "Sygnatury czasowe",
     "saving": "Zapisywanie",
-    "name": "Nazwisko"
+    "name": "Nazwisko",
+    "pageSize": "Elementów na stronę"
   },
   "issues": {
     "title": "Zgłoszenia",
