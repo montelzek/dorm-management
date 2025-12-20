@@ -11,6 +11,7 @@ import { ConfirmationDialogComponent } from './components/confirmation-dialog/co
 import { ResidentPayload } from './models/resident.models';
 import { ToastService } from '../../../core/services/toast.service';
 import { ResidentFormModalComponent } from './components/resident-form-modal/resident-form-modal';
+import { TechniciansListComponent } from './components/technicians-list/technicians-list';
 
 @Component({
   selector: 'app-residents-management',
@@ -22,7 +23,8 @@ import { ResidentFormModalComponent } from './components/resident-form-modal/res
     ResidentFormModalComponent,
     ConfirmationDialogComponent,
     TranslateModule,
-    LowerCasePipe
+    LowerCasePipe,
+    TechniciansListComponent
   ],
   templateUrl: './residents-management.html'
 })
@@ -54,10 +56,19 @@ export class ResidentsManagementComponent implements OnInit {
   readonly residentToDelete = signal<ResidentPayload | null>(null);
   readonly isLoading = signal<boolean>(false);
 
+  readonly activeTab = signal<'residents' | 'technicians'>('residents');
+
   ngOnInit() {
     this.userService.loadCurrentUser();
     this.loadResidents();
     this.residentService.getBuildings();
+  }
+
+  setActiveTab(tab: 'residents' | 'technicians') {
+    this.activeTab.set(tab);
+    if (tab === 'residents') {
+      this.loadResidents();
+    }
   }
 
   private loadResidents() {

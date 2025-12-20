@@ -104,3 +104,39 @@ export const CREATE_RESIDENT = gql`
     }
   }
 `;
+
+export const GET_ALL_TECHNICIANS = gql`
+  query GetAllTechnicians($page: Int, $size: Int, $search: String, $sortBy: String, $sortDirection: String) {
+    allTechnicians(page: $page, size: $size, search: $search, sortBy: $sortBy, sortDirection: $sortDirection) {
+      content {
+        id
+        firstName
+        lastName
+        email
+        phone
+      }
+      totalElements
+      totalPages
+      currentPage
+      pageSize
+    }
+  }
+`;
+
+export const CREATE_TECHNICIAN = gql`
+  mutation CreateTechnician($input: CreateTechnicianInput!) {
+    createTechnician(input: $input) {
+      id
+      firstName
+      lastName
+      email
+      phone
+    }
+  }
+`;
+
+export const DELETE_TECHNICIAN = gql`
+  mutation DeleteTechnician($userId: ID!) {
+    deleteTechnician(userId: $userId)
+  }
+`;

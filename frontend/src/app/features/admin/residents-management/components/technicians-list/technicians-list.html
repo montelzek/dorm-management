@@ -1,0 +1,165 @@
+<div class="flex flex-col h-full space-y-4">
+
+    <!-- Search and Actions (Copied from residents-management.html) -->
+    <div class="flex flex-col md:flex-row gap-4 items-end mb-6">
+        <div class="flex-1 w-full">
+            <label class="block text-sm font-medium text-text-secondary mb-2">
+                {{ 'users.searchByName' | translate }}
+            </label>
+            <input type="text" [value]="searchQuery()" (input)="onSearchChange($any($event.target).value)"
+                [placeholder]="'users.searchTechnicians' | translate"
+                class="w-full px-4 py-2 rounded-lg border border-card-border bg-card text-text-primary placeholder-text-secondary focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" />
+        </div>
+
+        <button (click)="openCreateModal()"
+            class="w-full md:w-auto px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition-colors font-medium flex items-center justify-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd"
+                    d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+                    clip-rule="evenodd" />
+            </svg>
+            {{ 'users.addTechnician' | translate }}
+        </button>
+    </div>
+
+    <!-- Table (Copied from resident-list.html and adapted) -->
+    <!-- Mobile Card View -->
+    <div class="md:hidden space-y-4">
+        @for (tech of data(); track tech.id) {
+        <div class="bg-card rounded-lg border border-card-border p-4 hover:bg-background transition-colors">
+            <!-- Header with Name -->
+            <div class="flex items-start justify-between mb-3">
+                <div>
+                    <h3 class="text-base font-semibold text-text-primary">
+                        {{ tech.firstName }} {{ tech.lastName }}
+                    </h3>
+                    <p class="text-sm text-text-secondary mt-1">{{ tech.email }}</p>
+                </div>
+            </div>
+
+            <!-- Details Grid -->
+            <div class="space-y-2 mb-3">
+                <div class="flex justify-between text-sm">
+                    <span class="text-text-secondary">{{ 'residents.phone' | translate }}:</span>
+                    <span class="text-text-primary">{{ tech.phone || 'N/A' }}</span>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="flex gap-2 pt-3 border-t border-card-border">
+                <button (click)="onDelete(tech)"
+                    class="flex-1 px-3 py-2 text-sm font-medium text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-950 rounded-md hover:bg-red-100 dark:hover:bg-red-900 transition-colors cursor-pointer">
+                    {{ 'common.delete' | translate }}
+                </button>
+            </div>
+        </div>
+        }
+    </div>
+
+    <!-- Desktop Table View -->
+    <div class="hidden md:block overflow-x-auto rounded-lg bg-card shadow-sm border border-card-border">
+        <table class="min-w-full divide-y divide-card-border">
+            <thead class="bg-background">
+                <tr>
+                    <th scope="col"
+                        class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-text-secondary cursor-pointer hover:text-text-primary"
+                        (click)="onSort('firstName')">
+                        <div class="flex items-center gap-1">
+                            {{ 'residents.firstName' | translate }}
+                            @if (sortBy() === 'firstName') {
+                            <span>{{ sortDirection() === 'asc' ? '↑' : '↓' }}</span>
+                            }
+                        </div>
+                    </th>
+                    <th scope="col"
+                        class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-text-secondary cursor-pointer hover:text-text-primary"
+                        (click)="onSort('lastName')">
+                        <div class="flex items-center gap-1">
+                            {{ 'residents.lastName' | translate }}
+                            @if (sortBy() === 'lastName') {
+                            <span>{{ sortDirection() === 'asc' ? '↑' : '↓' }}</span>
+                            }
+                        </div>
+                    </th>
+                    <th scope="col"
+                        class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-text-secondary">
+                        {{ 'residents.email' | translate }}
+                    </th>
+                    <th scope="col"
+                        class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-text-secondary">
+                        {{ 'residents.phone' | translate }}
+                    </th>
+                    <th scope="col"
+                        class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-text-secondary">
+                        {{ 'residents.actions' | translate }}
+                    </th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-card-border bg-card">
+                @for (tech of data(); track tech.id) {
+                <tr class="hover:bg-background transition-colors">
+                    <td class="whitespace-nowrap px-6 py-4 text-sm text-text-secondary">
+                        {{ tech.firstName }}
+                    </td>
+                    <td class="whitespace-nowrap px-6 py-4 text-sm text-text-secondary">
+                        {{ tech.lastName }}
+                    </td>
+                    <td class="whitespace-nowrap px-6 py-4 text-sm text-text-secondary">
+                        {{ tech.email }}
+                    </td>
+                    <td class="whitespace-nowrap px-6 py-4 text-sm text-text-secondary">
+                        {{ tech.phone || 'N/A' }}
+                    </td>
+                    <td class="whitespace-nowrap px-6 py-4 text-sm text-text-secondary">
+                        <div class="flex gap-3">
+                            <button (click)="onDelete(tech)"
+                                class="text-red-600 hover:text-red-500 dark:text-red-400 dark:hover:text-red-300 font-medium transition-colors cursor-pointer"
+                                [title]="'users.deleteTechnician' | translate">
+                                {{ 'common.delete' | translate }}
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Pagination (Copied from residents-management.html - shared style) -->
+    @if (serviceTotalPages() > 1) {
+    <div class="flex justify-center items-center gap-2 mt-6">
+        <button (click)="onPageChange(page() - 1)" [disabled]="page() === 0"
+            class="px-4 py-2 rounded-lg bg-card border border-card-border text-text-primary hover:bg-background disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+            {{ 'common.previous' | translate }}
+        </button>
+
+        <div class="flex gap-1">
+            @for (pageNum of [].constructor(serviceTotalPages()); track $index) {
+            @if ($index === 0 || $index === serviceTotalPages() - 1 || ($index >= page() - 1 && $index <= page() + 1)) {
+                <button (click)="onPageChange($index)" [class.bg-indigo-600]="page() === $index"
+                [class.text-white]="page() === $index" [class.bg-card]="page() !== $index"
+                [class.text-text-primary]="page() !== $index"
+                class="px-3 py-2 rounded-lg border border-card-border hover:bg-indigo-600 hover:text-white transition-colors min-w-[40px]">
+                {{ $index + 1 }}
+                </button>
+                } @else if ($index === page() - 2 || $index === page() + 2) {
+                <span class="px-2 py-1 text-text-secondary">...</span>
+                }
+                }
+        </div>
+
+        <button (click)="onPageChange(page() + 1)" [disabled]="page() === serviceTotalPages() - 1"
+            class="px-4 py-2 rounded-lg bg-card border border-card-border text-text-primary hover:bg-background disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+            {{ 'common.next' | translate }}
+        </button>
+    </div>
+    }
+</div>
+
+<app-technician-form-modal [isOpen]="isCreateModalOpen()" (close)="closeCreateModal()"
+    (submitForm)="onTechnicianSubmit($event)" />
+
+<app-confirmation-dialog [isOpen]="isDeleteDialogOpen()" [title]="'users.deleteTechnician' | translate"
+    [message]="('residents.deleteConfirmation' | translate) + ' ' + (technicianToDelete()?.firstName || '') + ' ' + (technicianToDelete()?.lastName || '') + '? ' + ('residents.cannotBeUndone' | translate)"
+    [confirmText]="'common.delete' | translate" [cancelText]="'common.cancel' | translate" (confirm)="onConfirmDelete()"
+    (cancel)="isDeleteDialogOpen.set(false)" />

@@ -3,7 +3,7 @@ import { Apollo } from 'apollo-angular';
 import { ResidentPayload } from '../models/resident.models';
 import { ResidentPage } from '../models/resident-page.models';
 import { RoomPayload } from '../models/room.models';
-import { GET_ALL_RESIDENTS, GET_RESIDENTS_BY_BUILDING, GET_BUILDINGS, GET_AVAILABLE_ROOMS, ASSIGN_ROOM, DELETE_RESIDENT, CREATE_RESIDENT } from '../residents.graphql';
+import { GET_ALL_RESIDENTS, GET_RESIDENTS_BY_BUILDING, GET_BUILDINGS, GET_AVAILABLE_ROOMS, ASSIGN_ROOM, DELETE_RESIDENT, CREATE_RESIDENT, GET_ALL_TECHNICIANS, CREATE_TECHNICIAN, DELETE_TECHNICIAN } from '../residents.graphql';
 import { map } from 'rxjs/operators';
 import { Building } from '../../../../shared/models/graphql.types';
 import { Observable } from 'rxjs';
@@ -162,6 +162,72 @@ export class ResidentService {
             throw new Error('Failed to create resident');
           }
           return result.data.createResident;
+        })
+      );
+  }
+
+  // Technician methods
+
+  getAllTechnicians(page: number = 0, size: number = 10, search?: string, sortBy?: string, sortDirection?: string) {
+    this.apollo
+      .watchQuery<{ allTechnicians: ResidentPage }>({
+        query: GET_ALL_TECHNICIANS,
+        variables: {
+          page,
+          size,
+          search: search || null,
+          sortBy: sortBy || null,
+          sortDirection: sortDirection || null
+        },
+        fetchPolicy: 'network-only'
+      })
+      .valueChanges
+      .pipe(
+        map(result => result.data.allTechnicians)
+      )
+      .subscribe({
+        next: (residentPage) => {
+          this.allResidents.set(residentPage.content); // Reusing the same signal for simplicity? Or should I use a separate one?
+          // Wait, if I use the same signal, it will overwrite the resident list when tab changes. This is fine if the list component consumes this signal.
+          this.totalElements.set(residentPage.totalElements);
+          this.totalPages.set(residentPage.totalPages);
+          this.currentPage.set(residentPage.currentPage);
+          this.pageSize.set(residentPage.pageSize);
+        },
+        error: (err) => {
+          console.error('Error fetching technicians:', err);
+        }
+      });
+  }
+
+  createTechnician(input: any): Observable<ResidentPayload> {
+    return this.apollo
+      .mutate<{ createTechnician: ResidentPayload }>({
+        mutation: CREATE_TECHNICIAN,
+        variables: { input }
+      })
+      .pipe(
+        map(result => {
+          if (!result.data) {
+            throw new Error('Failed to create technician');
+          }
+          return result.data.createTechnician;
+        })
+      );
+  }
+
+  deleteTechnician(userId: string): Observable<boolean> {
+    return this.apollo
+      .mutate<{ deleteTechnician: boolean }>({
+        mutation: DELETE_TECHNICIAN,
+        variables: { userId }
+      })
+      .pipe(
+        map(result => {
+          if (!result.data) {
+            throw new Error('Failed to delete technician');
+          }
+          return result.data.deleteTechnician;
         })
       );
   }

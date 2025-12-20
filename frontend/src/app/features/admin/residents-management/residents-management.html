@@ -2,9 +2,29 @@
   <div class="space-y-6">
 
     <div class="flex justify-between items-center">
-      <h1 class="text-2xl font-bold text-text-primary">{{ 'admin.residentsManagement' | translate }}</h1>
+      <h1 class="text-3xl font-bold text-text-primary">{{ 'users.title' | translate }}</h1>
     </div>
 
+    <div class="border-b border-card-border mb-6">
+      <nav class="-mb-px flex space-x-8">
+        <button (click)="setActiveTab('residents')" [class]="activeTab() === 'residents'
+              ? 'border-indigo-500 text-indigo-600 dark:text-indigo-400'
+              : 'border-transparent text-text-secondary hover:text-text-primary hover:border-gray-300'"
+          class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors cursor-pointer flex items-center gap-2">
+          <i class="fas fa-users"></i>
+          {{ 'users.residents' | translate }}
+        </button>
+        <button (click)="setActiveTab('technicians')" [class]="activeTab() === 'technicians'
+              ? 'border-indigo-500 text-indigo-600 dark:text-indigo-400'
+              : 'border-transparent text-text-secondary hover:text-text-primary hover:border-gray-300'"
+          class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors cursor-pointer flex items-center gap-2">
+          <i class="fas fa-tools"></i>
+          {{ 'users.technicians' | translate }}
+        </button>
+      </nav>
+    </div>
+
+    @if (activeTab() === 'residents') {
     <div class="flex flex-col md:flex-row gap-4 items-end">
 
       <div class="flex-1 w-full">
@@ -140,14 +160,19 @@
     </div>
     }
     }
+    }
+
+    @if (activeTab() === 'technicians') {
+    <app-technicians-list></app-technicians-list>
+    }
+
+    <app-room-assignment-modal [isOpen]="isModalOpen()" [resident]="selectedResident()" (close)="onModalClose()"
+      (assigned)="onRoomAssigned()" />
+
+    <app-confirmation-dialog [isOpen]="isDeleteDialogOpen()" [title]="'residents.deleteResident' | translate"
+      [message]="('residents.deleteConfirmation' | translate) + ' ' + (residentToDelete()?.firstName || '') + ' ' + (residentToDelete()?.lastName || '') + '? ' + ('residents.cannotBeUndone' | translate)"
+      [confirmText]="'common.delete' | translate" [cancelText]="'common.cancel' | translate"
+      (confirm)="onConfirmDelete()" (cancel)="onCancelDelete()" />
+
   </div>
-
-  <app-room-assignment-modal [isOpen]="isModalOpen()" [resident]="selectedResident()" (close)="onModalClose()"
-    (assigned)="onRoomAssigned()" />
-
-  <app-confirmation-dialog [isOpen]="isDeleteDialogOpen()" [title]="'residents.deleteResident' | translate"
-    [message]="('residents.deleteConfirmation' | translate) + ' ' + (residentToDelete()?.firstName || '') + ' ' + (residentToDelete()?.lastName || '') + '? ' + ('residents.cannotBeUndone' | translate)"
-    [confirmText]="'common.delete' | translate" [cancelText]="'common.cancel' | translate" (confirm)="onConfirmDelete()"
-    (cancel)="onCancelDelete()" />
-
 </app-main-layout>
