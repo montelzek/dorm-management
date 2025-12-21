@@ -829,6 +829,7 @@
     "noTechnicians": "Brak dostępnych techników",
     "selectTechnician": "Wybierz konserwatora",
     "selectBuilding": "Wybierz budynek",
+    "selectRoom": "Wybierz pokój",
     "userInformation": "Informacje użytkownika",
     "resourceInformation": "Informacje o zasobie",
     "resourceName": "Nazwa zasobu",

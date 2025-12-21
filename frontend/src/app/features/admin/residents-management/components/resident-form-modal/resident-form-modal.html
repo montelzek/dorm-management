@@ -54,6 +54,38 @@
                     [class.border-red-500]="form.get('phone')?.invalid && form.get('phone')?.touched" />
             </div>
 
+            <!-- Building (Helper for Room Selection) -->
+            <div>
+                <label class="block text-sm font-medium text-text-secondary mb-1">
+                    {{ 'admin.resourceBuilding' | translate }}
+                </label>
+                <select formControlName="buildingId" (change)="onBuildingChange($event)"
+                    class="w-full rounded-lg border-2 border-input-border bg-input-bg px-4 py-2 text-input-text focus:border-input-focus-border focus:outline-none focus:ring-2 focus:ring-input-focus-border transition-all">
+                    <option value="">{{ 'admin.selectBuilding' | translate }}</option>
+                    <option *ngFor="let building of residentService.buildings()" [value]="building.id">
+                        {{ building.name }}
+                    </option>
+                </select>
+            </div>
+
+            <!-- Room -->
+            <div>
+                <label class="block text-sm font-medium text-text-secondary mb-1">
+                    {{ 'nav.rooms' | translate }}
+                </label>
+                <select formControlName="roomId"
+                    class="w-full rounded-lg border-2 border-input-border bg-input-bg px-4 py-2 text-input-text focus:border-input-focus-border focus:outline-none focus:ring-2 focus:ring-input-focus-border transition-all"
+                    [class.opacity-50]="!form.get('buildingId')?.value">
+                    <option value="">{{ 'admin.selectRoom' | translate }}</option>
+                    <option *ngFor="let room of rooms()" [value]="room.id">
+                        {{ room.roomNumber }} ({{ room.capacity - room.currentOccupancy }} {{ 'dashboard.stats.available' | translate }})
+                    </option>
+                </select>
+                <div *ngIf="isLoadingRooms()" class="text-xs text-text-secondary mt-1">
+                    {{ 'common.loading' | translate }}
+                </div>
+            </div>
+
             <!-- Password -->
             <div>
                 <label class="block text-sm font-medium text-text-secondary mb-1">

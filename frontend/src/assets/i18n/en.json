@@ -964,6 +964,7 @@
     "noTechnicians": "No available technicians",
     "selectTechnician": "Select Technician",
     "selectBuilding": "Select Building",
+    "selectRoom": "Select Room",
     "userInformation": "User Information",
     "resourceInformation": "Resource Information",
     "resourceName": "Resource Name",
