@@ -6,7 +6,6 @@ VALUES
     (4, 'DS4 Balon', 'ul. Skarżyńskiego 9, 31-866 Kraków', NOW(), NOW()),
     (5, 'DS B-1 Bydgoska', 'ul. Bydgoska 19A, 30-056 Kraków', NOW(), NOW());
 
--- Reset the buildings sequence to continue from the last inserted ID
 SELECT setval('buildings_id_seq', (SELECT MAX(id) FROM buildings));
 
 INSERT INTO room_standards (id, code, name, capacity, price, created_at, updated_at) VALUES
@@ -32,26 +31,6 @@ INSERT INTO room_standards (id, code, name, capacity, price, created_at, updated
 
 -- Ensure sequence name matches table `room_standards` (fix typo)
 SELECT setval('room_standards_id_seq', COALESCE((SELECT MAX(id) FROM room_standards), 0));
--- Insert sample rooms (2-4 per building)
--- INSERT INTO rooms (building_id, room_number, capacity, created_at, updated_at)
--- VALUES
---     -- Building A (ID = 1)
---     (1, 'A101', 2, NOW(), NOW()),
---     (1, 'A102', 3, NOW(), NOW()),
---     (1, 'A201', 2, NOW(), NOW()),
---     (1, 'A202', 4, NOW(), NOW()),
---
---     -- Building B (ID = 2)
---     (2, 'B101', 2, NOW(), NOW()),
---     (2, 'B102', 2, NOW(), NOW()),
---     (2, 'B201', 3, NOW(), NOW()),
---
---     -- Building C (ID = 3)
---     (3, 'C101', 2, NOW(), NOW()),
---     (3, 'C102', 2, NOW(), NOW()),
---     (3, 'C103', 3, NOW(), NOW());
-
-
 
 
 INSERT INTO rooms (id, room_number, capacity, building_id, room_standard_id, created_at, updated_at)
@@ -128,7 +107,6 @@ VALUES
 
 
 
--- Reset the rooms sequence to continue from the last inserted ID (safe for SERIAL/BIGSERIAL)
 SELECT setval('rooms_id_seq', COALESCE((SELECT MAX(id) FROM rooms), 0));
 
 
@@ -422,13 +400,12 @@ VALUES
 -- Link announcements to buildings
 INSERT INTO announcement_buildings (announcement_id, building_id)
 VALUES
-    (1, 1),  -- Water maintenance in Building A
-    (3, 2),  -- Power outage in Building B
-    (4, 3),  -- Elevator maintenance in Building C
-    (5, 1),  -- Community meeting in Building A
-    (5, 2),  -- Community meeting also for Building B
-    (6, 1),  -- Heating check in Building A
-    (6, 2),  -- Heating check in Building B
-    (6, 3);  -- Heating check in Building C
+    (1, 1),
+    (3, 2),
+    (4, 3),
+    (5, 1),
+    (5, 2),
+    (6, 1),
+    (6, 2),
+    (6, 3);
 
--- Note: Announcements 2 (Internet Upgrade) has no building assignment, making it global for all residents

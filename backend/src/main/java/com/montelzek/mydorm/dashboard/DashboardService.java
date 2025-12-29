@@ -87,21 +87,21 @@ public class DashboardService {
 
     private AdminDashboardStats getAdminStats() {
         Long totalResidents = userRepository.countByRolesContaining(ERole.ROLE_RESIDENT);
-        Long totalRooms = roomRepository.count();
-        Long totalBuildings = buildingRepository.count();
+        long totalRooms = roomRepository.count();
+        long totalBuildings = buildingRepository.count();
         Long occupiedRooms = roomRepository.countOccupiedRooms();
         Long availableRooms = roomRepository.countAvailableRooms();
-        Long totalReservations = reservationRepository.count();
-        Long totalIssues = issueRepository.count();
+        long totalReservations = reservationRepository.count();
+        long totalIssues = issueRepository.count();
 
         return new AdminDashboardStats(
                 totalResidents.intValue(),
-                totalRooms.intValue(),
-                totalBuildings.intValue(),
+                (int) totalRooms,
+                (int) totalBuildings,
                 occupiedRooms.intValue(),
                 availableRooms.intValue(),
-                totalReservations.intValue(),
-                totalIssues.intValue()
+                (int) totalReservations,
+                (int) totalIssues
         );
     }
 
@@ -175,12 +175,12 @@ public class DashboardService {
     }
 
     private ResidentStats getResidentStats(Long userId) {
-        Long totalReservations = (long) reservationRepository.findByUserId(userId).size();
-        Long totalIssues = (long) issueRepository.findByUserId(userId).size();
+        long totalReservations = (long) reservationRepository.findByUserId(userId).size();
+        long totalIssues = (long) issueRepository.findByUserId(userId).size();
 
         return new ResidentStats(
-                totalReservations.intValue(),
-                totalIssues.intValue()
+                (int) totalReservations,
+                (int) totalIssues
         );
     }
 

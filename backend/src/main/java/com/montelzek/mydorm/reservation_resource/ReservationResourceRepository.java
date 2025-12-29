@@ -13,9 +13,7 @@ import java.util.List;
 public interface ReservationResourceRepository extends JpaRepository<ReservationResource, Long> {
 
     List<ReservationResource> findByBuildingId(Long buildingId);
-    
-    List<ReservationResource> findByBuildingIdAndIsActive(Long buildingId, boolean isActive);
-    
+
     @Query("SELECT DISTINCT r FROM ReservationResource r " +
             "LEFT JOIN r.building b " +
             "WHERE (:buildingId IS NULL OR r.building.id = :buildingId) AND " +

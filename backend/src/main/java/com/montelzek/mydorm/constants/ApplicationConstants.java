@@ -12,7 +12,6 @@ public final class ApplicationConstants {
     
     // ========== TIME ZONES ==========
     public static final ZoneId DORMITORY_TIMEZONE = ZoneId.of("Europe/Warsaw");
-    // Usunięto UTC_TIMEZONE - używamy tylko Europe/Warsaw
     
     // ========== RESERVATION CONSTRAINTS ==========
     public static final LocalTime EARLIEST_RESERVATION_TIME = LocalTime.of(8, 0);

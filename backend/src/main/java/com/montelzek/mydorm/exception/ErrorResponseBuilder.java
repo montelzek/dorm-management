@@ -12,19 +12,4 @@ public class ErrorResponseBuilder {
         errorResponse.put("message", message);
         return errorResponse;
     }
-
-    
-    public static Map<String, Object> buildSimpleGraphQLExtensions() {
-        Map<String, Object> extensions = new HashMap<>();
-        extensions.put("code", "USER_ERROR");
-        return extensions;
-    }
-
-    public static Map<String, Object> buildFromBusinessException(BusinessException ex) {
-        return buildSimpleErrorResponse(ex.getMessage());
-    }
-
-    public static Map<String, Object> buildGraphQLExtensionsFromBusinessException(BusinessException ex) {
-        return buildSimpleGraphQLExtensions();
-    }
 }

@@ -171,7 +171,6 @@ public class UserService {
                 .map(this::toPayload)
                 .collect(Collectors.toList());
 
-        // Reusing ResidentPage for now as it has the same structure
         return new ResidentPage(
                 content,
                 (int) userPage.getTotalElements(),
@@ -226,7 +225,6 @@ public class UserService {
                         "roomId"
                 ));
 
-        // Check if room has available capacity
         if (room.getUsers().size() >= room.getCapacity()) {
             throw new BusinessException(
                     ErrorCodes.VALIDATION_ERROR,

@@ -33,8 +33,6 @@ public interface EventRepository extends JpaRepository<Event, Long> {
         @Param("endDate") LocalDate endDate
     );
 
-    List<Event> findByBuildingIdOrderByEventDateAscStartTimeAsc(Long buildingId);
-
     @Query("SELECT e FROM Event e WHERE e.eventDate >= :date ORDER BY e.eventDate ASC, e.startTime ASC")
     List<Event> findTop5ByEventDateGreaterThanEqualOrderByEventDateAscStartTimeAsc(@Param("date") LocalDate date);
 

@@ -63,8 +63,8 @@ public class GraphQLExceptionHandler extends DataFetcherExceptionResolverAdapter
             if (attributes != null) {
                 return localeResolver.resolveLocale(attributes.getRequest());
             }
-        } catch (Exception e) {
-            // Fallback to default locale
+        } catch (Exception _) {
+
         }
         return new Locale("pl");
     }

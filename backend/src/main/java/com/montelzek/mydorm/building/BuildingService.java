@@ -60,7 +60,6 @@ public class BuildingService {
 
     @Transactional
     public AdminBuildingPayload createBuilding(CreateBuildingInput input) {
-        // Check if building with same name already exists
         if (buildingRepository.findByName(input.name()).isPresent()) {
             throw new IllegalStateException("Building with name '" + input.name() + "' already exists");
         }
@@ -77,8 +76,7 @@ public class BuildingService {
     public AdminBuildingPayload updateBuilding(Long id, UpdateBuildingInput input) {
         Building building = buildingRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Building not found with id: " + id));
-        
-        // Check if another building with same name exists
+
         buildingRepository.findByName(input.name()).ifPresent(existing -> {
             if (!existing.getId().equals(id)) {
                 throw new IllegalStateException("Building with name '" + input.name() + "' already exists");

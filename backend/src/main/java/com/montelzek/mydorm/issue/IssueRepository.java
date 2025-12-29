@@ -15,14 +15,7 @@ public interface IssueRepository extends JpaRepository<Issue, Long> {
     List<Issue> findByUserId(Long userId);
     
     List<Issue> findByUserIdAndStatus(Long userId, EIssueStatus status);
-    
-    // Admin methods for pagination and filtering
-    Page<Issue> findByStatus(EIssueStatus status, Pageable pageable);
-    
-    Page<Issue> findByPriority(EIssuePriority priority, Pageable pageable);
-    
-    Page<Issue> findByBuildingId(Long buildingId, Pageable pageable);
-    
+
     Long countByStatus(EIssueStatus status);
     
     @Query(value = "SELECT i FROM Issue i " +

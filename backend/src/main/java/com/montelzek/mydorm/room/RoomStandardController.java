@@ -39,7 +39,6 @@ public class RoomStandardController {
         rs.setName(input.name());
         rs.setCode(input.name());
         rs.setCapacity(input.capacity());
-        // parse price string to BigDecimal safely
         BigDecimal price;
         try {
             price = new BigDecimal(input.price());

@@ -47,16 +47,11 @@ public class RoomStandardService {
         if (!repository.existsById(id)) {
             throw new IllegalArgumentException("RoomStandard not found with id: " + id);
         }
-        // check if any room references this standard
         long count = roomRepository.countByRoomStandardId(id);
         if (count > 0) {
             throw new BusinessException(ErrorCodes.STANDARD_IN_USE, "Cannot delete standard: assigned to " + count + " room(s)", "roomStandard");
         }
         repository.deleteById(id);
         return true;
-    }
-
-    public long countUsage(Long id) {
-        return roomRepository.countByRoomStandardId(id);
     }
 }

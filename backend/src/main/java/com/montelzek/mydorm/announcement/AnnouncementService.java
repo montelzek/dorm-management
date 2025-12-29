@@ -30,9 +30,6 @@ public class AnnouncementService {
     private final BuildingRepository buildingRepository;
     private final UserRepository userRepository;
 
-    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
     @Transactional
     public AnnouncementsPagePayload getAllAnnouncements(Integer page, Integer size) {
         int pageNumber = (page != null && page >= 0) ? page : 0;

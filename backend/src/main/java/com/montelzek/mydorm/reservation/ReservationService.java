@@ -200,9 +200,6 @@ public class ReservationService {
         return allSlots;
     }
 
-    /**
-     * Parses date-time string to ZonedDateTime in Europe/Warsaw timezone
-     */
     public ZonedDateTime parseFlexibleDateTime(String dateTimeString) {
         try {
             return ZonedDateTime.parse(dateTimeString);
@@ -215,9 +212,6 @@ public class ReservationService {
         }
     }
 
-    /**
-     * Creates reservation with parsed date-time strings
-     */
     @Transactional
     public Reservation createReservationWithParsedTimes(String startTimeString, String endTimeString, Long resourceId, User user) {
         ZonedDateTime parsedStartTime = parseFlexibleDateTime(startTimeString);
@@ -226,17 +220,11 @@ public class ReservationService {
         return createReservation(parsedStartTime, parsedEndTime, resourceId, user);
     }
 
-    /**
-     * Gets user by ID with proper error handling
-     */
     public User getUserById(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Authenticated user not found in the database"));
     }
 
-    /**
-     * Converts LocalTime[] slots to GraphQL TimeSlot payloads
-     */
     public List<GraphQLPayloads.TimeSlot> convertSlotsToPayloads(List<LocalTime[]> slots, LocalDate date) {
         ZoneId dormitoryZone = ApplicationConstants.DORMITORY_TIMEZONE;
         
@@ -253,27 +241,18 @@ public class ReservationService {
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Gets available laundry slots as GraphQL payloads
-     */
     public List<GraphQLPayloads.TimeSlot> getAvailableLaundrySlotsAsPayloads(Long resourceId, String dateString) {
         LocalDate date = LocalDate.parse(dateString);
         List<LocalTime[]> slots = getAvailableLaundrySlots(resourceId, date);
         return convertSlotsToPayloads(slots, date);
     }
 
-    /**
-     * Gets available standard slots as GraphQL payloads
-     */
     public List<GraphQLPayloads.TimeSlot> getAvailableStandardSlotsAsPayloads(Long resourceId, String dateString) {
         LocalDate date = LocalDate.parse(dateString);
         List<LocalTime[]> slots = getAvailableStandardSlots(resourceId, date);
         return convertSlotsToPayloads(slots, date);
     }
 
-    /**
-     * Converts Reservation entity to GraphQL payload
-     */
     public GraphQLPayloads.ReservationPayload toPayload(Reservation reservation) {
         User user = reservation.getUser();
         ReservationResource resource = reservation.getReservationResource();
@@ -300,18 +279,13 @@ public class ReservationService {
         );
     }
 
-    /**
-     * Gets user's reservations as GraphQL payloads
-     */
     public List<GraphQLPayloads.ReservationPayload> getUserReservationsAsPayloads(Long userId) {
         return reservationRepository.findByUserId(userId).stream()
                 .map(this::toPayload)
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Cancels a reservation by ID for a specific user
-     */
+
     @Transactional
     public Boolean cancelReservation(Long reservationId, Long userId) {
         Reservation reservation = reservationRepository.findById(reservationId)

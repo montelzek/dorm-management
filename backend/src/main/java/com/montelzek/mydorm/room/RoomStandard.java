@@ -1,12 +1,20 @@
 package com.montelzek.mydorm.room;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "room_standards")
 public class RoomStandard {
 
@@ -15,7 +23,7 @@ public class RoomStandard {
     private Long id;
 
     @Column(nullable = false)
-    private String code; // optional code, can be same as name or generated
+    private String code;
 
     @Column(nullable = false)
     private String name;
@@ -34,61 +42,5 @@ public class RoomStandard {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    public RoomStandard() {}
-
-    public RoomStandard(String code, String name, Integer capacity, BigDecimal price) {
-        this.code = code;
-        this.name = name;
-        this.capacity = capacity;
-        this.price = price;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Integer getCapacity() {
-        return capacity;
-    }
-
-    public void setCapacity(Integer capacity) {
-        this.capacity = capacity;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
 }
 

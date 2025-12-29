@@ -44,10 +44,6 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
             @Param("endTime") LocalDateTime endTime
     );
 
-    @Query("SELECT COUNT(r) > 0 FROM Reservation r WHERE r.user.id = :userId AND r.status = 'CONFIRMED' AND r.endTime > :now")
-    boolean hasActiveReservations(@Param("userId") Long userId, @Param("now") LocalDateTime now);
-
-    // Admin queries for future confirmed reservations
     @Query("SELECT r FROM Reservation r WHERE r.status = 'CONFIRMED' AND r.startTime > :now")
     Page<Reservation> findFutureConfirmedReservations(@Param("now") LocalDateTime now, Pageable pageable);
 
