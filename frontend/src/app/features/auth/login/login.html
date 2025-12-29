@@ -6,55 +6,60 @@
     </div>
 
     <div class="text-center">
-      <img ngSrc="/logo-indigo.svg" alt="logo" class="mx-auto" height="53" width="53"/>
-      <h2 class="mt-6 text-center text-2xl/9 font-bold tracking-tight text-text-primary">{{ 'auth.signInToAccount' | translate }}</h2>
+      <img ngSrc="/logo-indigo.svg" alt="logo" class="mx-auto" height="53" width="53" />
+      <h2 class="mt-6 text-center text-2xl/9 font-bold tracking-tight text-text-primary">{{ 'auth.signInToAccount' |
+        translate }}</h2>
     </div>
 
     <div class="mt-8">
       <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-6">
 
         <div>
-          <label for="email" class="block text-sm/6 font-medium text-text-primary">{{ 'auth.email' | translate }}</label>
+          <label for="email" class="block text-sm/6 font-medium text-text-primary">{{ 'auth.email' | translate
+            }}</label>
           <div class="mt-2">
-            <input id="email" type="email" formControlName="email" class="block w-full rounded-md bg-input-bg px-3 py-1.5 text-base text-input-text outline-1 -outline-offset-1 outline-input-border placeholder:text-input-placeholder focus:outline-2 focus:-outline-offset-2 focus:outline-input-focus-border sm:text-sm/6" />
+            <input id="email" type="email" formControlName="email"
+              class="block w-full rounded-md bg-input-bg px-3 py-1.5 text-base text-input-text outline-1 -outline-offset-1 outline-input-border placeholder:text-input-placeholder focus:outline-2 focus:-outline-offset-2 focus:outline-input-focus-border sm:text-sm/6" />
           </div>
           @if (loginForm.get('email')?.invalid && (loginForm.get('email')?.dirty || loginForm.get('email')?.touched)) {
-            <p class="mt-2 text-sm text-error-text">
-              @if (loginForm.get('email')?.errors?.['required']) {
-                {{ 'auth.validation.emailRequired' | translate }}
-              }
-              @if (loginForm.get('email')?.errors?.['email']) {
-                {{ 'auth.validation.emailInvalid' | translate }}
-              }
-            </p>
+          <p class="mt-2 text-sm text-error-text">
+            @if (loginForm.get('email')?.errors?.['required']) {
+            {{ 'auth.validation.emailRequired' | translate }}
+            }
+            @if (loginForm.get('email')?.errors?.['email']) {
+            {{ 'auth.validation.emailInvalid' | translate }}
+            }
+          </p>
           }
         </div>
 
         <div>
           <div class="flex items-center justify-between">
-            <label for="password" class="block text-sm/6 font-medium text-text-primary">{{ 'auth.password' | translate }}</label>
+            <label for="password" class="block text-sm/6 font-medium text-text-primary">{{ 'auth.password' | translate
+              }}</label>
           </div>
           <div class="mt-2">
-            <input id="password" type="password" formControlName="password" class="block w-full rounded-md bg-input-bg px-3 py-1.5 text-base text-input-text outline-1 -outline-offset-1 outline-input-border placeholder:text-input-placeholder focus:outline-2 focus:-outline-offset-2 focus:outline-input-focus-border sm:text-sm/6" />
+            <input id="password" type="password" formControlName="password"
+              class="block w-full rounded-md bg-input-bg px-3 py-1.5 text-base text-input-text outline-1 -outline-offset-1 outline-input-border placeholder:text-input-placeholder focus:outline-2 focus:-outline-offset-2 focus:outline-input-focus-border sm:text-sm/6" />
           </div>
-          @if (loginForm.get('password')?.invalid && (loginForm.get('password')?.dirty || loginForm.get('password')?.touched)) {
-            <p class="mt-2 text-sm text-error-text">
-              @if (loginForm.get('password')?.errors?.['required']) {
-                {{ 'auth.validation.passwordRequired' | translate }}
-              }
-            </p>
+          @if (loginForm.get('password')?.invalid && (loginForm.get('password')?.dirty ||
+          loginForm.get('password')?.touched)) {
+          <p class="mt-2 text-sm text-error-text">
+            @if (loginForm.get('password')?.errors?.['required']) {
+            {{ 'auth.validation.passwordRequired' | translate }}
+            }
+          </p>
           }
         </div>
 
         <div>
-          <button type="submit" class="flex w-full justify-center cursor-pointer rounded-md bg-button-bg px-3 py-1.5 text-sm/6 font-semibold text-button-text shadow-xs hover:bg-button-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-button-focus-outline">{{ 'auth.signIn' | translate }}</button>
+          <button type="submit"
+            class="flex w-full justify-center cursor-pointer rounded-md bg-button-bg px-3 py-1.5 text-sm/6 font-semibold text-button-text shadow-xs hover:bg-button-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-button-focus-outline">{{
+            'auth.signIn' | translate }}</button>
         </div>
       </form>
 
-      <p class="mt-10 text-center text-sm/6 text-text-secondary">
-        {{ 'auth.dontHaveAccount' | translate }}
-        <a routerLink="/register" class="font-semibold text-link hover:text-link-hover">{{ 'auth.register' | translate }}</a>
-      </p>
+
     </div>
   </div>
 </div>

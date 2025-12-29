@@ -4,10 +4,7 @@ import com.montelzek.mydorm.exception.BusinessException;
 import com.montelzek.mydorm.exception.ErrorCodes;
 import com.montelzek.mydorm.room.Room;
 import com.montelzek.mydorm.room.RoomRepository;
-import com.montelzek.mydorm.user.payloads.ResidentPage;
-import com.montelzek.mydorm.user.payloads.ResidentPayload;
-import com.montelzek.mydorm.user.payloads.UpdateProfileInput;
-import com.montelzek.mydorm.user.payloads.UserProfilePayload;
+import com.montelzek.mydorm.user.payloads.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -34,50 +31,55 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
-    public ResidentPayload createResident(com.montelzek.mydorm.user.payloads.CreateResidentInput input) {
-        userRepository.findByEmail(input.email()).ifPresent(u -> {
-            throw new BusinessException(ErrorCodes.VALIDATION_ERROR, "Email already exists", "email");
-        });
-
-        User user = new User();
-        user.setFirstName(input.firstName());
-        user.setLastName(input.lastName());
-        user.setEmail(input.email());
-        user.setPhone(input.phone());
-        user.setPassword(passwordEncoder.encode(input.password()));
-        
-        user.setRoles(java.util.Collections.singleton(ERole.ROLE_RESIDENT));
+    public ResidentPayload createResident(CreateResidentInput input) {
+        User user = prepareBaseUser(
+                input.email(),
+                input.password(),
+                input.firstName(),
+                input.lastName(),
+                input.phone(),
+                ERole.ROLE_RESIDENT
+        );
 
         if (input.roomId() != null) {
             Room room = roomRepository.findById(Long.valueOf(input.roomId()))
                     .orElseThrow(() -> new BusinessException(ErrorCodes.RESOURCE_NOT_FOUND, "Room not found", "roomId"));
-            
+
             if (room.getUsers().size() >= room.getCapacity()) {
                 throw new BusinessException(ErrorCodes.VALIDATION_ERROR, "Room is at full capacity", "roomId");
             }
             user.setRoom(room);
         }
-
-        User savedUser = userRepository.save(user);
-        return toPayload(savedUser);
+        return toPayload(userRepository.save(user));
     }
 
-    public ResidentPayload createTechnician(com.montelzek.mydorm.user.payloads.CreateTechnicianInput input) {
-        userRepository.findByEmail(input.email()).ifPresent(u -> {
+    public ResidentPayload createTechnician(CreateTechnicianInput input) {
+        User user = prepareBaseUser(
+                input.email(),
+                input.password(),
+                input.firstName(),
+                input.lastName(),
+                input.phone(),
+                ERole.ROLE_TECHNICIAN
+        );
+
+        return toPayload(userRepository.save(user));
+    }
+
+    private User prepareBaseUser(String email, String password, String firstName, String lastName, String phone, ERole role) {
+        userRepository.findByEmail(email).ifPresent(u -> {
             throw new BusinessException(ErrorCodes.VALIDATION_ERROR, "Email already exists", "email");
         });
 
         User user = new User();
-        user.setFirstName(input.firstName());
-        user.setLastName(input.lastName());
-        user.setEmail(input.email());
-        user.setPhone(input.phone());
-        user.setPassword(passwordEncoder.encode(input.password()));
-        
-        user.setRoles(java.util.Collections.singleton(ERole.ROLE_TECHNICIAN));
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+        user.setEmail(email);
+        user.setPhone(phone);
+        user.setPassword(passwordEncoder.encode(password));
+        user.setRoles(java.util.Collections.singleton(role));
 
-        User savedUser = userRepository.save(user);
-        return toPayload(savedUser);
+        return user;
     }
 
 
