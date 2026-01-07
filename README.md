@@ -31,17 +31,6 @@
 
 MyDorm is a dormitory management system designed to automate and simplify the operations of student housing facilities. The application provides role-based access control with dedicated interfaces for residents, administrators, and technicians. It handles everything from room assignments and facility reservations to maintenance tracking, event management, and a built-in marketplace for students.
 
-### Key Capabilities
-
-- **User Management**: Complete resident lifecycle management with role-based access (Admin, Resident, Technician)
-- **Facility Management**: Buildings, rooms, resources, and room standards with dynamic pricing
-- **Reservations**: Book rooms and resources (laundry, common spaces) with availability checking
-- **Maintenance Tracking**: Issue reporting and resolution workflow with technician assignment
-- **Event Management**: Create and manage dormitory events with calendar integration
-- **Announcements**: Building-specific announcements and notifications
-- **Marketplace**: Buy/sell platform for residents with image support
-- **Dashboard Analytics**: Real-time statistics and insights for all user roles
-
 ## ✨ Features
 
 ### User Roles
@@ -71,11 +60,6 @@ The system supports three distinct user roles, each with tailored functionality:
 - **Announcements**:
   - View active announcements
   - Building-specific and general announcements
-- **Marketplace**:
-  - Browse marketplace listings
-  - Create listings (buy/sell) with images
-  - Manage own listings
-  - Contact other residents
 
 #### 👨‍💼 Administrator
 - **Admin Dashboard**: Comprehensive overview of facility operations
@@ -217,16 +201,6 @@ The system supports three distinct user roles, each with tailored functionality:
 - Display on resident and admin dashboards
 - Support for important/priority announcements
 
-#### 🛒 Marketplace
-- Listing creation with image uploads (stored in Docker volumes)
-- Category classification
-- Listing types (BUY, SELL)
-- Price display
-- Contact information sharing
-- User's own listings management
-- Image support with file upload
-- Listing details and descriptions
-
 ## 🛠️ Technology Stack
 
 ### Backend
@@ -253,68 +227,8 @@ The system supports three distinct user roles, each with tailored functionality:
 - **Nginx** for frontend serving
 - **Volume management** for uploaded files
 
-## 📁 Project Structure
-
-```
-mydorm/
-├── backend/
-│   ├── src/main/java/com/montelzek/mydorm/
-│   │   ├── config/              # Security, GraphQL configuration
-│   │   ├── security/            # JWT, UserDetails implementation
-│   │   ├── user/                # User entity, repository, service
-│   │   ├── building/            # Building management
-│   │   ├── room/                # Room management
-│   │   ├── roomstandard/        # Room standards with pricing
-│   │   ├── reservation/         # Reservation system
-│   │   ├── issue/               # Maintenance issues
-│   │   ├── event/               # Event management
-│   │   ├── announcement/        # Announcements
-│   │   ├── marketplace/         # Marketplace listings
-│   │   └── dashboard/           # Dashboard statistics
-│   ├── src/main/resources/
-│   │   ├── graphql/             # GraphQL schemas
-│   │   ├── db/migration/        # Flyway migration scripts
-│   │   ├── messages*.properties # i18n resources
-│   │   └── application.properties
-│   └── uploads/                 # Uploaded files (Docker volume)
-└── frontend/
-    └── src/app/
-        ├── core/
-        │   ├── guards/          # Auth guards
-        │   ├── interceptors/    # HTTP interceptors
-        │   └── services/        # Core services (auth, GraphQL)
-        ├── shared/
-        │   └── components/      # Reusable components
-        └── features/
-            ├── auth/            # Login, register
-            ├── admin/           # Admin panel
-            │   ├── dashboard/
-            │   ├── users-management/
-            │   ├── facilities-management/
-            │   ├── reservations-management/
-            │   ├── issues-management/
-            │   ├── events-management/
-            │   └── announcements-management/
-            ├── resident/        # Resident panel
-            │   ├── dashboard/
-            │   ├── reservations/
-            │   ├── issues/
-            │   ├── events/
-            │   ├── announcements/
-            │   └── marketplace/
-            └── technician/      # Technician panel
-                ├── dashboard/
-                ├── new-tasks/
-                └── tasks-history/
-```
 
 ## 🚀 Getting Started
-
-### Prerequisites
-- Docker and Docker Compose
-- Java 21 (for local development)
-- Node.js 18+ (for local development)
-- Maven (for local development)
 
 ### Running with Docker
 
@@ -330,54 +244,8 @@ docker-compose up -d
 ```
 
 3. Access the application:
-- Frontend: http://localhost:4200
-- Backend API: http://localhost:8080
-- GraphQL Playground: http://localhost:8080/graphiql
+http://localhost:4200
 
-### Local Development
-
-#### Backend
-```bash
-cd backend
-mvn clean install
-mvn spring-boot:run
-```
-
-#### Frontend
-```bash
-cd frontend
-npm install
-npm start
-```
-
-## 🔐 Authentication & Authorization
-
-### JWT Authentication
-- Stateless authentication using JWT tokens
-- Token generated on login and included in subsequent requests
-- Token validation via `JwtAuthenticationFilter`
-
-### User Roles
-- **ROLE_ADMIN**: Full system access
-- **ROLE_RESIDENT**: Resident features
-- **ROLE_TECHNICIAN**: Maintenance task management
-
-### Password Security
-- BCrypt hashing for password storage
-- Minimum password requirements enforced
-
-## 🗄️ Database Schema
-
-Key entities:
-- **users**: User accounts with roles
-- **buildings**: Dormitory buildings
-- **rooms**: Individual rooms with standard assignment
-- **room_standards**: Room pricing standards with occupancy
-- **reservations**: Facility reservations
-- **issues**: Maintenance requests
-- **events**: Dormitory events
-- **announcements**: System announcements
-- **marketplace_listings**: Student marketplace
 
 ## 📄 License
 
