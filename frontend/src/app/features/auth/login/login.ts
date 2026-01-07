@@ -14,7 +14,6 @@ import { ToastService } from '../../../core/services/toast.service';
   selector: 'app-login',
   imports: [
     ReactiveFormsModule,
-    RouterLink,
     NgOptimizedImage,
     TranslateModule,
     ThemeToggleComponent,
@@ -91,5 +90,19 @@ export class LoginComponent implements OnInit {
 
   private setLoading(loading: boolean): void {
     this.isLoading.set(loading);
+  }
+
+  fillCredentials(role: 'resident' | 'admin' | 'technician') {
+    const credentials = {
+      resident: { email: 'resident@resident.com', password: 'qwerty' },
+      admin: { email: 'admin@admin.com', password: 'qwerty' },
+      technician: { email: 'technician@technician.com', password: 'qwerty' }
+    };
+
+    const creds = credentials[role];
+    this.loginForm.patchValue({
+      email: creds.email,
+      password: creds.password
+    });
   }
 }
