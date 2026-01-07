@@ -1,11 +1,10 @@
-<button 
+<button
   (click)="toggleLanguage()"
   class="flex items-center justify-center h-6 rounded-md hover:opacity-80 transition-opacity duration-200 cursor-pointer"
   [attr.aria-label]="'Switch to ' + (isPolish() ? 'English' : 'Polish')"
 >
-  <!-- Pokazuje flagę języka, na który można przełączyć -->
+
   @if (isPolish()) {
-    <!-- Aktualnie PL, pokazuje flagę GB (UK) -->
     <svg class="w-7 h-5 rounded-sm flex-shrink-0" viewBox="0 0 60 30" xmlns="http://www.w3.org/2000/svg">
       <clipPath id="s"><path d="M0,0 v30 h60 v-30 z"/></clipPath>
       <clipPath id="t"><path d="M30,15 h30 v15 z v-30 h-30 z h-30 v15 z v-15 h30 z"/></clipPath>
@@ -18,7 +17,6 @@
       </g>
     </svg>
   } @else {
-    <!-- Aktualnie EN, pokazuje flagę PL -->
     <svg class="w-7 h-5 rounded-sm flex-shrink-0" viewBox="0 0 640 480" xmlns="http://www.w3.org/2000/svg">
       <g fill-rule="evenodd">
         <path fill="#fff" d="M640 480H0V0h640z"/>

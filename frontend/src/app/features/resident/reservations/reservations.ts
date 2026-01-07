@@ -170,7 +170,6 @@ export class ReservationsComponent implements OnInit {
   }
 
   private handleResourceSelection(resourceId: string | null, resources: ReservationResource[]): void {
-    // Disable and reset all time-related fields first
     this.reservationForm.get('date')!.disable();
     this.reservationForm.get('laundrySlot')!.disable();
     this.reservationForm.get('startTimeHour')!.disable();
@@ -242,7 +241,7 @@ export class ReservationsComponent implements OnInit {
     // Check weekly limits before creating reservation
     const reservationDate = new Date(startTime);
     const validationError = this.validateWeeklyLimits(resource, reservationDate);
-    
+
     if (validationError) {
       this.toastService.showError(validationError);
       return;
@@ -271,7 +270,7 @@ export class ReservationsComponent implements OnInit {
         if (r.status === 'CANCELLED') return false;
         const resDate = new Date(r.startTime);
         const isInWeek = resDate >= weekBounds.start && resDate < weekBounds.end;
-        const isLaundry = r.resource.name?.toLowerCase().includes('pralnia') || 
+        const isLaundry = r.resource.name?.toLowerCase().includes('pralnia') ||
                          r.resource.name?.toLowerCase().includes('laundry');
         return isInWeek && isLaundry;
       }).length;
@@ -283,8 +282,8 @@ export class ReservationsComponent implements OnInit {
       const resourceReservationsThisWeek = reservations.filter(r => {
         if (r.status === 'CANCELLED') return false;
         const resDate = new Date(r.startTime);
-        return r.resource.id === resource.id && 
-               resDate >= weekBounds.start && 
+        return r.resource.id === resource.id &&
+               resDate >= weekBounds.start &&
                resDate < weekBounds.end;
       }).length;
 
@@ -299,12 +298,12 @@ export class ReservationsComponent implements OnInit {
   private formatWeekDates(start: Date, end: Date): string {
     const locale = this.translate.currentLang || 'pl';
     const options: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'long', year: 'numeric' };
-    
+
     const startFormatted = start.toLocaleDateString(locale, options);
     const actualEnd = new Date(end);
     actualEnd.setDate(actualEnd.getDate() - 1);
     const endFormatted = actualEnd.toLocaleDateString(locale, options);
-    
+
     return `${startFormatted}-${endFormatted}`;
   }
 
@@ -312,13 +311,13 @@ export class ReservationsComponent implements OnInit {
     const d = new Date(date);
     const day = d.getDay();
     const diff = d.getDate() - day + (day === 0 ? -6 : 1);
-    
+
     const monday = new Date(d.setDate(diff));
     monday.setHours(0, 0, 0, 0);
-    
+
     const sunday = new Date(monday);
     sunday.setDate(monday.getDate() + 7);
-    
+
     return { start: monday, end: sunday };
   }
 
@@ -368,16 +367,16 @@ export class ReservationsComponent implements OnInit {
   }
 
   private handleReservationError(error: any): void {
-    console.error('Reservation creation error:', error);
-    
+    console.error(error);
+
     let errorMessage = this.translate.instant('common.error');
-    
+
     if (error.graphQLErrors && error.graphQLErrors.length > 0) {
       errorMessage = error.graphQLErrors[0].message;
     } else if (error.message) {
       errorMessage = error.message;
     }
-    
+
     this.toastService.showError(errorMessage);
   }
 
@@ -398,10 +397,10 @@ export class ReservationsComponent implements OnInit {
   onCancelReservation(reservationId: string): void {
     this.reservationService.cancelReservation(reservationId).subscribe({
       next: () => {
-        
+
       },
       error: (error) => {
-        console.error('Error canceling reservation:', error);
+        console.error(error);
       }
     });
   }

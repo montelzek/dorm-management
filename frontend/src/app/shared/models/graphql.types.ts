@@ -22,11 +22,11 @@ export interface ReservationResource {
 }
 
 export interface TimeSlot {
-  startTime: string; // ISO String
+  startTime: string;
   endTime: string;
 }
 
-export interface Room { // Nowy interfejs
+export interface Room {
   id: string;
   roomNumber: string;
 }

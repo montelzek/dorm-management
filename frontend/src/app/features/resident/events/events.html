@@ -44,7 +44,7 @@
         <div class="calendar-container">
           <mwl-calendar-month-view [viewDate]="viewDate()" [events]="calendarEvents()"
             [cellTemplate]="customCellTemplate" [headerTemplate]="headerTemplate" [weekStartsOn]="1" [locale]="locale"
-            (dayClicked)="onDayClicked($event)" (viewDateChange)="onViewDateChange($event)">
+            (dayClicked)="onDayClicked($event)">
             <ng-template #headerTemplate let-days="days" let-locale="locale">
               <div class="cal-header">
                 <div class="cal-cell" *ngFor="let day of days" [class.cal-past]="day.isPast"

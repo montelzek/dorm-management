@@ -48,7 +48,7 @@ export class ResidentService {
           this.pageSize.set(residentPage.pageSize);
         },
         error: (err) => {
-          console.error('Error fetching residents:', err);
+          console.error(err);
         }
       });
   }
@@ -80,7 +80,7 @@ export class ResidentService {
           this.pageSize.set(residentPage.pageSize);
         },
         error: (err) => {
-          console.error('Error fetching residents by building:', err);
+          console.error(err);
         }
       });
   }
@@ -100,7 +100,7 @@ export class ResidentService {
           this.buildings.set(buildings);
         },
         error: (err) => {
-          console.error('Error fetching buildings:', err);
+          console.error(err);
         }
       });
   }
@@ -187,15 +187,14 @@ export class ResidentService {
       )
       .subscribe({
         next: (residentPage) => {
-          this.allResidents.set(residentPage.content); // Reusing the same signal for simplicity? Or should I use a separate one?
-          // Wait, if I use the same signal, it will overwrite the resident list when tab changes. This is fine if the list component consumes this signal.
+          this.allResidents.set(residentPage.content);
           this.totalElements.set(residentPage.totalElements);
           this.totalPages.set(residentPage.totalPages);
           this.currentPage.set(residentPage.currentPage);
           this.pageSize.set(residentPage.pageSize);
         },
         error: (err) => {
-          console.error('Error fetching technicians:', err);
+          console.error(err);
         }
       });
   }

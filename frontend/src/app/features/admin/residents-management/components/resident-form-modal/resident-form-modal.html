@@ -10,10 +10,11 @@
                 <input type="text" formControlName="firstName"
                     class="w-full rounded-lg border-2 border-input-border bg-input-bg px-4 py-2 text-input-text focus:border-input-focus-border focus:outline-none focus:ring-2 focus:ring-input-focus-border transition-all"
                     [class.border-red-500]="form.get('firstName')?.invalid && form.get('firstName')?.touched" />
-                <div *ngIf="form.get('firstName')?.invalid && form.get('firstName')?.touched"
-                    class="text-red-500 text-xs mt-1">
-                    {{ 'common.required' | translate }}
-                </div>
+                @if (form.get('firstName')?.invalid && form.get('firstName')?.touched) {
+                    <div class="text-red-500 text-xs mt-1">
+                        {{ 'common.required' | translate }}
+                    </div>
+                }
             </div>
 
             <!-- Last Name -->
@@ -24,10 +25,11 @@
                 <input type="text" formControlName="lastName"
                     class="w-full rounded-lg border-2 border-input-border bg-input-bg px-4 py-2 text-input-text focus:border-input-focus-border focus:outline-none focus:ring-2 focus:ring-input-focus-border transition-all"
                     [class.border-red-500]="form.get('lastName')?.invalid && form.get('lastName')?.touched" />
-                <div *ngIf="form.get('lastName')?.invalid && form.get('lastName')?.touched"
-                    class="text-red-500 text-xs mt-1">
-                    {{ 'common.required' | translate }}
-                </div>
+                @if (form.get('lastName')?.invalid && form.get('lastName')?.touched) {
+                    <div class="text-red-500 text-xs mt-1">
+                        {{ 'common.required' | translate }}
+                    </div>
+                }
             </div>
 
             <!-- Email -->
@@ -38,10 +40,16 @@
                 <input type="email" formControlName="email"
                     class="w-full rounded-lg border-2 border-input-border bg-input-bg px-4 py-2 text-input-text focus:border-input-focus-border focus:outline-none focus:ring-2 focus:ring-input-focus-border transition-all"
                     [class.border-red-500]="form.get('email')?.invalid && form.get('email')?.touched" />
-                <div *ngIf="form.get('email')?.invalid && form.get('email')?.touched" class="text-red-500 text-xs mt-1">
-                    <span *ngIf="form.get('email')?.errors?.['required']">{{ 'common.required' | translate }}</span>
-                    <span *ngIf="form.get('email')?.errors?.['email']">{{ 'common.invalidEmail' | translate }}</span>
-                </div>
+                @if (form.get('email')?.invalid && form.get('email')?.touched) {
+                    <div class="text-red-500 text-xs mt-1">
+                        @if (form.get('email')?.errors?.['required']) {
+                            <span>{{ 'common.required' | translate }}</span>
+                        }
+                        @if (form.get('email')?.errors?.['email']) {
+                            <span>{{ 'common.invalidEmail' | translate }}</span>
+                        }
+                    </div>
+                }
             </div>
 
             <!-- Phone -->
@@ -62,9 +70,11 @@
                 <select formControlName="buildingId" (change)="onBuildingChange($event)"
                     class="w-full rounded-lg border-2 border-input-border bg-input-bg px-4 py-2 text-input-text focus:border-input-focus-border focus:outline-none focus:ring-2 focus:ring-input-focus-border transition-all">
                     <option value="">{{ 'admin.selectBuilding' | translate }}</option>
-                    <option *ngFor="let building of residentService.buildings()" [value]="building.id">
-                        {{ building.name }}
-                    </option>
+                    @for (building of residentService.buildings(); track building.id) {
+                        <option [value]="building.id">
+                            {{ building.name }}
+                        </option>
+                    }
                 </select>
             </div>
 
@@ -77,13 +87,17 @@
                     class="w-full rounded-lg border-2 border-input-border bg-input-bg px-4 py-2 text-input-text focus:border-input-focus-border focus:outline-none focus:ring-2 focus:ring-input-focus-border transition-all"
                     [class.opacity-50]="!form.get('buildingId')?.value">
                     <option value="">{{ 'admin.selectRoom' | translate }}</option>
-                    <option *ngFor="let room of rooms()" [value]="room.id">
-                        {{ room.roomNumber }} ({{ room.capacity - room.currentOccupancy }} {{ 'dashboard.stats.available' | translate }})
-                    </option>
+                    @for (room of rooms(); track room.id) {
+                        <option [value]="room.id">
+                            {{ room.roomNumber }} ({{ room.capacity - room.currentOccupancy }} {{ 'dashboard.stats.available' | translate }})
+                        </option>
+                    }
                 </select>
-                <div *ngIf="isLoadingRooms()" class="text-xs text-text-secondary mt-1">
-                    {{ 'common.loading' | translate }}
-                </div>
+                @if (isLoadingRooms()) {
+                    <div class="text-xs text-text-secondary mt-1">
+                        {{ 'common.loading' | translate }}
+                    </div>
+                }
             </div>
 
             <!-- Password -->
@@ -94,10 +108,11 @@
                 <input type="password" formControlName="password"
                     class="w-full rounded-lg border-2 border-input-border bg-input-bg px-4 py-2 text-input-text focus:border-input-focus-border focus:outline-none focus:ring-2 focus:ring-input-focus-border transition-all"
                     [class.border-red-500]="form.get('password')?.invalid && form.get('password')?.touched" />
-                <div *ngIf="form.get('password')?.invalid && form.get('password')?.touched"
-                    class="text-red-500 text-xs mt-1">
-                    {{ 'common.passwordMinLength' | translate }}
-                </div>
+                @if (form.get('password')?.invalid && form.get('password')?.touched) {
+                    <div class="text-red-500 text-xs mt-1">
+                        {{ 'common.passwordMinLength' | translate }}
+                    </div>
+                }
             </div>
 
             <div class="flex justify-end gap-3 mt-6">

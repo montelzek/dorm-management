@@ -28,14 +28,14 @@ export class AdminReservationService {
   readonly currentPage = signal<number>(0);
   readonly pageSize = signal<number>(10);
 
-  getAdminReservations(page: number = 0, size: number = 10, sortDirection?: string, 
+  getAdminReservations(page: number = 0, size: number = 10, sortDirection?: string,
                        resourceId?: string, buildingId?: string, date?: string, search?: string) {
     this.apollo
       .watchQuery<{ adminReservations: ReservationPage }>({
         query: GET_ADMIN_RESERVATIONS,
-        variables: { 
-          page, 
-          size, 
+        variables: {
+          page,
+          size,
           sortDirection: sortDirection || null,
           resourceId: resourceId || null,
           buildingId: buildingId || null,
@@ -57,7 +57,7 @@ export class AdminReservationService {
           this.pageSize.set(reservationPage.pageSize);
         },
         error: (err) => {
-          console.error('Error fetching reservations:', err);
+          console.error(err);
         }
       });
   }
@@ -77,7 +77,7 @@ export class AdminReservationService {
           this.buildings.set(buildings);
         },
         error: (err) => {
-          console.error('Error fetching buildings:', err);
+          console.error(err);
         }
       });
   }
@@ -98,7 +98,7 @@ export class AdminReservationService {
           this.resources.set(resources);
         },
         error: (err) => {
-          console.error('Error fetching resources:', err);
+          console.error(err);
         }
       });
   }

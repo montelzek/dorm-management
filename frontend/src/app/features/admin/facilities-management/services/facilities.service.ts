@@ -33,11 +33,6 @@ export interface Building {
   resourcesCount: number;
   createdAt: string;
 }
-
-export interface BuildingDetails extends Building {
-  updatedAt: string;
-}
-
 export interface Room {
   id: string;
   roomNumber: string;
@@ -134,12 +129,7 @@ export class FacilitiesService {
 
   // Room standards state
   private readonly _roomStandards = signal<RoomStandard[]>([]);
-  private readonly _roomStandardsTotalElements = signal<number>(0);
-  private readonly _roomStandardsTotalPages = signal<number>(0);
-  private readonly _roomStandardsCurrentPage = signal<number>(0);
-  private readonly _roomStandardsPageSize = signal<number>(10);
-
-  // All buildings for dropdowns
+// All buildings for dropdowns
   private readonly _allBuildings = signal<SimpleBuild[]>([]);
 
   // Loading states
@@ -159,20 +149,11 @@ export class FacilitiesService {
   readonly roomsTotalElements = computed(() => this._roomsTotalElements());
   readonly roomsTotalPages = computed(() => this._roomsTotalPages());
   readonly roomsCurrentPage = computed(() => this._roomsCurrentPage());
-  readonly roomsPageSize = computed(() => this._roomsPageSize());
-
   readonly resources = computed(() => this._resources());
   readonly resourcesTotalElements = computed(() => this._resourcesTotalElements());
   readonly resourcesTotalPages = computed(() => this._resourcesTotalPages());
   readonly resourcesCurrentPage = computed(() => this._resourcesCurrentPage());
-  readonly resourcesPageSize = computed(() => this._resourcesPageSize());
-
   readonly roomStandards = computed(() => this._roomStandards());
-  readonly roomStandardsTotalElements = computed(() => this._roomStandardsTotalElements());
-  readonly roomStandardsTotalPages = computed(() => this._roomStandardsTotalPages());
-  readonly roomStandardsCurrentPage = computed(() => this._roomStandardsCurrentPage());
-  readonly roomStandardsPageSize = computed(() => this._roomStandardsPageSize());
-
   readonly allBuildings = computed(() => this._allBuildings());
 
   readonly buildingsLoading = computed(() => this._buildingsLoading());
@@ -258,7 +239,7 @@ export class FacilitiesService {
         return success;
       }),
       catchError(error => {
-        console.error('Delete building error:', error);
+        console.error(error);
         const errorMsg = error?.graphQLErrors?.[0]?.message || error?.message || 'Unknown error';
         this.toastService.showError(this.translateService.instant('facilities.errorDeletingBuilding') + ': ' + errorMsg);
         return of(false);
@@ -350,7 +331,7 @@ export class FacilitiesService {
         return success;
       }),
       catchError(error => {
-        console.error('Delete room error:', error);
+        console.error(error);
         const errorMsg = error?.graphQLErrors?.[0]?.message || error?.message || 'Unknown error';
         this.toastService.showError(this.translateService.instant('facilities.errorDeletingRoom') + ': ' + errorMsg);
         return of(false);
@@ -461,7 +442,7 @@ export class FacilitiesService {
         return success;
       }),
       catchError(error => {
-        console.error('Delete space error:', error);
+        console.error(error);
         const errorMsg = error?.graphQLErrors?.[0]?.message || error?.message || 'Unknown error';
         this.toastService.showError(this.translateService.instant('facilities.errorDeletingSpace') + ': ' + errorMsg);
         return of(false);
@@ -542,7 +523,7 @@ export class FacilitiesService {
         return success;
       }),
       catchError(error => {
-        console.error('Delete room standard error:', error);
+        console.error(error);
         const errorMsg = error?.graphQLErrors?.[0]?.message || error?.message || 'Unknown error';
         this.toastService.showError(this.translateService.instant('facilities.errorDeletingStandard') + ': ' + errorMsg);
         return of(false);

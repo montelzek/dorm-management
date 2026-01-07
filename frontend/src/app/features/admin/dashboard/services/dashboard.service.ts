@@ -97,13 +97,12 @@ export class AdminDashboardService {
   error = signal<string | null>(null);
 
   loadAdminDashboard(): void {
-    // CRITICAL: Do NOT load if user is not an admin
     const currentUser = this.userService.currentUser();
     if (!currentUser) {
       console.warn('[AdminDashboardService] No user loaded, skipping dashboard load');
       return;
     }
-    
+
     if (currentUser.role !== 'ROLE_ADMIN') {
       console.warn('[AdminDashboardService] User is not an admin, skipping dashboard load. Role:', currentUser.role);
       this.error.set('Access denied: This dashboard is for admins only');
@@ -126,7 +125,7 @@ export class AdminDashboardService {
           }
         },
         error: (err) => {
-          console.error('[AdminDashboardService] Error loading dashboard:', err);
+          console.error(err);
           this.error.set('Failed to load dashboard data');
           this.isLoading.set(false);
         }

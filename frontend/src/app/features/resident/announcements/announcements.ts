@@ -77,7 +77,7 @@ export class ResidentAnnouncementsComponent implements OnInit {
           this.loading.set(false);
         },
         error: (error) => {
-          console.error('Error loading announcements:', error);
+          console.error(error);
           this.toastService.showError('toast.error.loadingAnnouncements');
           this.loading.set(false);
         }

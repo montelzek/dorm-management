@@ -18,7 +18,7 @@ export class ErrorService {
 
     this._currentError.set(appError);
 
-    console.error('Error occurred:', error);
+    console.error(error);
 
     setTimeout(() => this.clearError(appError.id), 5000);
   }

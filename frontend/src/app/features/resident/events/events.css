@@ -9,7 +9,6 @@
   display: block;
 }
 
-/* Force override any inline styles */
 ::ng-deep mwl-calendar-month-view {
   width: 100% !important;
   display: block !important;
@@ -19,7 +18,6 @@
   width: 100% !important;
 }
 
-/* Angular Calendar Base Layout - Using Grid instead of Table */
 ::ng-deep .cal-month-view {
   background-color: var(--color-card);
   border-radius: 0.5rem;
@@ -105,12 +103,10 @@ html.dark ::ng-deep .cal-month-view .cal-day-cell.cal-today {
   background-color: rgba(79, 70, 229, 0.2);
 }
 
-/* Hide default event rendering */
 ::ng-deep .cal-month-view .cal-events {
   display: none !important;
 }
 
-/* Custom cell layout */
 ::ng-deep .cal-month-view .cal-cell-top {
   display: flex;
   justify-content: space-between;

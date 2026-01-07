@@ -90,16 +90,16 @@ export class IssuesComponent implements OnInit {
   }
 
   private handleError(error: any): void {
-    console.error('Issue operation error:', error);
-    
+    console.error(error);
+
     let errorMessage = this.translate.instant('common.error');
-    
+
     if (error.graphQLErrors && error.graphQLErrors.length > 0) {
       errorMessage = error.graphQLErrors[0].message;
     } else if (error.message) {
       errorMessage = error.message;
     }
-    
+
     this.toastService.showError(errorMessage);
   }
 }

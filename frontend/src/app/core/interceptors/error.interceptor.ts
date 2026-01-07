@@ -21,7 +21,7 @@ export const ErrorInterceptor: HttpInterceptorFn = (req, next) => {
 
       const errorMessage = extractErrorMessage(error);
 
-      console.error('HTTP Error:', error);
+      console.error(error);
 
       toastService.showError(errorMessage);
       errorService.handleError(error);

@@ -70,7 +70,7 @@ export class IssueService {
       }),
       catchError(error => {
         this._isLoading.set(false);
-        console.error('Error loading issues:', error);
+        console.error(error);
         throw error;
       })
     );
@@ -116,7 +116,7 @@ export class IssueService {
       }),
       catchError(error => {
         this._isLoading.set(false);
-        console.error('Error cancelling issue:', error);
+        console.error(error);
         throw error;
       })
     );

@@ -9,7 +9,7 @@ import { createHttpLink } from '@apollo/client/link/http';
 import { ErrorInterceptor } from './core/interceptors/error.interceptor';
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 import { provideAnimations } from '@angular/platform-browser/animations';
-import { CalendarDateFormatter, DateAdapter } from 'angular-calendar';
+import { DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { provideTranslateService, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader, TRANSLATE_HTTP_LOADER_CONFIG } from '@ngx-translate/http-loader';
@@ -18,7 +18,7 @@ import localePl from '@angular/common/locales/pl';
 
 import { routes } from './app.routes';
 
-// Register Polish locale
+
 registerLocaleData(localePl);
 
 const uri = 'http://localhost:8080/graphql';

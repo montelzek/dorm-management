@@ -92,7 +92,7 @@ export class NewTasksComponent implements OnInit {
         this.toastService.showSuccess('toast.success.taskStatusUpdated');
       },
       error: (error) => {
-        console.error('Error updating task status:', error);
+        console.error(error);
       }
     });
   }

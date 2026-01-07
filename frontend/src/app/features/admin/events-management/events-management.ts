@@ -1,28 +1,50 @@
-import { Component, inject, OnInit, signal, computed } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
-import { CommonModule } from '@angular/common';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { CalendarEvent, CalendarView, CalendarModule, CalendarUtils, DateAdapter, CalendarA11y, CalendarDateFormatter, CalendarEventTitleFormatter } from 'angular-calendar';
-import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
-import { startOfMonth, endOfMonth, format, addMonths, subMonths, startOfWeek, endOfWeek, eachDayOfInterval, addWeeks, subWeeks } from 'date-fns';
-import { MainLayoutComponent } from '../../../shared/components/layout/main-layout/main-layout';
-import { UserService } from '../../../core/services/user.service';
-import { EventsService, Event as DormEvent, CreateEventInput } from './services/events.service';
-import { FacilitiesService } from '../facilities-management/services/facilities.service';
-import { ToastService } from '../../../core/services/toast.service';
-import { ModalComponent } from '../../../shared/components/ui/modal/modal';
-import { EventFormModalComponent } from './components/event-form-modal/event-form-modal';
-import { DeleteConfirmationModalComponent } from '../facilities-management/components/delete-confirmation-modal/delete-confirmation-modal';
+import {Component, computed, inject, OnInit, signal} from '@angular/core';
+import {AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Validators} from '@angular/forms';
+import {CommonModule} from '@angular/common';
+import {TranslateModule, TranslateService} from '@ngx-translate/core';
+import {
+  CalendarA11y,
+  CalendarDateFormatter,
+  CalendarEvent,
+  CalendarEventTitleFormatter,
+  CalendarModule,
+  CalendarUtils,
+  CalendarView,
+  DateAdapter
+} from 'angular-calendar';
+import {adapterFactory} from 'angular-calendar/date-adapters/date-fns';
+import {
+  addMonths,
+  addWeeks,
+  eachDayOfInterval,
+  endOfMonth,
+  endOfWeek,
+  format,
+  startOfMonth,
+  startOfWeek,
+  subMonths,
+  subWeeks
+} from 'date-fns';
+import {MainLayoutComponent} from '../../../shared/components/layout/main-layout/main-layout';
+import {UserService} from '../../../core/services/user.service';
+import {CreateEventInput, Event as DormEvent, EventsService} from './services/events.service';
+import {FacilitiesService} from '../facilities-management/services/facilities.service';
+import {ToastService} from '../../../core/services/toast.service';
+import {ModalComponent} from '../../../shared/components/ui/modal/modal';
+import {EventFormModalComponent} from './components/event-form-modal/event-form-modal';
+import {
+  DeleteConfirmationModalComponent
+} from '../facilities-management/components/delete-confirmation-modal/delete-confirmation-modal';
 
-// Custom validator to ensure date is not in the past
+
 function futureDateValidator(control: AbstractControl): ValidationErrors | null {
   if (!control.value) {
-    return null; // Don't validate empty values (let required validator handle that)
+    return null;
   }
 
   const selectedDate = new Date(control.value);
   const today = new Date();
-  today.setHours(0, 0, 0, 0); // Reset time to midnight for fair comparison
+  today.setHours(0, 0, 0, 0);
 
   if (selectedDate < today) {
     return { pastDate: true };
@@ -66,9 +88,7 @@ export class EventsManagementComponent implements OnInit {
   private readonly translateService = inject(TranslateService);
 
   readonly currentUser = this.userService.currentUser;
-  readonly CalendarView = CalendarView;
 
-  // Locale for calendar (string code for Angular pipes)
   readonly locale: string = 'pl';
 
   // State
@@ -90,14 +110,13 @@ export class EventsManagementComponent implements OnInit {
   readonly allBuildings = this.facilitiesService.allBuildings;
   readonly allRooms = computed(() => {
     const resources = this.facilitiesService.resources();
-    const commonSpaces = resources
+    return resources
       .filter(r => r.resourceType === 'STANDARD' && r.isActive)
       .map(r => ({
         id: r.id,
         roomNumber: r.name,
         buildingId: r.buildingId
       }));
-    return commonSpaces;
   });
 
   // Modal states
@@ -133,9 +152,7 @@ export class EventsManagementComponent implements OnInit {
   }
 
   loadCommonSpaces(): void {
-    // Load all resources (common spaces) with a large page size
     this.facilitiesService.getResources(0, 1000);
-    // The effect above will automatically update allRooms when resources are loaded
   }
 
   loadEvents(): void {
@@ -153,7 +170,7 @@ export class EventsManagementComponent implements OnInit {
         this.eventsLoading.set(false);
       },
       error: (error) => {
-        console.error('Error loading events:', error);
+        console.error(error);
         this.dormEvents.set([]);
         this.calendarEvents.set([]);
         this.eventsLoading.set(false);
@@ -176,12 +193,6 @@ export class EventsManagementComponent implements OnInit {
     });
     this.calendarEvents.set(calEvents);
   }
-
-  onViewDateChange(date: any): void {
-    this.viewDate.set(date);
-    this.loadEvents();
-  }
-
   previousMonth(): void {
     this.viewDate.set(subMonths(this.viewDate(), 1));
     this.loadEvents();
@@ -330,7 +341,7 @@ export class EventsManagementComponent implements OnInit {
   }
 
   private handleError(error: any): void {
-    console.error('Operation error:', error);
+    console.error(error);
   }
 }
 

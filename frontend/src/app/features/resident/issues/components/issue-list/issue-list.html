@@ -22,7 +22,7 @@
     <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
   </div>
   }
-  <!-- Empty State -->
+
   @else if (issues().length === 0) {
   <div class="text-center py-12">
     <svg class="mx-auto h-12 w-12 text-text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -40,19 +40,15 @@
     </p>
   </div>
   }
-  <!-- Issues List -->
+
   @else {
   <div class="space-y-3">
     @for (issue of issues(); track issue.id) {
     <div class="bg-card border border-card-border rounded-lg p-3 sm:p-4">
-      <!-- Mobile Layout (< 640px) -->
       <div class="sm:hidden space-y-3">
-        <!-- Title - Full width on mobile -->
         <h3 class="text-base font-semibold text-text-primary break-words">
           {{ issue.title }}
         </h3>
-
-        <!-- Badges - Below title on mobile -->
         <div class="flex flex-wrap items-center gap-2">
           <span [ngClass]="getStatusClass(issue.status)">
             {{ getStatusKey(issue.status) | translate }}
@@ -78,15 +74,13 @@
           }
         </div>
 
-        <!-- Cancel Button - Bottom on mobile -->
         @if (issue.status === 'REPORTED') {
         <app-button variant="danger" size="sm" (click)="onCancelIssue(issue.id)" class="w-full mt-4">
           {{ 'issues.cancelIssue' | translate }}
         </app-button>
         }
       </div>
-
-      <!-- Desktop Layout (>= 640px) -->
+      <!-- Desktop -->
       <div class="hidden sm:flex justify-between items-start gap-4">
         <div class="flex-1 min-w-0">
           <!-- Title and Badges inline on desktop -->
@@ -119,7 +113,6 @@
           </div>
         </div>
 
-        <!-- Cancel Button - Right side on desktop -->
         @if (issue.status === 'REPORTED') {
         <app-button variant="danger" size="sm" (click)="onCancelIssue(issue.id)" class="flex-shrink-0">
           {{ 'issues.cancelIssue' | translate }}

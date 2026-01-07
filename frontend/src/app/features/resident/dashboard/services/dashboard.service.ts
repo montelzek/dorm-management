@@ -163,9 +163,8 @@ export class ResidentDashboardService {
     this.isLoading.set(true);
     this.error.set(null);
 
-    // unsubscribe previous subscription if exists
     if (this.querySub) {
-      try { this.querySub.unsubscribe(); } catch (e) { /* ignore */ }
+      try { this.querySub.unsubscribe(); } catch (e) { }
       this.querySub = null;
     }
 
@@ -185,7 +184,7 @@ export class ResidentDashboardService {
         }
       },
       error: (err) => {
-        console.error('[ResidentDashboardService] Error loading dashboard:', err);
+        console.error(err);
         this.error.set('Failed to load dashboard data');
         this.isLoading.set(false);
       }

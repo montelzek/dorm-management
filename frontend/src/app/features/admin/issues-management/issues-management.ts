@@ -136,7 +136,7 @@ export class IssuesManagementComponent implements OnInit {
   }
 
   private handleError(error: any): void {
-    console.error('Issue operation error:', error);
+    console.error(error);
     let errorMessage = 'An unexpected error occurred. Please try again.';
     if (error.graphQLErrors && error.graphQLErrors.length > 0) {
       errorMessage = error.graphQLErrors[0].message;

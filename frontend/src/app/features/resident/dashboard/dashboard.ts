@@ -29,10 +29,8 @@ export class DashboardComponent implements OnInit {
   private dashboardLoaded = false;
 
   constructor() {
-    // Load dashboard ONLY when user is loaded
     effect(() => {
       const user = this.currentUser();
-      // react to user changes: load or clear dashboard depending on role
       if (user && user.role === 'ROLE_RESIDENT') {
         this.dashboardService.loadResidentDashboard();
       } else if (user && user.role !== 'ROLE_RESIDENT') {

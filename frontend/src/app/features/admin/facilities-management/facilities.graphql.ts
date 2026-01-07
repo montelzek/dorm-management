@@ -19,21 +19,6 @@ export const GET_ADMIN_BUILDINGS = gql`
     }
   }
 `;
-
-export const GET_BUILDING_DETAILS = gql`
-  query GetBuildingDetails($id: ID!) {
-    buildingDetails(id: $id) {
-      id
-      name
-      address
-      roomsCount
-      resourcesCount
-      createdAt
-      updatedAt
-    }
-  }
-`;
-
 // Buildings Mutations
 export const CREATE_BUILDING = gql`
   mutation CreateBuilding($input: CreateBuildingInput!) {
@@ -220,21 +205,6 @@ export const GET_ADMIN_ROOM_STANDARDS = gql`
     }
   }
 `;
-
-export const GET_ROOM_STANDARD = gql`
-  query GetRoomStandard($id: ID!) {
-    roomStandard(id: $id) {
-      id
-      code
-      name
-      capacity
-      price
-      createdAt
-      updatedAt
-    }
-  }
-`;
-
 export const CREATE_ROOM_STANDARD = gql`
   mutation CreateRoomStandard($input: CreateRoomStandardInput!) {
     createRoomStandard(input: $input) {

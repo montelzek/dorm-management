@@ -30,7 +30,6 @@ export class EventFormModalComponent {
   formSubmit = output<void>();
   cancel = output<void>();
 
-  // Minimum date is today (in yyyy-MM-dd format)
   minDate = computed(() => {
     const today = new Date();
     return today.toISOString().split('T')[0];

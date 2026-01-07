@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { MainLayoutComponent } from '../../../shared/components/layout/main-layout/main-layout';
 import { UserService } from '../../../core/services/user.service';
-import { FacilitiesService, Building, Room, Resource, RoomStandard } from './services/facilities.service';
+import { FacilitiesService, Building, Room, Resource } from './services/facilities.service';
 import { ToastService } from '../../../core/services/toast.service';
 import { ModalComponent } from '../../../shared/components/ui/modal/modal';
 import { BuildingsListComponent } from './components/buildings-list/buildings-list';
@@ -56,10 +56,6 @@ export class FacilitiesManagementComponent implements OnInit {
   // Buildings state
   readonly buildings = this.facilitiesService.buildings;
   readonly buildingsLoading = this.facilitiesService.buildingsLoading;
-  readonly buildingsCurrentPage = this.facilitiesService.buildingsCurrentPage;
-  readonly buildingsPageSize = this.facilitiesService.buildingsPageSize;
-  readonly buildingsTotalPages = this.facilitiesService.buildingsTotalPages;
-  readonly buildingsTotalElements = this.facilitiesService.buildingsTotalElements;
 
   // Rooms state
   readonly rooms = this.facilitiesService.rooms;
@@ -478,7 +474,6 @@ export class FacilitiesManagementComponent implements OnInit {
         if (success) {
           this.loadStandards();
         } else {
-          // show a user friendly message
           this.toastService.showError(this.translateService.instant('facilities.cannotDeleteStandard'));
         }
       },
@@ -548,7 +543,6 @@ export class FacilitiesManagementComponent implements OnInit {
   }
 
   private handleError(error: any): void {
-    console.error('Operation error:', error);
-    // Error already shown by service via toast
+    console.error(error);
   }
 }

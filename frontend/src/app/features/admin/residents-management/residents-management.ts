@@ -1,4 +1,4 @@
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { LowerCasePipe } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { ResidentService } from './services/resident';
@@ -134,7 +134,7 @@ export class ResidentsManagementComponent implements OnInit {
   }
 
   onRoomAssigned() {
-    this.loadResidents(); // Reload the residents list
+    this.loadResidents();
   }
 
   onDeleteResident(resident: ResidentPayload) {
@@ -159,7 +159,7 @@ export class ResidentsManagementComponent implements OnInit {
         this.loadResidents();
       },
       error: (err) => {
-        console.error('Error deleting resident:', err);
+        console.error(err);
         this.toastService.showError('toast.error.deletingResident');
       }
     });
@@ -181,7 +181,7 @@ export class ResidentsManagementComponent implements OnInit {
         this.loadResidents();
       },
       error: (error) => {
-        console.error('Error creating resident:', error);
+        console.error(error);
         const errorMsg = error?.graphQLErrors?.[0]?.message || error?.message || 'Unknown error';
         if (errorMsg.includes('Email already exists')) {
           this.toastService.showError('toast.error.emailExists');

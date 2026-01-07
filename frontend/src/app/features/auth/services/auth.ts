@@ -64,17 +64,9 @@ export class AuthService {
         if (userData?.token) {
           this.setAuthToken(userData.token);
           this._isLoggedIn.set(true);
-          // DO NOT set _currentUser here from login mutation payload — prefer
-          // to load authoritative user details from the `me` query via
-          // UserService.getCurrentUser(). That ensures signals stay consistent
-          // with GraphQL server data and avoids partial payload mismatch.
         }
       }),
-      // After token is set, immediately fetch current user from server and
-      // propagate it via UserService. We return the User observable so callers
-      // can react to the actual user (including role) and navigate safely.
       switchMap(() => {
-        // getCurrentUser returns Observable<User>
         return this.userService.getCurrentUser();
       }),
       catchError(error => {
@@ -93,13 +85,9 @@ export class AuthService {
     this.clearAuthToken();
     this._currentUser.set(null);
     this._isLoggedIn.set(false);
-    // Do not clear Apollo store here to avoid interfering with in-flight queries.
-    // Services should use fetchPolicy: 'network-only' for user-specific data.
-    // Clear the global user state as well
     try {
       this.userService.clearUser();
     } catch (e) {
-      // ignore
     }
   }
 

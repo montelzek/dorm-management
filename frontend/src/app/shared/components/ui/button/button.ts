@@ -21,7 +21,7 @@ export class ButtonComponent {
   readonly click = output<Event>();
 
   onClick(event: Event): void {
-    event.stopPropagation(); // Zatrzymaj propagację do rodzica
+    event.stopPropagation();
     if (!this.disabled() && !this.loading()) {
       this.click.emit(event);
     }
@@ -29,7 +29,7 @@ export class ButtonComponent {
 
   get buttonClasses(): string {
     const baseClasses = 'inline-flex items-center justify-center rounded-md font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer';
-    
+
     const variantClasses = {
       primary: 'bg-button-bg text-button-text hover:bg-button-hover focus:ring-button-focus-outline',
       secondary: 'bg-text-secondary text-card hover:bg-text-primary focus:ring-text-secondary',

@@ -116,7 +116,7 @@
             <div
               (click)="toggleBuilding(building.id)"
               [class.bg-indigo-50]="isBuildingSelected(building.id)"
-              [class.dark:bg-indigo-900/30]="isBuildingSelected(building.id)"
+              [class.dark:bg-indigo-900]="isBuildingSelected(building.id)"
               [class.border-indigo-500]="isBuildingSelected(building.id)"
               class="p-3 border-2 border-card-border rounded-lg cursor-pointer hover:border-indigo-400 transition-colors"
             >
@@ -132,7 +132,6 @@
               </div>
             </div>
           }
-        </div>
         @if (form().get('buildingIds')?.invalid && form().get('buildingIds')?.touched) {
           <p class="mt-2 text-sm text-red-500">{{ 'admin.atLeastOneBuilding' | translate }}</p>
         }
@@ -155,6 +154,7 @@
         >
           {{ isLoading() ? ('common.saving' | translate) + '...' : ((isEdit() ? 'common.update' : 'common.create') | translate) }}
         </button>
+      </div>
       </div>
     </form>
   </div>

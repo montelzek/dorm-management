@@ -91,7 +91,7 @@ export class ReservationService {
         return result.data.resourcesByBuilding;
       }),
       catchError(error => {
-        console.error('Error loading resources:', error);
+        console.error(error);
         throw error;
       })
     );
@@ -111,7 +111,7 @@ export class ReservationService {
             return result.data.availableLaundrySlots;
           }),
           catchError(error => {
-            console.error('Error loading laundry slots:', error);
+            console.error(error);
             throw error;
           })
         );
@@ -131,7 +131,7 @@ export class ReservationService {
             return result.data.availableStandardSlots;
           }),
           catchError(error => {
-            console.error('Error loading standard slots:', error);
+            console.error(error);
             throw error;
           })
         );
@@ -263,7 +263,7 @@ export class ReservationService {
       map(result => {
         this._isLoading.set(false);
         this.toastService.showSuccess('toast.success.reservationCancelled');
-        this.loadMyReservations(); 
+        this.loadMyReservations();
         return result.data!.cancelReservation;
       }),
       catchError(error => {

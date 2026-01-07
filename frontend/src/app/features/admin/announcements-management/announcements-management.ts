@@ -35,28 +35,28 @@ export class AnnouncementsManagementComponent implements OnInit {
   private readonly translateService = inject(TranslateService);
 
   readonly currentUser = this.userService.currentUser;
-  
+
   // State
   readonly announcements = this.announcementsService.announcements;
   readonly loading = this.announcementsService.loading;
   readonly currentPage = this.announcementsService.currentPage;
   readonly totalPages = this.announcementsService.totalPages;
   readonly totalElements = this.announcementsService.totalElements;
-  
+
   readonly selectedCategory = signal<string>('ALL');
-  
+
   // Buildings
   readonly allBuildings = this.facilitiesService.allBuildings;
-  
+
   // Modal states
   readonly isFormModalOpen = signal<boolean>(false);
   readonly isDeleteModalOpen = signal<boolean>(false);
-  
+
   // Edit mode
   readonly isEditMode = signal<boolean>(false);
   readonly selectedAnnouncement = signal<Announcement | null>(null);
   readonly announcementToDelete = signal<Announcement | null>(null);
-  
+
   // Form
   readonly announcementForm = this.fb.group({
     title: ['', [Validators.required, Validators.maxLength(200)]],
@@ -95,7 +95,7 @@ export class AnnouncementsManagementComponent implements OnInit {
   loadAnnouncements(): void {
     this.announcementsService.loadAnnouncements(this.currentPage(), 10).subscribe({
       error: (error) => {
-        console.error('Error loading announcements:', error);
+        console.error(error);
         this.toastService.showError(this.translateService.instant('admin.errorLoadingAnnouncements'));
       }
     });
@@ -111,7 +111,7 @@ export class AnnouncementsManagementComponent implements OnInit {
   openEditModal(announcement: Announcement): void {
     this.isEditMode.set(true);
     this.selectedAnnouncement.set(announcement);
-    
+
     this.announcementForm.patchValue({
       title: announcement.title,
       content: announcement.content,
@@ -120,7 +120,7 @@ export class AnnouncementsManagementComponent implements OnInit {
       endDate: announcement.endDate,
       buildingIds: announcement.buildings.map(b => b.id)
     });
-    
+
     this.isFormModalOpen.set(true);
   }
 
@@ -146,7 +146,7 @@ export class AnnouncementsManagementComponent implements OnInit {
     }
 
     const formValue = this.announcementForm.getRawValue();
-    
+
     if (this.isEditMode() && this.selectedAnnouncement()) {
       const input: UpdateAnnouncementInput = {
         title: formValue.title!,
@@ -164,7 +164,7 @@ export class AnnouncementsManagementComponent implements OnInit {
           this.loadAnnouncements();
         },
         error: (error) => {
-          console.error('Update error:', error);
+          console.error(error);
           this.toastService.showError(this.translateService.instant('admin.errorUpdatingAnnouncement'));
         }
       });
@@ -185,7 +185,7 @@ export class AnnouncementsManagementComponent implements OnInit {
           this.loadAnnouncements();
         },
         error: (error) => {
-          console.error('Create error:', error);
+          console.error(error);
           this.toastService.showError(this.translateService.instant('admin.errorCreatingAnnouncement'));
         }
       });

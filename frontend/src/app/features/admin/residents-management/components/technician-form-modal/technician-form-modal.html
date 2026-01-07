@@ -10,10 +10,11 @@
                 <input type="text" formControlName="firstName"
                     class="w-full rounded-lg border-2 border-input-border bg-input-bg px-4 py-2 text-input-text focus:border-input-focus-border focus:outline-none focus:ring-2 focus:ring-input-focus-border transition-all"
                     [class.border-red-500]="form.get('firstName')?.invalid && form.get('firstName')?.touched" />
-                <div *ngIf="form.get('firstName')?.invalid && form.get('firstName')?.touched"
-                    class="text-red-500 text-xs mt-1">
-                    {{ 'common.required' | translate }}
-                </div>
+                @if (form.get('firstName')?.invalid && form.get('firstName')?.touched) {
+                    <div class="text-red-500 text-xs mt-1">
+                        {{ 'common.required' | translate }}
+                    </div>
+                }
             </div>
 
             <!-- Last Name -->
@@ -24,10 +25,11 @@
                 <input type="text" formControlName="lastName"
                     class="w-full rounded-lg border-2 border-input-border bg-input-bg px-4 py-2 text-input-text focus:border-input-focus-border focus:outline-none focus:ring-2 focus:ring-input-focus-border transition-all"
                     [class.border-red-500]="form.get('lastName')?.invalid && form.get('lastName')?.touched" />
-                <div *ngIf="form.get('lastName')?.invalid && form.get('lastName')?.touched"
-                    class="text-red-500 text-xs mt-1">
-                    {{ 'common.required' | translate }}
-                </div>
+                @if (form.get('lastName')?.invalid && form.get('lastName')?.touched) {
+                    <div class="text-red-500 text-xs mt-1">
+                        {{ 'common.required' | translate }}
+                    </div>
+                }
             </div>
 
             <!-- Email -->
@@ -38,10 +40,16 @@
                 <input type="email" formControlName="email"
                     class="w-full rounded-lg border-2 border-input-border bg-input-bg px-4 py-2 text-input-text focus:border-input-focus-border focus:outline-none focus:ring-2 focus:ring-input-focus-border transition-all"
                     [class.border-red-500]="form.get('email')?.invalid && form.get('email')?.touched" />
-                <div *ngIf="form.get('email')?.invalid && form.get('email')?.touched" class="text-red-500 text-xs mt-1">
-                    <span *ngIf="form.get('email')?.errors?.['required']">{{ 'common.required' | translate }}</span>
-                    <span *ngIf="form.get('email')?.errors?.['email']">{{ 'common.invalidEmail' | translate }}</span>
-                </div>
+                @if (form.get('email')?.invalid && form.get('email')?.touched) {
+                    <div class="text-red-500 text-xs mt-1">
+                        @if (form.get('email')?.errors?.['required']) {
+                            <span>{{ 'common.required' | translate }}</span>
+                        }
+                        @if (form.get('email')?.errors?.['email']) {
+                            <span>{{ 'common.invalidEmail' | translate }}</span>
+                        }
+                    </div>
+                }
             </div>
 
             <!-- Phone -->
@@ -62,10 +70,11 @@
                 <input type="password" formControlName="password"
                     class="w-full rounded-lg border-2 border-input-border bg-input-bg px-4 py-2 text-input-text focus:border-input-focus-border focus:outline-none focus:ring-2 focus:ring-input-focus-border transition-all"
                     [class.border-red-500]="form.get('password')?.invalid && form.get('password')?.touched" />
-                <div *ngIf="form.get('password')?.invalid && form.get('password')?.touched"
-                    class="text-red-500 text-xs mt-1">
-                    {{ 'common.passwordMinLength' | translate }}
-                </div>
+                @if (form.get('password')?.invalid && form.get('password')?.touched) {
+                    <div class="text-red-500 text-xs mt-1">
+                        {{ 'common.passwordMinLength' | translate }}
+                    </div>
+                }
             </div>
 
             <div class="flex justify-end gap-3 mt-6">

@@ -59,7 +59,7 @@ export class RoomAssignmentModalComponent {
         this.availableRooms.set(rooms);
       },
       error: (err) => {
-        console.error('Error loading available rooms:', err);
+        console.error(err);
         this.toastService.showError('toast.error.loadingRooms');
       }
     });
@@ -90,7 +90,7 @@ export class RoomAssignmentModalComponent {
         this.onClose();
       },
       error: (err) => {
-        console.error('Error assigning room:', err);
+        console.error(err);
         this.toastService.showError('toast.error.assigningRoom');
         this.isLoading.set(false);
       }

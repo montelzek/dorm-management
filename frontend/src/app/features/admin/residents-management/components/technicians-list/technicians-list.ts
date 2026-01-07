@@ -51,38 +51,7 @@ export class TechniciansListComponent implements OnInit {
 
     loadTechnicians() {
         this.isLoading.set(true);
-        // Use a small delay for search debounce if needed, or just direct call.
-        // For now, direct call is fine, or simple timeout.
 
-        // Note: getAllTechnicians in service is subscription-based but updates service signals?
-        // Let's check resident.service.ts again.
-        // It updates `this.allResidents` signal in service.
-        // Wait, if I use the SAME service instance and it updates `allResidents`, then `ResidentsManagementComponent` will also see these updates if it monitors `allResidents`.
-        // This is potential conflict if both components are active or if state leaks.
-        // However, I can subscribe locally in this component instead of relying on service signals if the service method returns an Observable.
-        // But `getAllTechnicians` in service returns void and subscribes internally.
-        // I should modify `getAllTechnicians` to return Observable OR verify if using shared signals is "Users Management" intended behavior.
-        // Actually, `ResidentsManagementComponent` uses `this.residentService.allResidents`.
-        // If I use `getAllTechnicians` which updates `allResidents`, then switching tabs might be tricky if I don't clear it.
-        // But since they are on different tabs, only one is "active" presumably?
-        // Actually, `TechniciansListComponent` has its own `technicians` signal.
-        // The service method `getAllTechnicians` updates `this.allResidents` signal in the service.
-        // I should probably refactor the service to return Observable for better component-level state management, 
-        // OR create a `technicians` signal in the service. I'll do the latter or just rely on the return value if I can.
-        // The current `getAllTechnicians` I wrote:
-        // .subscribe({ next: (page) => { this.allResidents.set(...) } })
-        // It updates the shared signal. This is OK if I treat `allResidents` as `currentList` generic signal.
-        // But `TechniciansListComponent` has `technicians` signal. 
-        // I will update the service to return the observable or allow subscription.
-        // Actually, looking at `ResidentService`:
-        /*
-          getAllResidents(...) { ... .subscribe(...) }
-        */
-        // It's designed to update the service state.
-        // I will follow the pattern:
-        // I will read `this.residentService.allResidents` in my component knowing it might contain technicians.
-        // BUT, `ResidentsManagementComponent` also reads it.
-        // To avoid confusion, I will rename `allResidents` in Service to `currentUsersList` mentally, or just accept it.
 
         this.residentService.getAllTechnicians(
             this.page(),
@@ -93,19 +62,10 @@ export class TechniciansListComponent implements OnInit {
         );
     }
 
-    // NOTE: Because the service updates a shared signal, I need to make sure I read from it.
-    // But wait, `getAllTechnicians` implementation I wrote updates `this.allResidents` in service.
-    // So I should use `this.residentService.allResidents` here too.
-    // Let's do that.
 
     readonly data = this.residentService.allResidents;
-    // And other pagination signals from service
-    readonly serviceTotalElements = this.residentService.totalElements;
-    readonly serviceTotalPages = this.residentService.totalPages;
+  readonly serviceTotalPages = this.residentService.totalPages;
 
-    // Actually, to make it cleaner and less coupled to "Residents" naming in service,
-    // I should have `technicians` signal in service or just use the current one.
-    // I'll use the current one.
 
     onSearchChange(query: string) {
         this.searchQuery.set(query);
@@ -150,7 +110,7 @@ export class TechniciansListComponent implements OnInit {
                 this.loadTechnicians();
             },
             error: (error) => {
-                console.error('Error creating technician:', error);
+                console.error(error);
                 this.toastService.showError('users.technicians.createError');
             }
         });
@@ -172,7 +132,7 @@ export class TechniciansListComponent implements OnInit {
                 this.technicianToDelete.set(null);
                 this.loadTechnicians();
             },
-            error: (err) => {
+            error: () => {
                 this.toastService.showError('users.technicians.deleteError');
             }
         });

@@ -21,7 +21,6 @@ export class HeaderComponent {
 
   mobileMenuToggle = output<void>();
 
-  // Computed properties based on user role
   readonly userName = computed(() => {
     const user = this.user();
     if (!user?.firstName || !user?.lastName) return 'Guest';

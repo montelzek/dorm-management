@@ -19,13 +19,9 @@ export class AppComponent implements OnInit {
   }
 
   private initializeLanguage(): void {
-    // Set available languages
     this.translate.addLangs(['pl', 'en']);
-    
-    // Set fallback language
     this.translate.setFallbackLang('pl');
-    
-    // Get saved language preference or use default
+
     const savedLanguage = localStorage.getItem('app_language') || 'pl';
     this.translate.use(savedLanguage);
   }

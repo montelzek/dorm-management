@@ -69,11 +69,11 @@ export class ReservationsManagementComponent implements OnInit {
     const size = this.size();
     const search = this.searchQuery().trim() || undefined;
     const sortDirection = this.sortDirection();
-    
+
     setTimeout(() => {
       this.reservationService.getAdminReservations(
-        page, 
-        size, 
+        page,
+        size,
         sortDirection,
         resourceId || undefined,
         buildingId || undefined,
@@ -93,15 +93,13 @@ export class ReservationsManagementComponent implements OnInit {
   onBuildingFilterChange(buildingId: string) {
     this.selectedBuildingId.set(buildingId);
     this.page.set(0);
-    
-    // Load resources for selected building
+
     if (buildingId) {
       this.reservationService.getResources(buildingId);
     } else {
       this.reservationService.resources.set([]);
     }
-    
-    // Reset resource filter
+
     this.selectedResourceId.set('');
     this.loadReservations();
   }
@@ -166,7 +164,7 @@ export class ReservationsManagementComponent implements OnInit {
         this.loadReservations();
       },
       error: (err) => {
-        console.error('Error cancelling reservation:', err);
+        console.error(err);
         this.toastService.showError(this.translateService.instant('admin.reservationCancelledError'));
       }
     });
